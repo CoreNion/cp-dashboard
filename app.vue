@@ -3,6 +3,8 @@
 const timeState = useState('time', () => new Date(new Date().getTime()));
 // 現在の室温
 const roomTmpState = useState('roomTemp', () => 21);
+// 現在の気圧
+const pressureState = useState('pressure', () => 1013);
 // 現在の外気温 (WIP)
 const outTmpState = useState('outTemp', () => 25);
 // 天気
@@ -29,42 +31,40 @@ const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) 
 
 <template>
   <NuxtLayout>
-    <div class="flex flex-col text-center">
+    <div class="min-h-screen flex flex-row text-center gap-2">
       <div class="flex flex-row justify-between">
         <div class="stats stats-vertical shadow">
           <div class="stat">
-            <div class="stat-title text-3xl">室温</div>
-            <div class="stat-value text-5xl">{{ roomTmpState }}℃</div>
+            <div class="stat-title text-5xl">室温</div>
+            <div class="stat-value text-7xl">{{ roomTmpState }} <span class="text-5xl">℃</span></div>
           </div>
           <div class="stat">
-            <div class="stat-title text-3xl">外気温</div>
-            <div class="stat-value text-5xl">{{ outTmpState }}℃</div>
-          </div>
-          <div class="stat">
-            <div class="stat-title text-3xl">天気</div>
-            <div class="stat-value text-5xl">{{ weatherState }}</div>
-          </div>
-        </div>
-        <div class="flex flex-col gap-4 m-2">
-          <div>
-            <h2 class="text-2xl mb-3">レポート日数</h2>
-            <div class="radial-progress text-primary text-4xl"
-              :style="{ '--value': reportRatio, '--size': '8rem', '--thickness': '1rem' }">
-              {{ reportMonthDeadlineTime.getDate() }}日
+            <div class="stat-title text-5xl">気圧</div>
+            <div class="stat-value text-7xl">{{ pressureState }}
+              <br>
+              <span class="text-5xl">hPa</span>
             </div>
+          </div>
+          <div class="stat">
+            <div class="stat-title text-5xl">外気温</div>
+            <div class="stat-value text-7xl">{{ outTmpState }} <span class="text-5xl">℃</span></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title text-5xl">天気</div>
+            <div class="stat-value text-7xl">{{ weatherState }}</div>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col items-center gap-4">
+      <div class="grow flex flex-col max-h-max items-center justify-center gap-4">
         <!-- 時間表示 -->
-        <h1 class="countdown text-9xl font-bold">
+        <h1 class="countdown text-[15vw] font-bold">
           <span :style="{ '--value': timeState.getHours() }"></span>:
           <span :style="{ '--value': timeState.getMinutes() }"></span>:
           <span :style="{ '--value': timeState.getSeconds() }"></span>
         </h1>
         <!-- 日付表示 -->
-        <h2 class="countdown text-4xl">
+        <h2 class="countdown text-[4vw]">
           {{ timeState.toLocaleDateString(undefined, {
             year: 'numeric',
             month: 'short',
@@ -72,6 +72,16 @@ const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) 
             weekday: 'short'
           }) }}
         </h2>
+      </div>
+
+      <div class="flex flex-col gap-4 m-2">
+        <div>
+          <h2 class="text-2xl mb-3">レポート日数</h2>
+          <div class="radial-progress text-primary text-4xl"
+            :style="{ '--value': reportRatio, '--size': '10vw', '--thickness': '1vw' }">
+            {{ reportMonthDeadlineTime.getDate() }}日
+          </div>
+        </div>
       </div>
     </div>
   </NuxtLayout>
