@@ -3,6 +3,9 @@ export default {
   content: [
     "./app.vue",
     "./components/**/*.vue",
+    "./layouts/**/*.vue",
+    "./pages/**/*.vue",
+    "./plugins/**/*.vue",
   ],
   theme: {
     extend: {},
@@ -12,7 +15,7 @@ export default {
   ],
   daisyui: {
     themes: [
-      "dark",
+      "white",
     ],
   },
 }
