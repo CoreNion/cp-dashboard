@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useIntervalFn } from '@vueuse/core' 
+
 // 現在時刻
 const timeState = useState('time', () => new Date(new Date().getTime()));
 // 現在の室温
-const roomTmpState = useState('roomTemp', () => 21);
+const roomTmpState = useState('roomTemp', () => 0);
 // 現在の気圧
 const pressureState = useState('pressure', () => 1013);
 // 現在の外気温 (WIP)
@@ -10,9 +12,12 @@ const outTmpState = useState('outTemp', () => 25);
 // 天気
 const weatherState = useState('weather', () => '☀️');
 
-// 1秒ごとに現在時刻を更新
-setInterval(() => {
+// 1秒ごとに現在時刻/温度を更新
+useIntervalFn(async () => {
   timeState.value = new Date(new Date().getTime());
+
+  const { data } = await useFetch('/api/tmp');
+  roomTmpState.value = data.value?.tmp ?? 0;
 }, 1000);
 
 // 毎月15日のレポート提出期限

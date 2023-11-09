@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@vueuse/core": "^10.5.0",
     "autoprefixer": "^10.4.16",
     "daisyui": "^3.9.4",
     "mcp-spi-adc": "^3.2.0",
