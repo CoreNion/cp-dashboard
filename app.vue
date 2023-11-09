@@ -41,7 +41,7 @@ const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) 
         <div class="stats stats-vertical shadow">
           <div class="stat">
             <div class="stat-title text-5xl">室温</div>
-            <div class="stat-value text-7xl">{{ roomTmpState }} <span class="text-5xl">℃</span></div>
+            <div class="stat-value text-7xl">{{ roomTmpState.toFixed(1) }} <span class="text-5xl">℃</span></div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">気圧</div>

@@ -1,6 +1,6 @@
 import { openMcp3008 } from "mcp-spi-adc";
 
-const tempSensor = openMcp3008(5, { speedHz: 20000 }, (err: string) => {
+const tempSensor = openMcp3008(0, { speedHz: 20000 }, (err: string) => {
   if (err) throw err;
 });
 
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     tempSensor.read((err: any, reading: { value: number; }) => {
       if (err) reject(err);
 
-      resolve(reading.value);
+      resolve((reading.value * 5 - 0.5) * 100);
     });
   }).catch((err) => {
     console.error(err);
