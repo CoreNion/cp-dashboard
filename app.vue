@@ -16,8 +16,10 @@ const weatherState = useState('weather', () => '☀️');
 useIntervalFn(async () => {
   timeState.value = new Date(new Date().getTime());
 
-  const { data } = await useFetch('/api/tmp');
+  const { data } = await useFetch('/api/sensor');
+
   roomTmpState.value = data.value?.tmp ?? 0;
+  pressureState.value = data.value?.pressure ?? 0;
 }, 1000);
 
 // 毎月15日のレポート提出期限
@@ -45,7 +47,7 @@ const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) 
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">気圧</div>
-            <div class="stat-value text-7xl">{{ pressureState }}
+            <div class="stat-value text-7xl">{{ pressureState.toFixed() }}
               <br>
               <span class="text-5xl">hPa</span>
             </div>
