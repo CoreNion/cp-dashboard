@@ -22,6 +22,24 @@ useIntervalFn(async () => {
   pressureState.value = data.value?.pressure ?? 0;
 }, 1000);
 
+// 10分ごとに天気を更新
+async function refleshWeather() {
+  // アメダスの番号 (44132: 東京)
+  const amedasNumber = 44132;
+  // 最新のJSONファイル名 (3時間ごとに別ファイル)
+  const yymmdd = `${timeState.value.getFullYear()}${timeState.value.getMonth() + 1}${timeState.value.getDate()}`;
+  const latestJsonName = `${yymmdd}_${Math.floor(timeState.value.getHours() / 3) * 3}.json`;
+
+  // アメダスのデータを取得 (44132: 東京)
+  const { data } = await useFetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`);
+
+  // 最後にある最新の天気情報を取得
+  const latestWeather = Object(Object.values(Object(data.value)).pop());
+  outTmpState.value = latestWeather.temp[0];
+}
+refleshWeather();
+useIntervalFn(refleshWeather, 600000);
+
 // 毎月15日のレポート提出期限
 const reportMonthDeadline = new Date(timeState.value.getFullYear(), timeState.value.getMonth(), 15);
 // 毎月15日のレポート提出期限までの残り時間を計算
