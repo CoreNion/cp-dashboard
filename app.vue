@@ -4,13 +4,13 @@ import { useIntervalFn } from '@vueuse/core'
 // 現在時刻
 const timeState = useState('time', () => new Date(new Date().getTime()));
 // 現在の室温
-const roomTmpState = useState('roomTemp', () => 0);
+const roomTmpState : Ref<number | null> = useState('roomTemp', () => null);
 // 現在の気圧
-const pressureState = useState('pressure', () => 1013);
+const pressureState : Ref<number | null> = useState('pressure', () => null);
 // 現在の外気温
-const outTmpState = useState('outTemp', () => 25);
+const outTmpState : Ref<number | null> = useState('outTemp', () => null);
 // 天気
-const weatherState = useState('weather', () => '☀️');
+const weatherState  : Ref<string | null>= useState('weather', () => null);
 
 // 1秒ごとに現在時刻/温度を更新
 useIntervalFn(async () => {
@@ -18,8 +18,8 @@ useIntervalFn(async () => {
 
   const { data } = await useFetch('/api/sensor');
 
-  roomTmpState.value = data.value?.tmp ?? 0;
-  pressureState.value = data.value?.pressure ?? 0;
+  roomTmpState.value = data.value?.tmp ?? null;
+  pressureState.value = data.value?.pressure ?? null;
 }, 1000);
 
 // 10分ごとに天気を更新
@@ -89,22 +89,22 @@ const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) 
         <div class="stats stats-vertical shadow">
           <div class="stat">
             <div class="stat-title text-5xl">室温</div>
-            <div class="stat-value text-7xl">{{ roomTmpState.toFixed(1) }} <span class="text-5xl">℃</span></div>
+            <div class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }} <span class="text-5xl">℃</span></div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">気圧</div>
-            <div class="stat-value text-7xl">{{ pressureState.toFixed() }}
+            <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}
               <br>
               <span class="text-5xl">hPa</span>
             </div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">外気温</div>
-            <div class="stat-value text-7xl">{{ outTmpState }} <span class="text-5xl">℃</span></div>
+            <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }} <span class="text-5xl">℃</span></div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">天気</div>
-            <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState }}</div>
+            <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState != null ? weatherState : "-" }}</div>
           </div>
         </div>
       </div>
