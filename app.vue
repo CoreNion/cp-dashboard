@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIntervalFn } from '@vueuse/core' 
+import { useIntervalFn } from '@vueuse/core'
 
 // 現在時刻
 const timeState = useState('time', () => new Date(new Date().getTime()));
@@ -7,7 +7,7 @@ const timeState = useState('time', () => new Date(new Date().getTime()));
 const roomTmpState = useState('roomTemp', () => 0);
 // 現在の気圧
 const pressureState = useState('pressure', () => 1013);
-// 現在の外気温 (WIP)
+// 現在の外気温
 const outTmpState = useState('outTemp', () => 25);
 // 天気
 const weatherState = useState('weather', () => '☀️');
@@ -26,16 +26,44 @@ useIntervalFn(async () => {
 async function refleshWeather() {
   // アメダスの番号 (44132: 東京)
   const amedasNumber = 44132;
+  // office番号 (東京地方)
+  const officeNumber = 130000;
+  const areaNumber = 130010;
+
   // 最新のJSONファイル名 (3時間ごとに別ファイル)
   const yymmdd = `${timeState.value.getFullYear()}${timeState.value.getMonth() + 1}${timeState.value.getDate()}`;
-  const latestJsonName = `${yymmdd}_${Math.floor(timeState.value.getHours() / 3) * 3}.json`;
+  const latestJsonName = `${yymmdd}_${(Math.floor(timeState.value.getHours() / 3) * 3).toString().padStart(2, "0")}.json`;
 
-  // アメダスのデータを取得 (44132: 東京)
-  const { data } = await useFetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`);
+  // アメダス/天気予報のデータを取得
+  const { data, error } = await useAsyncData(
+    'getWeatherData',
+    async () => {
+      return await Promise.all([
+        // アメダスのデータ
+        $fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
+        // 天気予報のデータ
+        $fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${officeNumber}.json`)
+      ])
+    }
+  );
+  if (!data.value) {
+    console.error(error.value);
+    return;
+  }
 
-  // 最後にある最新の天気情報を取得
-  const latestWeather = Object(Object.values(Object(data.value)).pop());
+  /* アメダスのデータの処理 */
+  const amedasData = Object(data.value[0]);
+
+  // 最後にある最新の気象データを取得
+  const latestWeather = Object(Object.values(amedasData).pop());
   outTmpState.value = latestWeather.temp[0];
+
+  /* 天気予報のデータの処理 */
+  const forecastData = Array(data.value[1]);
+
+  // 今日の天気を取得
+  const todayWeatherCode = Object(forecastData[0])[0].timeSeries[0].areas[0].weatherCodes[0];
+  weatherState.value = weather2str(todayWeatherCode);
 }
 refleshWeather();
 useIntervalFn(refleshWeather, 600000);
@@ -76,7 +104,7 @@ const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) 
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">天気</div>
-            <div class="stat-value text-7xl">{{ weatherState }}</div>
+            <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState }}</div>
           </div>
         </div>
       </div>
