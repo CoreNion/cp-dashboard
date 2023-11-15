@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
 
   // WIP
   let pressure = await _readSendorValue(pressureSensor!);
-  pressure = pressure ? pressure * Number(volts): null;
+  pressure = pressure ? pressure * Number(volts) * 423.6: null;
 
   return {
     tmp: tmp,
