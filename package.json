@@ -14,6 +14,7 @@
     "@vueuse/core": "^10.5.0",
     "autoprefixer": "^10.4.16",
     "daisyui": "^3.9.4",
+    "dayjs": "^1.11.10",
     "mcp-spi-adc": "^3.2.0",
     "nuxt": "^3.8.0",
     "postcss": "^8.4.31",

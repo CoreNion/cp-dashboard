@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import { useIntervalFn } from '@vueuse/core'
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import 'dayjs/locale/ja';
+
+dayjs.extend(duration);
+dayjs.locale("ja");
 
 // 現在時刻
-const timeState = useState('time', () => new Date(new Date().getTime()));
+const timeState = useState('time', () => dayjs().toDate());
 // 現在の室温
-const roomTmpState : Ref<number | null> = useState('roomTemp', () => null);
+const roomTmpState: Ref<number | null> = useState('roomTemp', () => null);
 // 現在の気圧
-const pressureState : Ref<number | null> = useState('pressure', () => null);
+const pressureState: Ref<number | null> = useState('pressure', () => null);
 // 現在の外気温
-const outTmpState : Ref<number | null> = useState('outTemp', () => null);
+const outTmpState: Ref<number | null> = useState('outTemp', () => null);
 // 天気
-const weatherState  : Ref<string | null>= useState('weather', () => null);
+const weatherState: Ref<string | null> = useState('weather', () => null);
 
 // 1秒ごとに現在時刻/温度を更新
 useIntervalFn(async () => {
-  timeState.value = new Date(new Date().getTime());
+  timeState.value = dayjs().toDate();
 
   const { data } = await useFetch('/api/sensor');
 
@@ -24,6 +30,8 @@ useIntervalFn(async () => {
 
 // 10分ごとに天気を更新
 async function refleshWeather() {
+  const djs = dayjs();
+
   // アメダスの番号 (44132: 東京)
   const amedasNumber = 44132;
   // office番号 (東京地方)
@@ -31,8 +39,8 @@ async function refleshWeather() {
   const areaNumber = 130010;
 
   // 最新のJSONファイル名 (3時間ごとに別ファイル)
-  const yymmdd = `${timeState.value.getFullYear()}${timeState.value.getMonth() + 1}${timeState.value.getDate()}`;
-  const latestJsonName = `${yymmdd}_${(Math.floor(timeState.value.getHours() / 3) * 3).toString().padStart(2, "0")}.json`;
+  const yymmdd = djs.format('YYYYMMDD');
+  const latestJsonName = `${yymmdd}_${(Math.floor(djs.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
 
   // アメダス/天気予報のデータを取得
   const { data, error } = await useAsyncData(
@@ -68,71 +76,84 @@ async function refleshWeather() {
 refleshWeather();
 useIntervalFn(refleshWeather, 600000);
 
+const djs = dayjs();
+
+// 今月15日
+const thisMonthLimit = djs.date(15).hour(0).minute(59).second(59)
+
 // 毎月15日のレポート提出期限
-const reportMonthDeadline = new Date(timeState.value.getFullYear(), timeState.value.getMonth(), 15);
+const reportMonthDeadline = dayjs()
+  .month(
+    // 今月15日を過ぎていたら、次の月の15日にする
+    djs.isAfter(thisMonthLimit)
+      ? djs.month() + 1 :
+      djs.month())
+  .date(15)
+  .hour(23).minute(59).second(59);
+
 // 毎月15日のレポート提出期限までの残り時間を計算
-const reportMonthDeadlineTime = new Date(reportMonthDeadline.getTime() - timeState.value.getTime());
+const reportMonthLimit = reportMonthDeadline.diff(djs, 'millisecond');
+const reportMonthLimitDays = dayjs.duration({ milliseconds: reportMonthLimit }).asDays() - 1;
+// 赤くするかどうか
+const needReportMonthAlert = reportMonthLimitDays > 5;
 
 /* レポート期限の割合を計算 */
-// レポート期限の開始日
-const reportStartMonth = new Date(reportMonthDeadline.getFullYear(), (reportMonthDeadline.getMonth() - 1), 15);
-// レポート期限の開始日からレポート期限までの日数
-const reportDays = new Date(reportMonthDeadline.getTime() - reportStartMonth.getTime())
+// レポート期限の開始日からレポート期限までの時間
+const reportTime = reportMonthDeadline.diff(reportMonthDeadline.month(reportMonthDeadline.month() - 1), 'millisecond');
 // 消費した日数 / レポート期限までの日数 * 100
-const reportRatio = ((reportDays.getTime() - reportMonthDeadlineTime.getTime()) / reportDays.getTime()) * 100;
+const reportRatio = ((reportTime - reportMonthLimit) / reportTime) * 100;
 </script>
 
 <template>
   <NuxtLayout>
     <div class="min-h-screen flex flex-row text-center gap-2">
-      <div class="flex flex-row justify-between">
+      <div class="basis-1/4 flex flex-row justify-between">
         <div class="stats stats-vertical shadow">
           <div class="stat">
             <div class="stat-title text-5xl">室温</div>
-            <div class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }} <span class="text-5xl">℃</span></div>
+            <div class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }} <span
+                class="text-5xl">℃</span></div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">気圧</div>
-            <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}
+            <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed() : "-" }}
               <br>
               <span class="text-5xl">hPa</span>
             </div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">外気温</div>
-            <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }} <span class="text-5xl">℃</span></div>
+            <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }} <span class="text-5xl">℃</span>
+            </div>
           </div>
           <div class="stat">
             <div class="stat-title text-5xl">天気</div>
-            <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState != null ? weatherState : "-" }}</div>
+            <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState != null ? weatherState : "-"
+            }}</div>
           </div>
         </div>
       </div>
 
-      <div class="grow flex flex-col max-h-max items-center justify-center gap-4">
+      <div class="basis-1/2 flex flex-col max-h-max items-center justify-center gap-4">
         <!-- 時間表示 -->
         <h1 class="countdown text-[15vw] font-bold">
-          <span :style="{ '--value': timeState.getHours() }"></span>:
-          <span :style="{ '--value': timeState.getMinutes() }"></span>:
-          <span :style="{ '--value': timeState.getSeconds() }"></span>
+          <span :style="{ '--value': dayjs(timeState).hour() }"></span>:
+          <span :style="{ '--value': dayjs(timeState).minute() }"></span>:
+          <span :style="{ '--value': dayjs(timeState).second() }"></span>
         </h1>
         <!-- 日付表示 -->
         <h2 class="countdown text-[4vw]">
-          {{ timeState.toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            weekday: 'short'
-          }) }}
+          {{ dayjs(timeState).format('YYYY年 MM月DD日 (ddd)') }}
         </h2>
       </div>
 
-      <div class="flex flex-col gap-4 m-2">
-        <div>
+      <div class="basis-1/4 flex flex-col items-end gap-4">
+        <div class="m-2">
           <h2 class="text-2xl mb-3">レポート日数</h2>
-          <div class="radial-progress text-primary text-4xl"
+          <div :class="['radial-progress', 'text-4xl', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
             :style="{ '--value': reportRatio, '--size': '10vw', '--thickness': '1vw' }">
-            {{ reportMonthDeadlineTime.getDate() }}日
+            <!-- parseIntはマイナス0対策 -->
+            {{ parseInt(reportMonthLimitDays.toFixed()) }}日
           </div>
         </div>
       </div>
