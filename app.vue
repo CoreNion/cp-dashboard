@@ -25,6 +25,7 @@ const weatherState: Ref<string | null> = useState('weather', () => null);
 
 // タイマーのインターバル
 let interval: Pausable | null = null;
+let isTimerActive: Ref<boolean> = useState('isTimerActive', () => false);
 
 // 1秒ごとに現在時刻/温度を更新
 useIntervalFn(async () => {
@@ -113,6 +114,13 @@ const reportRatio = ((reportTime - reportMonthLimit) / reportTime) * 100;
 
 // タイマーの開始
 function startTimer() {
+  // 一時停止されている場合は再開
+  if (interval?.isActive) {
+    interval.resume();
+    isTimerActive.value = true;
+    return;
+  }
+
   // タイマーの音
   const audio = new Audio('./alert.mp3');
 
@@ -133,11 +141,27 @@ function startTimer() {
 
     // 残り時間が0になったらアラームを流して タイマーを止める
     if (duration.seconds() <= 0) {
-      interval?.pause();
       timerState.value = null;
       audio.play();
+      interval?.pause();
+      interval = null;
     }
   }, 1000);
+  isTimerActive.value = true;
+}
+
+// タイマーの一時停止
+function pauseTimer() {
+  interval?.pause();
+  isTimerActive.value = false;
+}
+
+// タイマーのリセット
+function resetTimer() {
+  timerState.value = null;
+  timerSettingState.value = [0, 0, 0];
+  interval = null;
+  isTimerActive.value = false;
 }
 
 // タイマーの設定時間を増やす関数
@@ -216,7 +240,8 @@ function duration2ArrayTime(duration: duration.Duration) {
       <div class="max-xl:hidden basis-[25.0%] flex flex-col items-end gap-4">
         <div class="m-2">
           <h2 class="text-3xl mb-3">レポート日数</h2>
-          <div :class="['radial-progress', 'text-6xl', 'font-bold', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
+          <div
+            :class="['radial-progress', 'text-6xl', 'font-bold', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
             :style="{ '--value': reportRatio, '--size': '12vw', '--thickness': '1.5vw' }">
             <!-- parseIntはマイナス0対策 -->
             {{ parseInt(reportMonthLimitDays.toFixed()) }}日
@@ -240,11 +265,13 @@ function duration2ArrayTime(duration: duration.Duration) {
           <div class="flex flex-row gap-2">
             <button class="btn btn-secondary" @click="addTimerLimit([0, 1, 0])">+1分</button>
             <button class="btn btn-secondary" @click="addTimerLimit([0, 0, 10])">+10秒</button>
-            <button class="btn btn-secondary" @click="timerSettingState = [0, 0, 0]">clear</button>
           </div>
-          <button class="btn btn-primary" @click="startTimer()">スタート</button>
+          <div class="flex flex-row gap-2">
+            <button class="btn btn-primary"
+            @click="isTimerActive ? pauseTimer() : startTimer()"> {{ isTimerActive ? "一時停止" : "スタート" }}</button>
+            <button class="btn btn-secondary" @click="resetTimer()">clear</button>
+          </div>
         </div>
       </div>
     </div>
-  </NuxtLayout>
-</template>
+</NuxtLayout></template>
