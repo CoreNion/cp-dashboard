@@ -50,12 +50,12 @@ export default defineEventHandler(async (event) => {
   let tmp = (await _readSendorValue(tempSensor!));
   tmp = tmp ? (tmp * Number(volts) - 0.5) * 100 : null;
 
-  // WIP
+  // WIP、圧力センサーは動作していない？
   let pressure = await _readSendorValue(pressureSensor!);
   pressure = pressure ? pressure * Number(volts) * 423.6: null;
 
   return {
     tmp: tmp,
-    pressure: pressure
+    pressure: null
   };
 });
