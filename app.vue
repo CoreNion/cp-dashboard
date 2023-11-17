@@ -164,7 +164,7 @@ function duration2ArrayTime(duration: duration.Duration) {
 <template>
   <NuxtLayout>
     <div class="min-h-screen flex flex-row text-center gap-2">
-      <div class="basis-1/4 flex flex-row justify-between">
+      <div class="basis-[30.0%] flex flex-row justify-between">
         <div class="min-w-full stats stats-vertical shadow">
           <div class="stat">
             <div class="stat-title text-5xl">室温</div>
@@ -191,7 +191,7 @@ function duration2ArrayTime(duration: duration.Duration) {
         </div>
       </div>
 
-      <div class="basis-1/2 flex flex-col max-h-max items-center justify-center gap-3">
+      <div class="grow flex flex-col max-h-max items-center justify-center gap-3">
         <!-- メイン表示 -->
         <h1 class="countdown text-[15vw] font-bold">
           <span :style="{ '--value': timerState != null ? timerState[0] : dayjs(timeState).hour() }"></span>:
@@ -213,11 +213,11 @@ function duration2ArrayTime(duration: duration.Duration) {
         </h2>
       </div>
 
-      <div class="basis-1/4 flex flex-col items-end gap-4">
+      <div class="basis-[25.0%] flex flex-col items-end gap-4">
         <div class="m-2">
-          <h2 class="text-2xl mb-3">レポート日数</h2>
-          <div :class="['radial-progress', 'text-4xl', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
-            :style="{ '--value': reportRatio, '--size': '10vw', '--thickness': '1vw' }">
+          <h2 class="text-3xl mb-3">レポート日数</h2>
+          <div :class="['radial-progress', 'text-6xl', 'font-bold', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
+            :style="{ '--value': reportRatio, '--size': '12vw', '--thickness': '1.5vw' }">
             <!-- parseIntはマイナス0対策 -->
             {{ parseInt(reportMonthLimitDays.toFixed()) }}日
           </div>
