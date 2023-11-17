@@ -164,7 +164,7 @@ function duration2ArrayTime(duration: duration.Duration) {
 <template>
   <NuxtLayout>
     <div class="min-h-screen flex flex-row text-center gap-2">
-      <div class="basis-[30.0%] flex flex-row justify-between">
+      <div class="max-xl:hidden basis-[30.0%] flex flex-row justify-between">
         <div class="min-w-full stats stats-vertical shadow">
           <div class="stat">
             <div class="stat-title text-5xl">室温</div>
@@ -193,7 +193,7 @@ function duration2ArrayTime(duration: duration.Duration) {
 
       <div class="grow flex flex-col max-h-max items-center justify-center gap-3">
         <!-- メイン表示 -->
-        <h1 class="countdown text-[15vw] font-bold">
+        <h1 class="countdown max-xl:text-[20vw] text-[15vw] font-bold">
           <span :style="{ '--value': timerState != null ? timerState[0] : dayjs(timeState).hour() }"></span>:
           <span :style="{ '--value': timerState != null ? timerState[1] : dayjs(timeState).minute() }"></span>:
           <span :style="{ '--value': timerState != null ? timerState[2] : dayjs(timeState).second() }"></span>
@@ -209,11 +209,11 @@ function duration2ArrayTime(duration: duration.Duration) {
               <span :style="{ '--value': dayjs(timeState).second() }"></span>
             </div>
           </div>
-          <span v-if="timerState == null" class="text-[5vw]"> {{ dayjs(timeState).format('YYYY年 MM月DD日 (ddd)') }}</span>
+          <span v-if="timerState == null" class="max-xl:text-[7vw] text-[5vw]"> {{ dayjs(timeState).format('YYYY年 MM月DD日 (ddd)') }}</span>
         </h2>
       </div>
 
-      <div class="basis-[25.0%] flex flex-col items-end gap-4">
+      <div class="max-xl:hidden basis-[25.0%] flex flex-col items-end gap-4">
         <div class="m-2">
           <h2 class="text-3xl mb-3">レポート日数</h2>
           <div :class="['radial-progress', 'text-6xl', 'font-bold', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
