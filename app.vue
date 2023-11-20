@@ -141,10 +141,8 @@ function startTimer() {
 
     // 残り時間が0になったらアラームを流して タイマーを止める
     if (duration.seconds() <= 0) {
-      timerState.value = null;
       audio.play();
-      interval?.pause();
-      interval = null;
+      resetTimer();
     }
   }, 1000);
   isTimerActive.value = true;
@@ -160,6 +158,7 @@ function pauseTimer() {
 function resetTimer() {
   timerState.value = null;
   timerSettingState.value = [0, 0, 0];
+  interval?.pause();
   interval = null;
   isTimerActive.value = false;
 }
