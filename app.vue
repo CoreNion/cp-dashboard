@@ -260,6 +260,7 @@ function duration2ArrayTime(duration: duration.Duration) {
           </div>
 
           <div class="flex flex-row gap-2">
+            <button class="btn btn-secondary" @click="addTimerLimit([0, 5, 0])">+5分</button>
             <button class="btn btn-secondary" @click="addTimerLimit([0, 1, 0])">+1分</button>
             <button class="btn btn-secondary" @click="addTimerLimit([0, 0, 10])">+10秒</button>
           </div>
