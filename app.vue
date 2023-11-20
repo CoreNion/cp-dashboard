@@ -225,11 +225,9 @@ function duration2ArrayTime(duration: duration.Duration) {
         <!-- サブ表示 -->
         <h2>
           <div v-if="timerState != null" class="flex flex-row items-center">
-            <span class="text-[4vw]"> {{ dayjs(timeState).format('MM/DD (ddd)') }}</span>
-            <div class="countdown text-[7vw]">
-              <span :style="{ '--value': dayjs(timeState).hour() }"></span>:
-              <span :style="{ '--value': dayjs(timeState).minute() }"></span>:
-              <span :style="{ '--value': dayjs(timeState).second() }"></span>
+            <span class="text-[4vw] mr-3"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
+            <div class="text-[7vw] font-mono">
+                <span> {{ dayjs(timeState).format("HH:mm:ss") }}</span>
             </div>
           </div>
           <span v-if="timerState == null" class="max-xl:text-[7vw] text-[5vw]"> {{ dayjs(timeState).format('YYYY年 MM月DD日 (ddd)') }}</span>
