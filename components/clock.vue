@@ -12,10 +12,10 @@ const timeState = useState('time', () => dayjs().toDate());
 // タイマーの残り時間
 const timerState = timer();
 
-// 1秒ごとに現在時刻を更新
+// 100msごとに現在時刻を更新
 useIntervalFn(async () => {
   timeState.value = dayjs().toDate();
-}, 1000);
+}, 100);
 
 </script>
 
