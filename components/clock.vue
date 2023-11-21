@@ -20,9 +20,9 @@ useIntervalFn(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen items-center justify-center gap-3">
+  <div class="flex flex-col 2xl:min-h-screen items-center justify-center gap-3">
     <!-- メイン表示 -->
-    <h1 class="countdown max-xl:text-[20vw] text-[15vw] font-bold">
+    <h1 class="countdown max-md:text-[21.5vw] text-[15vw] font-bold">
       <span :style="{ '--value': timerState != null ? timerState[0] : dayjs(timeState).hour() }"></span>:
       <span :style="{ '--value': timerState != null ? timerState[1] : dayjs(timeState).minute() }"></span>:
       <span :style="{ '--value': timerState != null ? timerState[2] : dayjs(timeState).second() }"></span>
@@ -31,12 +31,12 @@ useIntervalFn(async () => {
     <!-- サブ表示 -->
     <h2>
       <div v-if="timerState != null" class="flex flex-row items-center">
-        <span class="text-[4vw] mr-3"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
-        <div class="text-[7vw] font-mono">
+        <span class="max-md:text-[6vw] text-[4vw] mr-3"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
+        <div class="max-md:text-[12vw] text-[7vw] font-mono">
           <span> {{ dayjs(timeState).format("HH:mm:ss") }}</span>
         </div>
       </div>
-      <span v-if="timerState == null" class="max-xl:text-[7vw] text-[5vw]"> {{ dayjs(timeState).format('YYYY年 MM月DD日(ddd)') }}</span>
+      <span v-if="timerState == null" class="max-md:text-[9vw] text-[5vw]"> {{ dayjs(timeState).format('YYYY年 MM月DD日(ddd)') }}</span>
     </h2>
   </div>
 </template>

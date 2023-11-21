@@ -7,8 +7,6 @@ import 'dayjs/locale/ja';
 dayjs.extend(duration);
 dayjs.locale("ja");
 
-const djs = dayjs();
-
 const intervalState = interval();
 const isTimerActiveState = isTimerActive();
 const timerState = timer();
@@ -89,29 +87,35 @@ function duration2ArrayTime(duration: duration.Duration) {
 </script>
 
 <template>
-  <div class="flex flex-col justify-end items-center gap-2">
-    <h3 class="text-xl font-bold">タイマー設定</h3>
+  <div class="flex max-2xl:flex-row flex-col justify-center items-center gap-2">
+    <div>
+      <h3 class="text-xl font-bold">タイマー設定</h3>
 
-    <div class="flex flex-row m-3">
-      <input type="number" class="grow w-10 outline-none" placeholder="時間" min="0" max="60"
-        :value="timerSettingState[0]" />
-      <span class="font-bold mx-2">:</span>
-      <input type="number" class="grow w-10 outline-none" placeholder="分" min="0" max="60"
-        :value="timerSettingState[1]" />
-      <span class="font-bold mx-2">:</span>
-      <input type="number" class="grow w-10 outline-none" placeholder="秒" min="0" max="60"
-        :value="timerSettingState[2]" />
+      <div class="flex flex-row m-3">
+        <input type="number" class="grow w-10 outline-none" placeholder="時間" min="0" max="60"
+          :value="timerSettingState[0]" />
+        <span class="font-bold mx-2">:</span>
+        <input type="number" class="grow w-10 outline-none" placeholder="分" min="0" max="60"
+          :value="timerSettingState[1]" />
+        <span class="font-bold mx-2">:</span>
+        <input type="number" class="grow w-10 outline-none" placeholder="秒" min="0" max="60"
+          :value="timerSettingState[2]" />
+      </div>
     </div>
 
-    <div class="flex flex-row gap-2">
-      <button class="btn btn-secondary" @click="addTimerLimit([0, 5, 0])">+5分</button>
-      <button class="btn btn-secondary" @click="addTimerLimit([0, 1, 0])">+1分</button>
-      <button class="btn btn-secondary" @click="addTimerLimit([0, 0, 10])">+10秒</button>
-    </div>
-    <div class="flex flex-row gap-2">
-      <button class="btn btn-primary" @click="isTimerActiveState ? pauseTimer() : startTimer()"> {{ isTimerActiveState ? "一時停止" :
-        "スタート" }}</button>
-      <button class="btn btn-secondary" @click="resetTimer()">clear</button>
+    <div class="flex flex-col gap-2">
+      <div class="flex flex-row gap-2">
+        <button class="btn btn-secondary" @click="addTimerLimit([0, 5, 0])">+5分</button>
+        <button class="btn btn-secondary" @click="addTimerLimit([0, 1, 0])">+1分</button>
+        <button class="btn btn-secondary" @click="addTimerLimit([0, 0, 10])">+10秒</button>
+      </div>
+
+      <div class="flex gap-2 justify-center">
+        <button class="btn btn-primary" @click="isTimerActiveState ? pauseTimer() : startTimer()"> {{ isTimerActiveState ?
+          "一時停止" :
+          "スタート" }}</button>
+        <button class="btn btn-secondary" @click="resetTimer()">clear</button>
+      </div>
     </div>
   </div>
 </template>
