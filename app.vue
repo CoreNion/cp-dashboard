@@ -26,7 +26,7 @@ useSeoMeta({
         <div class="grow m-2 flex flex-col justify-end items-center gap-2">
           <TimerSetting></TimerSetting>
           <span>Copyright © 2023 CoreNion</span>
-          <a href="https://github.com/CoreNion/cp-dashboard/" class="link" >Source Code / Licence</a>
+          <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
         </div>
       </div>
     </div>
@@ -34,6 +34,10 @@ useSeoMeta({
     <div class="2xl:hidden min-h-screen flex flex-col items-center text-center">
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
+      <div class="flex flex-row gap-5">
+        <span>Copyright © 2023 CoreNion</span>
+        <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
+      </div>
     </div>
   </NuxtLayout>
 </template>

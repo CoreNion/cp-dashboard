@@ -92,14 +92,17 @@ useIntervalFn(refleshWeather, 600000);
       </div>
     </div>
     <div class="stat">
-      <div class="stat-title text-5xl">外気温</div>
+      <div class="stat-title text-5xl">外気温*</div>
       <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }} <span class="text-5xl">℃</span>
       </div>
     </div>
     <div class="stat">
-      <div class="stat-title text-5xl">天気</div>
+      <div class="stat-title text-5xl">天気*</div>
       <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState != null ? weatherState : "-"
       }}</div>
+    </div>
+    <div class="stat m-auto">
+      <span>*出典: 気象庁ホームページ</span>
     </div>
   </div>
 </template>
