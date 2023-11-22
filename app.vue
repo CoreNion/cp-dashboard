@@ -1,4 +1,12 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: 'CP Dashboard',
+  ogTitle: 'CP Dashboard',
+  description: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
+  ogDescription: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
+  ogImage: 'https://coreinion.github.io/cp-dashboard/ogp.png',
+  twitterCard: 'summary_large_image',
+})
 </script>
 
 <template>
