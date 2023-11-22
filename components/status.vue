@@ -13,8 +13,16 @@ const outTmpState: Ref<number | null> = useState('outTemp', () => null);
 const weatherState: Ref<string | null> = useState('weather', () => null);
 
 // 1秒ごとに温度を更新
-useIntervalFn(async () => {
-  const { data } = await useFetch('/api/sensor');
+const refleshStatus = useIntervalFn(async () => {
+  const { data, error } = await useFetch('/api/sensor');
+  if (error.value) {
+    console.error(error.value);
+    refleshStatus.pause();
+
+    roomTmpState.value = null;
+    pressureState.value = null;
+    return;
+  }
 
   roomTmpState.value = data.value?.tmp ?? null;
   pressureState.value = data.value?.pressure ?? null;
