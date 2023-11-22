@@ -25,6 +25,8 @@ useSeoMeta({
         <report></report>
         <div class="grow m-2 flex flex-col justify-end items-center gap-2">
           <TimerSetting></TimerSetting>
+          <span>Copyright © 2023 CoreNion</span>
+          <a href="https://github.com/CoreNion/cp-dashboard/" class="link" >Source Code / Licence</a>
         </div>
       </div>
     </div>
