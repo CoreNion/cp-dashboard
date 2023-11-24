@@ -8,13 +8,13 @@ export default defineNuxtConfig({
     "baseURL": process.env.BASE_URL || "/",
   },
   build: {},
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {}
-    }
-  },
   modules: [
-    '@nuxtjs/tailwindcss'
-  ]
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode'
+  ],
+  colorMode: {
+    preference: 'autumn', 
+    dataValue: 'theme', // activate data-theme in <html> tag
+    classSuffix: '',
+  },
 })

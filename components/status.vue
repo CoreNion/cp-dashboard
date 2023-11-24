@@ -118,6 +118,7 @@ onMounted(async () => {
     </div>
     <div class="stat m-auto">
       <span>*出典: 気象庁ホームページ</span>
+      <settings></settings>
     </div>
   </div>
 </template>
