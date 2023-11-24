@@ -12,12 +12,16 @@ const outTmpState: Ref<number | null> = useState('outTemp', () => null);
 // 天気
 const weatherState: Ref<string | null> = useState('weather', () => null);
 
+// センサーのインターバル
+let sensorInterval: Pausable | null = null;
+
 // 1秒ごとに温度を更新
-const refleshStatus = useIntervalFn(async () => {
+async function refleshStatus() {
   const { data, error } = await useFetch('/api/sensor');
   if (error.value) {
+    // エラーの場合は停止
     console.error(error.value);
-    refleshStatus.pause();
+    sensorInterval?.pause();
 
     roomTmpState.value = null;
     pressureState.value = null;
@@ -26,7 +30,7 @@ const refleshStatus = useIntervalFn(async () => {
 
   roomTmpState.value = data.value?.tmp ?? null;
   pressureState.value = data.value?.pressure ?? null;
-}, 1000);
+}
 
 // 10分ごとに天気を更新
 async function refleshWeather() {
@@ -43,46 +47,55 @@ async function refleshWeather() {
   const latestJsonName = `${yymmdd}_${(Math.floor(djs.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
 
   // アメダス/天気予報のデータを取得
-  const { data, error } = await useAsyncData(
-    'getWeatherData',
-    async () => {
-      return await Promise.all([
-        // アメダスのデータ
-        $fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
-        // 天気予報のデータ
-        $fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${officeNumber}.json`)
-      ])
-    }
-  );
-  if (!data.value) {
-    console.error(error.value);
+  const data = await Promise.all([
+    // アメダスのデータ
+    $fetch<Number>(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
+    // 天気予報のデータ
+    $fetch<Number>(`https://www.jma.go.jp/bosai/forecast/data/forecast/${officeNumber}.json`)
+  ]).catch((e) => {
+    console.error(e);
+    return;
+  });
+
+  if (data == null) {
+    console.error('data is null');
     return;
   }
 
   /* アメダスのデータの処理 */
-  const amedasData = Object(data.value[0]);
+  const amedasData = Object(data[0]);
 
   // 最後にある最新の気象データを取得
   const latestWeather = Object(Object.values(amedasData).pop());
   outTmpState.value = latestWeather.temp[0];
 
   /* 天気予報のデータの処理 */
-  const forecastData = Array(data.value[1]);
+  const forecastData = Array(data[1]);
 
   // 今日の天気を取得
   const todayWeatherCode = Object(forecastData[0])[0].timeSeries[0].areas[0].weatherCodes[0];
   weatherState.value = weather2str(todayWeatherCode);
 }
-refleshWeather();
-useIntervalFn(refleshWeather, 600000);
+
+// クライアントサイドのみで実行
+onMounted(async () => {
+  // 1秒ごとに温度を更新
+  await refleshStatus();
+  sensorInterval = useIntervalFn(refleshStatus, 1000);
+  
+  // 10分ごとに天気を更新
+  await refleshWeather();
+  useIntervalFn(refleshWeather, 600000);
+});
 </script>
 
 <template>
   <div class="min-w-full stats stats-vertical shadow">
     <div class="stat">
       <div class="stat-title text-5xl">室温</div>
-      <div class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }} <span
-          class="text-5xl">℃</span></div>
+      <div class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
+        <span class="text-5xl">℃</span>
+      </div>
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">気圧</div>
@@ -93,13 +106,15 @@ useIntervalFn(refleshWeather, 600000);
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">外気温*</div>
-      <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }} <span class="text-5xl">℃</span>
+      <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }}
+        <span class="text-5xl">℃</span>
       </div>
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">天気*</div>
-      <div class="stat-value text-7xl" style="white-space: pre-wrap;">{{ weatherState != null ? weatherState : "-"
-      }}</div>
+      <div class="stat-value text-7xl" style="white-space: pre-wrap;">
+        {{ weatherState != null ? weatherState : "-" }}
+      </div>
     </div>
     <div class="stat m-auto">
       <span>*出典: 気象庁ホームページ</span>
