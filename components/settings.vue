@@ -32,6 +32,34 @@ const themes = [
   'coffee',
   'winter',
 ];
+
+// センサー情報のソースを変更
+const onSourceChange = async (e: Event) => {
+  if (!(e.target instanceof HTMLSelectElement)) return;
+  const value = e.target.value;
+
+  if (value === 'serial') {
+    // Web Serial APIを使ってArduinoとシリアル接続
+    const port = await navigator.serial.requestPort({
+      filters: [
+        { usbVendorId: 0x2341, usbProductId: 0x0043 },
+      ]
+    });
+    await port.open({ baudRate: 9600 });
+    const reader = port.readable!.getReader();
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        reader.releaseLock();
+        break;
+      }
+      
+      console.log(new TextDecoder().decode(value));
+    }
+  } else if (value === 'rpi') {
+  }
+}
 </script>
 
 <template>
@@ -48,6 +76,15 @@ const themes = [
           <select class="select select-bordered w-full max-w-xs" v-model="colorMode.preference">
             <option disabled selected>テーマを選択...</option>
             <option v-for="theme of themes" :key="theme">{{ theme }}</option>
+          </select>
+        </label>
+
+        <label class="label">
+          <span class="label-text">センサー情報</span>
+          <select class="select select-bordered w-full max-w-xs" @change="onSourceChange">
+            <option disabled selected>ソースを選択...</option>
+            <option value="serial">Arduino (シリアル接続)</option>
+            <option value="rpi">Raspberry Pi</option>
           </select>
         </label>
       </p>

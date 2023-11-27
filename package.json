@@ -13,6 +13,7 @@
     "@nuxt/devtools": "^1.0.3",
     "@nuxtjs/color-mode": "^3.3.2",
     "@nuxtjs/tailwindcss": "^6.10.1",
+    "@types/w3c-web-serial": "^1.0.6",
     "@vueuse/core": "^10.5.0",
     "autoprefixer": "^10.4.16",
     "daisyui": "^4.4.2",
