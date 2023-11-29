@@ -4,13 +4,13 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 
 // 現在の室温
-const roomTmpState: Ref<number | null> = useState('roomTemp', () => null);
+const roomTmpState = roomTmp();
 // 現在の気圧
-const pressureState: Ref<number | null> = useState('pressure', () => null);
+const pressureState = pressure();
 // 現在の外気温
-const outTmpState: Ref<number | null> = useState('outTemp', () => null);
+const outTmpState = outTmp();
 // 天気
-const weatherState: Ref<string | null> = useState('weather', () => null);
+const weatherState = weather();
 
 // センサーのインターバル
 let sensorInterval: Pausable | null = null;
@@ -18,8 +18,8 @@ let sensorInterval: Pausable | null = null;
 // 1秒ごとに温度を更新
 async function refleshStatus() {
   const { data, error } = await useFetch('/api/sensor');
-  if (error.value) {
-    // エラーの場合は停止
+  if (error.value || data.value?.tmp == null) {
+    // エラー・データが無いの場合は停止
     console.error(error.value);
     sensorInterval?.pause();
 

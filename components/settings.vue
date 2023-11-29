@@ -33,6 +33,9 @@ const themes = [
   'winter',
 ];
 
+// 現在の室温
+const roomTmpState = roomTmp();
+
 // センサー情報のソースを変更
 const onSourceChange = async (e: Event) => {
   if (!(e.target instanceof HTMLSelectElement)) return;
@@ -45,19 +48,46 @@ const onSourceChange = async (e: Event) => {
         { usbVendorId: 0x2341, usbProductId: 0x0043 },
       ]
     });
-    await port.open({ baudRate: 9600 });
-    const reader = port.readable!.getReader();
+    await port.open({ baudRate: 115200 });
 
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) {
-        reader.releaseLock();
-        break;
+    // シリアルポートからのデータをテキストに変換しながら読み込み
+    const textDecoder = new TextDecoderStream();
+    port.readable!.pipeTo(textDecoder.writable);
+    const reader = textDecoder.readable!.getReader();
+
+    new Promise(async () => {
+      let json = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) {
+          reader.releaseLock();
+          break;
+        }
+        json += value;
+
+        // 改行コードでJSONの区切りを判定
+        if (json.endsWith('\n')) {
+          const data = JSON.parse(json);
+
+          // 気温データを更新
+          roomTmpState.value = data.temperature;
+          json = '';
+        }
+        console.log(value);
       }
-      
-      console.log(new TextDecoder().decode(value));
-    }
+    });
+
+    // Arduinoにセンサー情報の取得をリクエスト
+    const rawRequest = new TextEncoder().encode("REQUEST_SENSOR_DATA\n");
+    const writer = port.writable!.getWriter();
+
+    // 3秒ごとにリクエストを送信
+    setInterval(async () => {
+      await writer.write(rawRequest);
+    }, 3000);
   } else if (value === 'rpi') {
+
   }
 }
 </script>
