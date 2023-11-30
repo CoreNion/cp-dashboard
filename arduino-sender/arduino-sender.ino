@@ -18,7 +18,7 @@ void loop()
     if (data == "REQUEST_SENSOR_DATA")
     {
       // 温度測定
-      float tmpVoltage = analogRead(TMP36_APIN) * 5.0 / 1024.0;
+      float tmpVoltage = analogRead(TMP36_APIN) * 5.0 / 1023.0;
       float temperature = (tmpVoltage - 0.5) * 100;
 
       // 気圧測定 (WIP)
