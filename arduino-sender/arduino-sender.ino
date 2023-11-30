@@ -14,7 +14,7 @@ void loop()
 {
   if (Serial.available())
   {
-    String data = Serial.readStringUntil('\n');
+    String data = Serial.readStringUntil(';');
     if (data == "REQUEST_SENSOR_DATA")
     {
       // 温度測定

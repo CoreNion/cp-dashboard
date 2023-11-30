@@ -33,6 +33,9 @@ const themes = [
   'winter',
 ];
 
+// センサーのソース
+const sensorSourceState = sensorSource();
+
 // 現在の室温
 const roomTmpState = roomTmp();
 
@@ -41,54 +44,8 @@ const onSourceChange = async (e: Event) => {
   if (!(e.target instanceof HTMLSelectElement)) return;
   const value = e.target.value;
 
-  if (value === 'serial') {
-    // Web Serial APIを使ってArduinoとシリアル接続
-    const port = await navigator.serial.requestPort({
-      filters: [
-        { usbVendorId: 0x2341, usbProductId: 0x0043 },
-      ]
-    });
-    await port.open({ baudRate: 115200 });
-
-    // シリアルポートからのデータをテキストに変換しながら読み込み
-    const textDecoder = new TextDecoderStream();
-    port.readable!.pipeTo(textDecoder.writable);
-    const reader = textDecoder.readable!.getReader();
-
-    new Promise(async () => {
-      let json = '';
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) {
-          reader.releaseLock();
-          break;
-        }
-        json += value;
-
-        // 改行コードでJSONの区切りを判定
-        if (json.endsWith('\n')) {
-          const data = JSON.parse(json);
-
-          // 気温データを更新
-          roomTmpState.value = data.temperature;
-          json = '';
-        }
-        console.log(value);
-      }
-    });
-
-    // Arduinoにセンサー情報の取得をリクエスト
-    const rawRequest = new TextEncoder().encode("REQUEST_SENSOR_DATA\n");
-    const writer = port.writable!.getWriter();
-
-    // 3秒ごとにリクエストを送信
-    setInterval(async () => {
-      await writer.write(rawRequest);
-    }, 3000);
-  } else if (value === 'rpi') {
-
-  }
+  // ローカルストレージに保存
+  localStorage.setItem('sensorSource', value);
 }
 </script>
 
@@ -111,7 +68,7 @@ const onSourceChange = async (e: Event) => {
 
         <label class="label">
           <span class="label-text">センサー情報</span>
-          <select class="select select-bordered w-full max-w-xs" @change="onSourceChange">
+          <select class="select select-bordered w-full max-w-xs" @change="onSourceChange" v-model="sensorSourceState">
             <option disabled selected>ソースを選択...</option>
             <option value="serial">Arduino (シリアル接続)</option>
             <option value="rpi">Raspberry Pi</option>

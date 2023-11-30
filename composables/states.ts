@@ -1,5 +1,8 @@
 import type { Pausable } from "@vueuse/core";
 
+// 現在のセンサー情報のソース
+export const sensorSource = () => useState<String>('sensorSource', () => "rpi");
+
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);
 // タイマーが動いているかどうか

@@ -3,6 +3,11 @@ import { useIntervalFn, type Pausable } from '@vueuse/core'
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 
+// センサーのソース
+const sensorSourceState = sensorSource();
+// シリアル通信の準備ができているか
+const isSerialReady = useState('isSerialReady', () => false);
+
 // 現在の室温
 const roomTmpState = roomTmp();
 // 現在の気圧
@@ -14,22 +19,106 @@ const weatherState = weather();
 
 // センサーのインターバル
 let sensorInterval: Pausable | null = null;
+let serialPort: SerialPort | null = null;
 
-// 1秒ごとに温度を更新
-async function refleshStatus() {
-  const { data, error } = await useFetch('/api/sensor');
-  if (error.value || data.value?.tmp == null) {
-    // エラー・データが無いの場合は停止
-    console.error(error.value);
-    sensorInterval?.pause();
+// Arduinoにセンサー情報の取得をリクエストするときの生データ
+const kRawRequest = new TextEncoder().encode("REQUEST_SENSOR_DATA;");
 
-    roomTmpState.value = null;
-    pressureState.value = null;
+/// シリアルポートに接続
+async function connectSerialDevice() {
+  // シリアル通信の準備ができていない場合は初期化
+  try {
+    serialPort = await navigator.serial.requestPort({
+      filters: [
+        { usbVendorId: 0x2341, usbProductId: 0x0043 },
+      ]
+    });
+    await serialPort.open({ baudRate: 115200 });
+  } catch (e) {
+    console.error(e);
     return;
   }
 
-  roomTmpState.value = data.value?.tmp ?? null;
-  pressureState.value = data.value?.pressure ?? null;
+  isSerialReady.value = true;
+  sensorInterval?.resume();
+}
+
+// センサー情報を更新
+async function refleshStatus() {
+  // 同時実行されないようにIntervalを一時停止
+  sensorInterval?.pause();
+
+  // センサーのソース設定を取得
+  const sensorSource = localStorage.getItem('sensorSource');
+  if (sensorSource == null) {
+    // ない場合は初期値のラズパイに設定
+    localStorage.setItem('sensorSource', 'rpi');
+  } else {
+    sensorSourceState.value = sensorSource;
+  }
+
+  if (sensorSourceState.value === "rpi") {
+    // サーバーからセンサー情報を取得
+    const { data, error } = await useFetch('/api/sensor');
+    if (error.value || data.value?.tmp == null) {
+      // エラー・データが無いの場合は停止
+      console.error(error.value);
+
+      roomTmpState.value = null;
+      pressureState.value = null;
+      return;
+    }
+
+    roomTmpState.value = data.value?.tmp ?? null;
+    pressureState.value = data.value?.pressure ?? null;
+  } else if (sensorSourceState.value === "serial" && serialPort != null) {
+    // シリアルポートからのデータを読み込み
+    const reader = serialPort.readable!.getReader();
+
+    // シリアル通信からのデータを受信するタスク
+    const serialTask = new Promise<void>(async (resolve, reject) => {
+      // 細切れのデータが来るのでwhile
+
+      let json = '';
+      while (true) {
+        // 受信待ち
+        const { value, done } = await reader.read();
+        if (done) {
+          reader.releaseLock();
+          break;
+        }
+        json += new TextDecoder().decode(value);
+
+        // 改行コードでJSONの区切りを判定
+        if (json.endsWith('\n')) {
+          // JSONをパース
+          const data = JSON.parse(json);
+
+          // 気温データを更新
+          roomTmpState.value = data.temperature;
+
+          // 終了
+          reader.releaseLock();
+          break;
+        }
+      }
+
+      resolve();
+    });
+
+    // Arduinoにセンサー情報の取得をリクエスト
+    const writer = serialPort.writable!.getWriter();
+    await writer.write(kRawRequest);
+    writer.releaseLock();
+
+    // シリアル通信のタスクが終了するまで待機
+    await serialTask;
+  } else if (!isSerialReady.value) {
+    return;
+  }
+
+  // Intervalを再開
+  sensorInterval?.resume();
 }
 
 // 10分ごとに天気を更新
@@ -79,10 +168,10 @@ async function refleshWeather() {
 
 // クライアントサイドのみで実行
 onMounted(async () => {
-  // 1秒ごとに温度を更新
+  // 2秒ごとに温度を更新 (1秒だとシリアル通信が追いつかない?
   await refleshStatus();
-  sensorInterval = useIntervalFn(refleshStatus, 1000);
-  
+  sensorInterval = useIntervalFn(refleshStatus, 2000);
+
   // 10分ごとに天気を更新
   await refleshWeather();
   useIntervalFn(refleshWeather, 600000);
@@ -93,7 +182,13 @@ onMounted(async () => {
   <div class="min-w-full stats stats-vertical shadow">
     <div class="stat">
       <div class="stat-title text-5xl">室温</div>
-      <div class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
+      <div v-if="sensorSourceState === 'serial' && !isSerialReady">
+        <span class="font-bold text-xl">接続設定が必要です</span>
+        <br>
+        <button class="btn btn-primary mt-3" @click="connectSerialDevice()">設定する</button>
+      </div>
+
+      <div v-else class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
         <span class="text-5xl">℃</span>
       </div>
     </div>
