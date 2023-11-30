@@ -131,16 +131,17 @@ async function refleshWeather() {
   const officeNumber = 130000;
   const areaNumber = 130010;
 
+  // 最新の気象データの時刻を取得
+  const latestTime = dayjs(await $fetch<string>('https://www.jma.go.jp/bosai/amedas/data/latest_time.txt'));
   // 最新のJSONファイル名 (3時間ごとに別ファイル)
-  const yymmdd = djs.format('YYYYMMDD');
-  const latestJsonName = `${yymmdd}_${(Math.floor(djs.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
+  const latestJsonName = `${latestTime.format("YYYYMMDD")}_${(Math.floor(latestTime.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
 
   // アメダス/天気予報のデータを取得
   const data = await Promise.all([
     // アメダスのデータ
-    $fetch<Number>(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
+    $fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
     // 天気予報のデータ
-    $fetch<Number>(`https://www.jma.go.jp/bosai/forecast/data/forecast/${officeNumber}.json`)
+    $fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${officeNumber}.json`)
   ]).catch((e) => {
     console.error(e);
     return;
