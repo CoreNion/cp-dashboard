@@ -35,6 +35,7 @@ void loop()
       // +Outputの電圧 (mvに変換)
       float mps2407POutVoltage = analogRead(MPS2407_POUTPUT_APIN) * 5.0 / 1023.0 * 1000;
       // 気圧 = (P-Outputの電圧 - M-Outputの電圧) / 0.174 (推測、WIP)
+      // Arduinoのアナログ入力の分解能が低すぎて、気圧の算出がうまくいかない模様
       float pressure = (mps2407POutVoltage - mps2407MOutVoltage) / 0.174;
 
       // JSONを生成

@@ -96,8 +96,8 @@ async function refleshStatus() {
 
           // 気温データを更新
           roomTmpState.value = data.temperature;
-          // 気圧データを更新
-          pressureState.value = data.pressure;
+          // 気圧データを更新 (まともに動作せず)
+          // pressureState.value = data.pressure;
 
           // 終了
           reader.releaseLock();
