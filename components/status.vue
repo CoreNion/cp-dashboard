@@ -96,6 +96,8 @@ async function refleshStatus() {
 
           // 気温データを更新
           roomTmpState.value = data.temperature;
+          // 気圧データを更新
+          pressureState.value = data.pressure;
 
           // 終了
           reader.releaseLock();
@@ -195,7 +197,7 @@ onMounted(async () => {
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">気圧</div>
-      <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed() : "-" }}
+      <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}
         <br>
         <span class="text-5xl">hPa</span>
       </div>
