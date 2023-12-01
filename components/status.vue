@@ -160,6 +160,7 @@ async function refleshWeather() {
   // 最後にある最新の気象データを取得
   const latestWeather = Object(Object.values(amedasData).pop());
   outTmpState.value = latestWeather.temp[0];
+  pressureState.value = latestWeather.pressure[0];
 
   /* 天気予報のデータの処理 */
   const forecastData = Array(data[1]);
@@ -196,7 +197,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="stat">
-      <div class="stat-title text-5xl">気圧</div>
+      <div class="stat-title text-5xl">気圧*</div>
       <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}
         <br>
         <span class="text-5xl">hPa</span>
