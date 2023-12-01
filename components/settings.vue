@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
 const themes = [
+  'dash',
   'system',
   'light',
   'dark',
@@ -31,13 +32,13 @@ const themes = [
   'night',
   'coffee',
   'winter',
+  'dim',
+  'nord',
+  'sunset',
 ];
 
 // センサーのソース
 const sensorSourceState = sensorSource();
-
-// 現在の室温
-const roomTmpState = roomTmp();
 
 // センサー情報のソースを変更
 const onSourceChange = async (e: Event) => {
