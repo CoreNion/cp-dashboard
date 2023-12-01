@@ -6,7 +6,10 @@ useSeoMeta({
   ogDescription: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
   ogImage: 'https://coreinion.github.io/cp-dashboard/ogp.png',
   twitterCard: 'summary_large_image',
-})
+});
+
+// チャイムの有効/無効
+const isChimeEnabledState = isChimeEnabled();
 </script>
 
 <template>
@@ -31,7 +34,11 @@ useSeoMeta({
       </div>
     </div>
 
-    <div class="2xl:hidden min-h-screen flex flex-col items-center text-center">
+    <div class="2xl:hidden min-h-screen min-w-full flex flex-col items-center text-center">
+      <label class="label cursor-pointer">
+        <span class="label-text mr-4">チャイム機能</span>
+        <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
+      </label>
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
       <div class="flex flex-row gap-5">
