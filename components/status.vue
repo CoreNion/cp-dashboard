@@ -17,6 +17,9 @@ const outTmpState = outTmp();
 // 天気
 const weatherState = weather();
 
+// チャイムの有効/無効
+const isChimeEnabledState = isChimeEnabled();
+
 // センサーのインターバル
 let sensorInterval: Pausable | null = null;
 let serialPort: SerialPort | null = null;
@@ -215,9 +218,16 @@ onMounted(async () => {
         {{ weatherState != null ? weatherState : "-" }}
       </div>
     </div>
-    <div class="stat m-auto">
+
+    <div class="stat m-auto gap-2">
       <span>*出典: 気象庁ホームページ</span>
-      <settings></settings>
+
+      <settings class="flex-1"></settings>
+
+      <label class="label cursor-pointer">
+        <span class="label-text">チャイム機能</span>
+        <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
+      </label>
     </div>
   </div>
 </template>
