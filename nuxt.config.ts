@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   build: {},
   modules: [
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    'nuxt-icon'
   ],
   colorMode: {
     preference: 'autumn', 

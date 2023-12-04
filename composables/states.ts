@@ -19,4 +19,4 @@ export const pressure = () => useState<Number | null>('pressure', () => null);
 // 現在の外気温
 export const outTmp= () => useState<Number | null>('outTemp', () => null);
 // 天気
-export const weather = () => useState<String | null>('weather', () => null);
+export const weather = () => useState<string | null>('weather', () => null);

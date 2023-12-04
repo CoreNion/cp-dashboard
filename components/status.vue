@@ -196,7 +196,7 @@ onMounted(async () => {
       </div>
 
       <div v-else class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-        <span class="text-5xl">℃</span>
+        <IconCss name="uil:celsius" class="text-6xl" />
       </div>
     </div>
     <div class="stat">
@@ -209,14 +209,12 @@ onMounted(async () => {
     <div class="stat">
       <div class="stat-title text-5xl">外気温*</div>
       <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }}
-        <span class="text-5xl">℃</span>
+        <IconCss name="uil:celsius" class="text-6xl" />
       </div>
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">天気*</div>
-      <div class="stat-value text-7xl" style="white-space: pre-wrap;">
-        {{ weatherState != null ? weatherState : "-" }}
-      </div>
+      <IconCss :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value text-8xl m-auto" />
     </div>
 
     <div class="stat m-auto gap-2">

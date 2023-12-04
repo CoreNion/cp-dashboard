@@ -20,6 +20,7 @@
     "dayjs": "^1.11.10",
     "mcp-spi-adc": "^3.2.0",
     "nuxt": "^3.8.0",
+    "nuxt-icon": "^0.6.6",
     "postcss": "^8.4.31",
     "typescript": "^5.2.2",
     "vue": "^3.3.7",

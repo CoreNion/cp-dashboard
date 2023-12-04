@@ -8,12 +8,12 @@ export default function (weatherCode: String) {
       // 朝の内霧後晴れ
     case "131":
       // 晴れ明け方霧
-      return "☀️";
+      return "wi:day-sunny";
     case "101":
       // 晴れ時々曇り
     case "132":
       // 晴れ朝夕曇り
-      return "☀️☁︎";
+      return "wi:day-sunny-overcast";
     case "102":
       // 晴れ一時雨
     case "103":
@@ -22,7 +22,7 @@ export default function (weatherCode: String) {
       // 晴れ朝夕一時雨
     case "121":
       // 晴れ朝の内一時雨
-      return "☀️☔️";
+      return "wi:day-rain";
     case "104":
       // 晴れ一時雪
     case "105":
@@ -31,24 +31,24 @@ export default function (weatherCode: String) {
       // 晴れ一時雪か雨
     case "170":
       // 晴れ時々雪か雨
-      return "☀️☃️";
+      return "wi:day-snow";
     case "106":
       // 晴れ一時雨か雪
     case "107":
       // 晴れ時々雨か雪
     case "181":
       // 晴れのち雪か雨
-      return "☀️☔️❄️";
+      return "wi:day-rain-mix";
     case "108":
       // 晴れ時々雨か雷雨
     case "140":
       // 晴れ時々雨で雷を伴う
-      return "☀️⛈️";
+      return "wi:day-thunderstorm";
     case "110":
       // 晴れのち時々曇り
     case "111":
       // 晴れのち曇り
-      return "☀️→☁︎";
+      return "wi:day-cloudy";
     case "112":
       // 晴れのち一時雨
     case "113":
@@ -61,43 +61,43 @@ export default function (weatherCode: String) {
       // 晴れ昼頃から雨
     case "127":
       // 晴れ夕方から雨
-      return "☀️→☔️";
+      return "wi:day-rain";
     case "115":
       // 晴れのち一時雪
     case "116":
       // 晴れのち時々雪
     case "117":
       // 晴れのち雪
-      return "☀️→☃️";
+      return "wi:day-snow";
     case "118":
       // 晴れのち雨か雪
-      return "☀️→\n ☔️❄️";
+      return "wi:day-rain-mix";
     case "119":
       // 晴れのち雨か雷雨
     case "125":
       // 晴午後は雷雨
-      return "☀️→⛈️";
+      return "wi:day-thunderstorm";
     case "123":
       // 晴れ山沿い雷雨
-      return "☀️⛰️⛈️";
+      return "wi:day-cloudy";
     case "124":
       // 晴れ山沿い雪
-      return "☀️🗻";
+      return "wi:day-sunny-overcast";
     case "128":
       // 晴れ夜は雨
-      return "☀️🌙☔️";
+      return "wi:night-alt-rain";
   
     /* 曇り */
     case "200":
       // 曇り
     case "231":
       // 曇り海上海岸は霧か霧雨
-      return "☁";
+      return "wi:cloudy";
     case "201":
       // 曇り時々晴れ
     case "223":
       // 曇り日中時々晴れ
-      return "☁︎☀️";
+      return "wi:day-cloudy";
     case "202":
       // 曇り一時雨
     case "203":
@@ -106,32 +106,32 @@ export default function (weatherCode: String) {
       // 曇り朝夕一時雨
     case "221":
       // 曇り朝の内一時雨
-      return "☁︎☔️";
+      return "wi:rain-mix";
     case "204":
       // 曇り一時雪
     case "205":
       // 曇り時々雪
-      return "☁︎☃️";
+      return "wi:snow";
     case "206":
       // 曇り一時雨か雪
     case "207":
       // 曇り時々雨か雪
     case "270":
       // 曇り時々雪か雨
-      return "☁︎☔️❄️";
+      return "wi:rain-mix";
     case "208":
       // 曇り一時雨か雷雨
     case "240":
       // 曇り時々雨で雷を伴う
-      return "☁︎⛈️";
+      return "wi:thunderstorm";
     case "209":
       // 霧
-      return "🌫️";
+      return "wi:fog";
     case "210":
       // 曇りのち時々晴れ
     case "211":
       // 曇りのち晴れ
-    return "☁︎→☀️";
+    return "wi:day-cloudy";
     case "212":
       // 曇りのち一時雨
     case "213":
@@ -146,7 +146,7 @@ export default function (weatherCode: String) {
       // 曇り夕方から雨
     case "226":
       // 曇り夜は雨
-      return "☁︎→☔️";
+      return "wi:night-alt-rain";
     case "215":
       // 曇りのち一時雪
     case "216":
@@ -159,29 +159,29 @@ export default function (weatherCode: String) {
       // 曇り夕方から雪
     case "230":
       // 曇り夜は雪
-      return "☁︎→☃️";
+      return "wi:night-alt-snow";
     case "218":
       // 曇りのち雨か雪
     case "281":
       // 曇りのち雪か雨
-      return "☁︎→\n ☔️❄️";
+      return "wi:rain-mix";
     case "219":
       // 曇りのち雨か雷雨
-      return "☁︎→⛈️";
+      return "wi:thunderstorm";
     case "250":
       // 曇り時々雪で雷を伴う
-      return "☁︎⛄️⚡️";
+      return "wi:thunderstorm";
 
     /* 雨 */
     case "300":
       // 雨
-      return "☔️";
+      return "wi:rain";
     case "301":
       // 雨時々晴れ
-      return "☔️☀️";
+      return "wi:day-rain";
     case "302":
       // 雨時々止む
-      return "☔️☁️";
+      return "wi:raindrops";
     case "303":
       // 雨時々雪
     case "304":
@@ -192,15 +192,15 @@ export default function (weatherCode: String) {
       // 雨朝晩一時雪
     case "329":
       // 雨一時みぞれ
-      return "☔️❄️";
+      return "wi:rain-mix";
     case "306":
       // 大雨
     case "328":
       // 雨一時強く降る
-      return "☔️🌧️";
+      return "wi:rain";
     case "308":
       // 雨で暴風を伴う
-      return "☔️💨";
+      return "wi:rain-wind";
     case "311":
       // 雨のち晴れ
     case "320":
@@ -209,12 +209,12 @@ export default function (weatherCode: String) {
       // 雨昼ごろから晴れ
     case "324":
       // 雨夕方から晴れ
-      return "☔️→☀️";
+      return "wi:night-rain";
     case "313":
       // 雨のち曇り
     case "321":
       // 朝のうち雨のち曇り
-      return "☔️→☁️";
+      return "wi:rain";
     case "314":
       // 雨のち時々雪
     case "315":
@@ -223,78 +223,78 @@ export default function (weatherCode: String) {
       // 雨夕方から雪
     case "327":
       // 雨夜は雪
-      return "☔️→❄️";
+      return "wi:rain-mix";
     case "316":
       // 雨か雪のち晴れ
     case "361":
       // 雪か雨のち晴れ
-      return "☔️❄️→☀️";
+      return "wi:day-rain";
     case "317":
       // 雨か雪のち曇り
     case "371":
       // 雪か雨のち曇り
-      return "☔️❄️\n →☁️";
+      return "wi:rain-mix";
     case "325":
       // 雨夜は晴れ
-      return "☔️→🌙";
+      return "wi:night-alt-rain";
     case "340":
       // 雪か雨
-      return "⛄️☔️";
+      return "wi:rain-mix";
     case "350":
       // 雨で雷を伴う
-      return "⛈️";
+      return "wi:thunderstorm";
 
     /* 雪 */
     case "400":
       // 雪
-      return "⛄️";
+      return "wi:snow";
     case "401":
       // 雪時々晴れ
-      return "⛄️☀️";
+      return "wi:day-snow";
     case "402":
       // 雪時々止む
-      return "⛄️☁️";
+      return "wi:snowflake-cold";
     case "403":
       // 雪時々雨
     case "409":
       // 雪一時雨
-      return "❄️☔️";
+      return "wi:rain-mix";
     case "405":
       // 大雪
     case "425":
       // 雪一時強く降る
-      return "☃️🌨️";
+      return "wi:snow-wind";
     case "406":
       // 風雪強い
     case "407":
       // 暴風雪
-      return "💨☃️";
+      return "wi:snow-wind";
     case "411":
       // 雪のち晴れ
     case "420":
       // 朝のうち雪のち晴れ
-      return "⛄️→☀️";
+      return "wi:day-snow";
     case "413":
       // 雪のち曇り
     case "421":
       // 朝のうち雪のち曇り
-      return "⛄️→☁️";
+      return "wi:snowflake-cold";
     case "414":
       // 雪のち雨
     case "422":
       // 雪昼頃から雨
     case "423":
       // 雪夕方から雨
-      return "⛄️→☔️";
+      return "wi:rain-mix";
     case "426":
       // 雪のちみぞれ
     case "427":
       // 雪一時みぞれ
-      return "⛄️→\n ❄️☔️";
+      return "wi:rain-mix";
     case "450":
       // 雪で雷を伴う
-      return "⛄️⚡️";
+      return "wi:thunderstorm";
     default:
-      return "？";
+      return "line-md:question-circlewi:alien";
   };
 }
