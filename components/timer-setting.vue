@@ -24,7 +24,7 @@ function startTimer() {
   }
 
   // タイマーの音
-  const audio = new Audio('./alert.mp3');
+  const audio = new Audio(timerAlertSource().value);
 
   // タイマーの残り時間を設定
   timerState.value = timerSettingState.value;

@@ -10,6 +10,28 @@ useSeoMeta({
 
 // チャイムの有効/無効
 const isChimeEnabledState = isChimeEnabled();
+
+onMounted(async () => {
+  // OPFSからチャイム音源とアラート音源を読み込む
+  const opfsRoot = await navigator.storage.getDirectory();
+
+  // チャイム音源を読み込む
+  try {
+    const chimeHandle = await opfsRoot.getFileHandle('chime.mp3', { create: false });
+    const chimeBuffer = await chimeHandle.getFile();
+    chimeSource().value = URL.createObjectURL(chimeBuffer);
+  } catch (e) {
+  }
+
+  // アラート音源を読み込む
+  try {
+    const alertHandle = await opfsRoot.getFileHandle('alert.mp3', { create: false });
+    const alertBuffer = await alertHandle.getFile();
+    timerAlertSource().value = URL.createObjectURL(alertBuffer);
+  } catch {
+    
+  }
+});
 </script>
 
 <template>

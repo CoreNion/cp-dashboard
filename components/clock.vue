@@ -58,7 +58,7 @@ useIntervalFn(async () => {
   if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
     // カウントを増やし、チャイムを鳴らす
     chimeCount++;
-    const audio = new Audio('/alert.mp3');
+    const audio = new Audio(chimeSource().value);
     audio.play();
 
     if (chimeCount === chimeTimes.length) {

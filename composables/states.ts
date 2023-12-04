@@ -1,7 +1,11 @@
 import type { Pausable } from "@vueuse/core";
 
 // 現在のセンサー情報のソース
-export const sensorSource = () => useState<String>('sensorSource', () => "rpi");
+export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
+// タイマーの音声のソース
+export const timerAlertSource = () => useState<string>('timerSource', () => "/alert.mp3");
+// チャイムの音声ソース
+export const chimeSource = () => useState<string>('chimeSource', () => "/alert.mp3");
 
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);

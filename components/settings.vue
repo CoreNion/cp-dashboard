@@ -39,6 +39,10 @@ const themes = [
 
 // センサーのソース
 const sensorSourceState = sensorSource();
+// チャイムの音源
+const chimeSourceState = chimeSource();
+// タイマーのアラート音源
+const timerAlertSourceState = timerAlertSource();
 
 // センサー情報のソースを変更
 const onSourceChange = async (e: Event) => {
@@ -48,6 +52,63 @@ const onSourceChange = async (e: Event) => {
   // ローカルストレージに保存
   localStorage.setItem('sensorSource', value);
 }
+
+const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
+const onAlertAudioChange = async (e: Event) => {
+  if (!(e.target instanceof HTMLInputElement)) return;
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  // OPFSにファイルを保存
+  saveFile(file, 'alert.mp3');
+  // メモリ上の音源を更新
+  timerAlertSource().value = URL.createObjectURL(file);
+  // 名前を更新
+  alertFileNameState.value = file.name;
+}
+const removeAlertAudio = () => {
+  localStorage.removeItem('alert.mp3');
+  removeFile('alert.mp3');
+
+  // メモリ上の音源/名前を元に戻す
+  alertFileNameState.value = 'デフォルトの音声';
+  timerAlertSourceState.value = '/alert.mp3';
+}
+
+const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
+const onChimeAudioChange = async (e: Event) => {
+  if (!(e.target instanceof HTMLInputElement)) return;
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  saveFile(file, 'chime.mp3');
+  chimeSourceState.value = URL.createObjectURL(file);
+  chimeFileNameState.value = file.name;
+}
+const removeChimeAudio = () => {
+  localStorage.removeItem('chime.mp3');
+  removeFile('chime.mp3');
+
+  chimeFileNameState.value = 'デフォルトの音声';
+  chimeSourceState.value = '/alert.mp3';
+}
+
+const playAudio = (link: string) => {
+  const audio = new Audio(link);
+  audio.play();
+}
+
+onMounted(() => {
+  const alertFileName = localStorage.getItem('alert.mp3');
+  if (alertFileName != null) {
+    alertFileNameState.value = alertFileName;
+  }
+
+  const chimeFileName = localStorage.getItem('chime.mp3');
+  if (chimeFileName != null) {
+    chimeFileNameState.value = chimeFileName;
+  }
+});
 </script>
 
 <template>
@@ -58,7 +119,7 @@ const onSourceChange = async (e: Event) => {
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
       </form>
       <h3 class="font-bold text-lg">設定</h3>
-      <p class="py-4">
+      <p class="py-2">
         <label class="label">
           <span class="label-text">テーマ</span>
           <select class="select select-bordered w-full max-w-xs" v-model="colorMode.preference">
@@ -74,6 +135,36 @@ const onSourceChange = async (e: Event) => {
             <option value="serial">Arduino (シリアル接続)</option>
             <option value="rpi">Raspberry Pi</option>
           </select>
+        </label>
+      </p>
+
+      <div class="divider"></div> 
+
+      <p class="pb-2">
+        <label class="label">
+          <span class="label-text whitespace-nowrap">アラート音</span>
+          <div class="flex flex-col items-end gap-1 w-full">
+            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*" @change="onAlertAudioChange" />
+            <div class="flex flex-row items-center gap-2">
+              <button v-if="alertFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error" @click="removeAlertAudio">
+                <IconCss name="uil:trash-alt" />
+              </button>
+              <button class="grow link" @click="playAudio(timerAlertSourceState)">{{ alertFileNameState }}</button>
+            </div>
+          </div>
+        </label>
+
+        <label class="label">
+          <span class="label-text whitespace-nowrap">チャイム</span>
+          <div class="flex flex-col items-end gap-1 w-full">
+            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*" @change="onChimeAudioChange" />
+            <div class="flex flex-row items-center gap-2">
+              <button v-if="chimeFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error" @click="removeChimeAudio">
+                <IconCss name="uil:trash-alt" />
+              </button>
+              <button class="grow link" @click="playAudio(chimeSourceState)">{{ chimeFileNameState }}</button>
+            </div>
+          </div>
         </label>
       </p>
     </div>
