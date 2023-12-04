@@ -44,6 +44,9 @@ const chimeSourceState = chimeSource();
 // タイマーのアラート音源
 const timerAlertSourceState = timerAlertSource();
 
+// チャイムの有効/無効
+const isChimeEnabledState = isChimeEnabled();
+
 // センサー情報のソースを変更
 const onSourceChange = async (e: Event) => {
   if (!(e.target instanceof HTMLSelectElement)) return;
@@ -138,15 +141,19 @@ onMounted(() => {
         </label>
       </p>
 
-      <div class="divider"></div> 
+      <div class="divider"></div>
 
-      <p class="pb-2">
+      <h4 class="font-bold">音声設定</h4>
+
+      <p class="py-3">        
         <label class="label">
           <span class="label-text whitespace-nowrap">アラート音</span>
           <div class="flex flex-col items-end gap-1 w-full">
-            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*" @change="onAlertAudioChange" />
+            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*"
+              @change="onAlertAudioChange" />
             <div class="flex flex-row items-center gap-2">
-              <button v-if="alertFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error" @click="removeAlertAudio">
+              <button v-if="alertFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
+                @click="removeAlertAudio">
                 <IconCss name="uil:trash-alt" />
               </button>
               <button class="grow link" @click="playAudio(timerAlertSourceState)">{{ alertFileNameState }}</button>
@@ -157,16 +164,22 @@ onMounted(() => {
         <label class="label">
           <span class="label-text whitespace-nowrap">チャイム</span>
           <div class="flex flex-col items-end gap-1 w-full">
-            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*" @change="onChimeAudioChange" />
+            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*"
+              @change="onChimeAudioChange" />
             <div class="flex flex-row items-center gap-2">
-              <button v-if="chimeFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error" @click="removeChimeAudio">
+              <button v-if="chimeFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
+                @click="removeChimeAudio">
                 <IconCss name="uil:trash-alt" />
               </button>
               <button class="grow link" @click="playAudio(chimeSourceState)">{{ chimeFileNameState }}</button>
             </div>
           </div>
         </label>
+
+        <label class="label cursor-pointer">
+          <span class="label-text">チャイム鳴動状態</span>
+          <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
+        </label>
       </p>
-    </div>
-  </dialog>
-</template>
+  </div>
+</dialog></template>
