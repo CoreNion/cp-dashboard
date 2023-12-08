@@ -154,7 +154,7 @@ onMounted(() => {
             <div class="flex flex-row items-center gap-2">
               <button v-if="alertFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
                 @click="removeAlertAudio">
-                <IconCss name="uil:trash-alt" />
+                <Icon name="uil:trash-alt" />
               </button>
               <button class="grow link" @click="playAudio(timerAlertSourceState)">{{ alertFileNameState }}</button>
             </div>
@@ -169,7 +169,7 @@ onMounted(() => {
             <div class="flex flex-row items-center gap-2">
               <button v-if="chimeFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
                 @click="removeChimeAudio">
-                <IconCss name="uil:trash-alt" />
+                <Icon name="uil:trash-alt" />
               </button>
               <button class="grow link" @click="playAudio(chimeSourceState)">{{ chimeFileNameState }}</button>
             </div>

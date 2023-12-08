@@ -8,9 +8,6 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 });
 
-// チャイムの有効/無効
-const isChimeEnabledState = isChimeEnabled();
-
 onMounted(async () => {
   // OPFSからチャイム音源とアラート音源を読み込む
   const opfsRoot = await navigator.storage.getDirectory();
@@ -57,10 +54,6 @@ onMounted(async () => {
     </div>
 
     <div class="2xl:hidden min-h-screen min-w-full flex flex-col items-center text-center">
-      <label class="label cursor-pointer">
-        <span class="label-text mr-4">チャイム機能</span>
-        <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
-      </label>
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
       <div class="flex flex-row gap-5">

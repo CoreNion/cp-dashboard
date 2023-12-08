@@ -17,9 +17,6 @@ const outTmpState = outTmp();
 // 天気
 const weatherState = weather();
 
-// チャイムの有効/無効
-const isChimeEnabledState = isChimeEnabled();
-
 // センサーのインターバル
 let sensorInterval: Pausable | null = null;
 let serialPort: SerialPort | null = null;
@@ -191,41 +188,35 @@ onMounted(async () => {
       <div class="stat-title text-5xl">室温</div>
       <div v-if="sensorSourceState === 'serial' && !isSerialReady">
         <span class="font-bold text-xl">接続設定が必要です</span>
-        <br>
-        <button class="btn btn-primary mt-3" @click="connectSerialDevice()">設定する</button>
+        <button class="btn btn-primary btn-sm mt-1" @click="connectSerialDevice()">設定する</button>
       </div>
 
       <div v-else class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-        <IconCss name="uil:celsius" class="text-6xl" />
+        <Icon name="uil:celsius" class="text-6xl" />
       </div>
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">気圧*</div>
-      <div class="stat-value text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}
-        <br>
+      <div class="stat-value flex flex-col">
+        <span class="text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
         <span class="text-5xl">hPa</span>
       </div>
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">外気温*</div>
       <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }}
-        <IconCss name="uil:celsius" class="text-6xl" />
+        <Icon name="uil:celsius" class="text-6xl" />
       </div>
     </div>
     <div class="stat">
       <div class="stat-title text-5xl">天気*</div>
-      <IconCss :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value text-8xl m-auto" />
+      <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value text-8xl m-auto" />
     </div>
 
     <div class="stat m-auto gap-2">
       <span>*出典: 気象庁ホームページ</span>
 
       <settings class="flex-1"></settings>
-
-      <label class="label cursor-pointer">
-        <span class="label-text">チャイム機能</span>
-        <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
-      </label>
     </div>
   </div>
 </template>
