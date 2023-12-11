@@ -9,6 +9,13 @@ useSeoMeta({
 });
 
 onMounted(async () => {
+  // スリープを無効化
+  try {
+    await navigator.wakeLock.request('screen');
+  } catch (e) {
+    console.warn(e);
+  }
+
   // OPFSからチャイム音源とアラート音源を読み込む
   const opfsRoot = await navigator.storage.getDirectory();
 
