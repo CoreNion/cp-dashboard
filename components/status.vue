@@ -21,9 +21,6 @@ const weatherState = weather();
 let sensorInterval: Pausable | null = null;
 let serialPort: SerialPort | null = null;
 
-// Arduinoにセンサー情報の取得をリクエストするときの生データ
-const kRawRequest = new TextEncoder().encode("REQUEST_SENSOR_DATA;");
-
 /// シリアルポートに接続
 async function connectSerialDevice() {
   // シリアル通信の準備ができていない場合は初期化
