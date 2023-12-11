@@ -11,8 +11,17 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    'nuxt-icon'
+    'nuxt-icon',
+    '@vite-pwa/nuxt'
   ],
+  pwa: {
+    manifest: {
+      name: 'Campus Dashboard',
+      short_name: 'CP-Dashboard',
+      lang: 'ja',
+      display: 'standalone',
+    },
+  },
   colorMode: {
     preference: 'dash', 
     dataValue: 'theme', // activate data-theme in <html> tag

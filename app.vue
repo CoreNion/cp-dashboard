@@ -39,6 +39,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <NuxtPwaManifest />
   <NuxtLayout>
     <!-- 全画面時の表示 -->
     <div class="max-2xl:hidden min-h-screen flex flex-row text-center gap-2">
