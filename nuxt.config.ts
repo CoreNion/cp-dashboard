@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     'nuxt-icon'
   ],
   colorMode: {
-    preference: 'autumn', 
+    preference: 'dash', 
     dataValue: 'theme', // activate data-theme in <html> tag
     classSuffix: '',
   },
