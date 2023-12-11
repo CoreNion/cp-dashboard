@@ -41,11 +41,19 @@ const themes = [
 const sensorSourceState = sensorSource();
 // チャイムの音源
 const chimeSourceState = chimeSource();
+// 予鈴の音源
+const preChimeSourceState = preChimeSource();
 // タイマーのアラート音源
 const timerAlertSourceState = timerAlertSource();
 
 // チャイムの有効/無効
 const isChimeEnabledState = isChimeEnabled();
+// 予鈴の有効/無効
+const isPreChimeEnabledState = isPreChimeEnabled();
+
+const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
+const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
+const preChimeFileNameState = useState('preChimeFileName', () => 'デフォルトの音声');
 
 // センサー情報のソースを変更
 const onSourceChange = async (e: Event) => {
@@ -56,52 +64,68 @@ const onSourceChange = async (e: Event) => {
   localStorage.setItem('sensorSource', value);
 }
 
-const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
-const onAlertAudioChange = async (e: Event) => {
+// 音源変更時の処理
+const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis.Ref<string>, storageKey: string, fileNameState: globalThis.Ref<string>) => {
+  // ファイルを読み込む
   if (!(e.target instanceof HTMLInputElement)) return;
   const file = e.target.files?.[0];
   if (!file) return;
 
   // OPFSにファイルを保存
-  saveFile(file, 'alert.mp3');
+  saveFile(file, fileName);
   // メモリ上の音源を更新
-  timerAlertSource().value = URL.createObjectURL(file);
-  // 名前を更新
-  alertFileNameState.value = file.name;
+  sourceState.value = URL.createObjectURL(file);
+  // ファイル名を更新
+  fileNameState.value = file.name;
+
+  // ローカルストレージに元のファイル名を保存
+  localStorage.setItem(storageKey, file.name);
 }
-const removeAlertAudio = () => {
-  localStorage.removeItem('alert.mp3');
-  removeFile('alert.mp3');
+
+// 音源削除時の処理
+const removeAudio = (fileName: string, sourceState: globalThis.Ref<string>, storageKey: string, fileNameState: globalThis.Ref<string>) => {
+  // ローカルストレージからメタデータ(元ファイル名)を削除
+  localStorage.removeItem(storageKey);
+  // OPFSからファイルを削除
+  removeFile(fileName);
 
   // メモリ上の音源/名前を元に戻す
-  alertFileNameState.value = 'デフォルトの音声';
-  timerAlertSourceState.value = '/alert.mp3';
+  fileNameState.value = 'デフォルトの音声';
+  sourceState.value = "/alert.mp3";
 }
 
-const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
+const onAlertAudioChange = async (e: Event) => {
+  onAudioChange(e, 'alert.mp3', timerAlertSourceState, 'alertFileName', alertFileNameState);
+}
+
+const removeAlertAudio = () => {
+  removeAudio('alert.mp3', timerAlertSourceState, 'alertFileName', alertFileNameState);
+}
+
 const onChimeAudioChange = async (e: Event) => {
-  if (!(e.target instanceof HTMLInputElement)) return;
-  const file = e.target.files?.[0];
-  if (!file) return;
-
-  saveFile(file, 'chime.mp3');
-  chimeSourceState.value = URL.createObjectURL(file);
-  chimeFileNameState.value = file.name;
+  onAudioChange(e, 'chime.mp3', chimeSourceState, 'chimeFileName', chimeFileNameState);
 }
+
 const removeChimeAudio = () => {
-  localStorage.removeItem('chime.mp3');
-  removeFile('chime.mp3');
-
-  chimeFileNameState.value = 'デフォルトの音声';
-  chimeSourceState.value = '/alert.mp3';
+  removeAudio('chime.mp3', chimeSourceState, 'chimeFileName', chimeFileNameState);
 }
 
+const onPreChimeAudioChange = async (e: Event) => {
+  onAudioChange(e, 'pre-chime.mp3', preChimeSourceState, 'preChimeFileName', preChimeFileNameState);
+}
+
+const removePreChimeAudio = () => {
+  removeAudio('pre-chime.mp3', preChimeSourceState, 'preChimeFileName', preChimeFileNameState);
+}
+
+// 音源を再生
 const playAudio = (link: string) => {
   const audio = new Audio(link);
   audio.play();
 }
 
 onMounted(() => {
+  // ローカルストレージから元ファイル名を取得
   const alertFileName = localStorage.getItem('alert.mp3');
   if (alertFileName != null) {
     alertFileNameState.value = alertFileName;
@@ -110,6 +134,11 @@ onMounted(() => {
   const chimeFileName = localStorage.getItem('chime.mp3');
   if (chimeFileName != null) {
     chimeFileNameState.value = chimeFileName;
+  }
+
+  const preChimeFileName = localStorage.getItem('pre-chime.mp3');
+  if (preChimeFileName != null) {
+    preChimeFileNameState.value = preChimeFileName;
   }
 });
 </script>
@@ -145,41 +174,25 @@ onMounted(() => {
 
       <h4 class="font-bold">音声設定</h4>
 
-      <p class="py-3">        
-        <label class="label">
-          <span class="label-text whitespace-nowrap">アラート音</span>
-          <div class="flex flex-col items-end gap-1 w-full">
-            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*"
-              @change="onAlertAudioChange" />
-            <div class="flex flex-row items-center gap-2">
-              <button v-if="alertFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
-                @click="removeAlertAudio">
-                <Icon name="uil:trash-alt" />
-              </button>
-              <button class="grow link" @click="playAudio(timerAlertSourceState)">{{ alertFileNameState }}</button>
-            </div>
-          </div>
-        </label>
+      <p class="py-3">
+        <AudioSetting labelText="タイマー終了時" :fileName="alertFileNameState" :source="timerAlertSourceState"
+          :onAudioChange="onAlertAudioChange" :removeAudio="removeAlertAudio" :playAudio="playAudio" />
 
-        <label class="label">
-          <span class="label-text whitespace-nowrap">チャイム</span>
-          <div class="flex flex-col items-end gap-1 w-full">
-            <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*"
-              @change="onChimeAudioChange" />
-            <div class="flex flex-row items-center gap-2">
-              <button v-if="chimeFileNameState != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
-                @click="removeChimeAudio">
-                <Icon name="uil:trash-alt" />
-              </button>
-              <button class="grow link" @click="playAudio(chimeSourceState)">{{ chimeFileNameState }}</button>
-            </div>
-          </div>
-        </label>
+        <AudioSetting labelText="チャイム" :fileName="chimeFileNameState" :source="chimeSourceState"
+          :onAudioChange="onChimeAudioChange" :removeAudio="removeChimeAudio" :playAudio="playAudio" />
 
-        <label class="label cursor-pointer">
+        <AudioSetting labelText="予鈴チャイム" :fileName="preChimeFileNameState" :source="preChimeSourceState"
+          :onAudioChange="onPreChimeAudioChange" :removeAudio="removePreChimeAudio" :playAudio="playAudio" />
+
+        <label class="label cursor-pointer mt-4">
           <span class="label-text">チャイム鳴動状態</span>
           <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
         </label>
+        <label class="label cursor-pointer mt-4">
+          <span class="label-text">予鈴鳴動状態</span>
+          <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
+        </label>
       </p>
-  </div>
-</dialog></template>
+    </div>
+  </dialog>
+</template>

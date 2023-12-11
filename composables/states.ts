@@ -6,6 +6,8 @@ export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
 export const timerAlertSource = () => useState<string>('timerSource', () => "/alert.mp3");
 // チャイムの音声ソース
 export const chimeSource = () => useState<string>('chimeSource', () => "/alert.mp3");
+// 予鈴の音声ソース
+export const preChimeSource = () => useState<string>('preChimeSource', () => "/alert.mp3");
 
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);
@@ -15,6 +17,8 @@ export const isTimerActive = () => useState('isTimerActive', () => false);
 export const timer = () => useState<number[] | null>('timer', () => null);
 // チャイムの有効/無効
 export const isChimeEnabled = () => useState<boolean>('isChimeEnabled', () => true);
+// 予鈴の有効/無効
+export const isPreChimeEnabled = () => useState<boolean>('isPreChimeEnabled', () => true);
 
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
