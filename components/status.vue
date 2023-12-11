@@ -182,32 +182,33 @@ onMounted(async () => {
 <template>
   <div class="min-w-full stats stats-vertical shadow">
     <div class="stat">
-      <div class="stat-title text-5xl">室温</div>
+      <div class="stat-title text-[3vw]">室温</div>
       <div v-if="sensorSourceState === 'serial' && !isSerialReady">
         <span class="font-bold text-xl">接続設定が必要です</span>
+        <br>
         <button class="btn btn-primary btn-sm mt-1" @click="connectSerialDevice()">設定する</button>
       </div>
 
-      <div v-else class="stat-value text-7xl">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-        <Icon name="uil:celsius" class="text-6xl" />
+      <div v-else class="stat-value text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
+      <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
     <div class="stat">
-      <div class="stat-title text-5xl">気圧*</div>
-      <div class="stat-value flex flex-col">
-        <span class="text-7xl">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
-        <span class="text-5xl">hPa</span>
+      <div class="stat-title text-[3vw]">気圧*</div>
+      <div class="stat-value leading-none flex flex-col">
+        <span class="text-[4.6vw]">{{ pressureState != null ? pressureState.toFixed(1): "-" }}</span>
+        <span class="text-[3vw]">hPa</span>
       </div>
     </div>
     <div class="stat">
-      <div class="stat-title text-5xl">外気温*</div>
-      <div class="stat-value text-7xl">{{ outTmpState != null ? outTmpState : "-" }}
-        <Icon name="uil:celsius" class="text-6xl" />
+      <div class="stat-title text-[3vw]">外気温*</div>
+      <div class="stat-value text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
+        <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
     <div class="stat">
-      <div class="stat-title text-5xl">天気*</div>
-      <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value text-8xl m-auto" />
+      <div class="stat-title text-[3vw]">天気*</div>
+      <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value m-auto leading-none" size="5vw" />
     </div>
 
     <div class="stat m-auto gap-2">

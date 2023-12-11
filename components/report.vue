@@ -36,9 +36,9 @@ const reportRatio = ((reportTime - reportMonthLimit) / reportTime) * 100;
 
 <template>
   <div class="m-2">
-    <h2 class="text-3xl mb-3">レポート日数</h2>
+    <h2 class="text-[2vw] mb-3">レポート日数</h2>
     <ClientOnly>
-      <div :class="['radial-progress', 'text-6xl', 'font-bold', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
+      <div :class="['radial-progress', 'text-[3vw]', 'font-bold', needReportMonthAlert ? 'text-primary' : 'text-red-600']"
         :style="{ '--value': reportRatio, '--size': '12vw', '--thickness': '1.5vw' }">
         <!-- parseIntはマイナス0対策 -->
         {{ parseInt(reportMonthLimitDays.toFixed()) }}日
