@@ -20,6 +20,11 @@ let chimeCount = chimeTimes.length - chimeTimes.filter((chimeTime) => {
   const chime = dayjs().hour(chimeTime[0]).minute(chimeTime[1]).second(0).millisecond(0);
   return chime.diff(dayjs()) > 0;
 }).length;
+// 予定時刻を過ぎた予鈴数を計算 (全数 - 過ぎてない予鈴の数)
+let preChimeCount = preChimeTimes.length - preChimeTimes.filter((preChimeTime) => {
+  const preChime = dayjs().hour(preChimeTime[0]).minute(preChimeTime[1]).second(0).millisecond(0);
+  return preChime.diff(dayjs()) > 0;
+}).length;
 
 // 100msごとに現在時刻を更新
 useIntervalFn(async () => {
@@ -37,6 +42,20 @@ useIntervalFn(async () => {
     if (chimeCount === chimeTimes.length) {
       // 全てのチャイムが鳴ったらカウントをリセット
       chimeCount = 0;
+    }
+  }
+
+  // 予鈴を鳴らす時間か確認
+  const preChime = dayjs().hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
+  if (preChime.diff(now) <= 0 && isChimeEnabledState.value) {
+    // カウントを増やし、予鈴を鳴らす
+    preChimeCount++;
+    const audio = new Audio(preChimeSource().value);
+    audio.play();
+
+    if (preChimeCount === preChimeTimes.length) {
+      // 全ての予鈴が鳴ったらカウントをリセット
+      preChimeCount = 0;
     }
   }
 }, 100);
