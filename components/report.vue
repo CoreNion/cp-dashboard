@@ -6,32 +6,43 @@ import 'dayjs/locale/ja';
 dayjs.extend(duration);
 dayjs.locale("ja");
 
-const djs = dayjs();
+const date = useState(() => dayjs().toDate());
 
 // 今月15日
-const thisMonthLimit = djs.date(15).hour(0).minute(59).second(59)
+const thisMonthLimit = useState(() => dayjs(date.value).date(15).hour(0).minute(59).second(59).toDate());
 
 // 毎月15日のレポート提出期限
-const reportMonthDeadline = dayjs()
+const reportMonthDeadline = useState(() => dayjs()
   .month(
     // 今月15日を過ぎていたら、次の月の15日にする
-    djs.isAfter(thisMonthLimit)
-      ? djs.month() + 1 :
-      djs.month())
+    dayjs(date.value).isAfter(dayjs(thisMonthLimit.value))
+      ? dayjs(date.value).month() + 1 :
+      dayjs(date.value).month())
   .date(15)
-  .hour(23).minute(59).second(59);
+  .hour(23).minute(59).second(59).toDate());
 
 // 毎月15日のレポート提出期限までの残り時間を計算
-const reportMonthLimit = reportMonthDeadline.diff(djs, 'millisecond');
-const reportMonthLimitDays = dayjs.duration({ milliseconds: reportMonthLimit }).asDays() - 1;
+const reportMonthLimit = useState(() => dayjs(reportMonthDeadline.value).diff(dayjs(date.value), 'millisecond'));
+const reportMonthLimitDays = useState('reportMonthLimitDays', () => dayjs.duration({ milliseconds: reportMonthLimit.value }).asDays() - 1);
 // 赤くするかどうか
-const needReportMonthAlert = reportMonthLimitDays > 5;
+const needReportMonthAlert = useState('needReportMonthAlert', () => reportMonthLimitDays.value > 5);
 
 /* レポート期限の割合を計算 */
 // レポート期限の開始日からレポート期限までの時間
-const reportTime = reportMonthDeadline.diff(reportMonthDeadline.month(reportMonthDeadline.month() - 1), 'millisecond');
+const reportTime = useState(() => {
+  const rMDL = dayjs(reportMonthDeadline.value);
+ return rMDL.diff(rMDL.month(rMDL.month() - 1), 'millisecond');
+});
+
 // 消費した日数 / レポート期限までの日数 * 100
-const reportRatio = ((reportTime - reportMonthLimit) / reportTime) * 100;
+const reportRatio = useState('reportRatio', () => ((reportTime.value - reportMonthLimit.value) / reportTime.value) * 100);
+
+// 10分ごとにレポート期限の割合を更新
+onMounted(() => {
+  setInterval(() => {
+    date.value = dayjs().toDate();
+  }, 600000);
+});
 </script>
 
 <template>
