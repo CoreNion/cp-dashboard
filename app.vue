@@ -31,9 +31,15 @@ useHead({
 });
 
 onMounted(async () => {
-  // スリープを無効化
   try {
+    // スリープを無効化
     await navigator.wakeLock.request('screen');
+    // タブ切り替え後でも持続するようにする
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible') {
+        await navigator.wakeLock.request('screen');
+      }
+    });
   } catch (e) {
     console.warn(e);
   }
