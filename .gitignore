@@ -26,3 +26,7 @@ logs
 # Arduino VS Code Extension
 .vscode/arduino.json
 .vscode/c_cpp_properties.json
+
+# Yarn v4
+.yarn/
+!.yarn/release/*
