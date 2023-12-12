@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isChimeEnabled } from '~/composables/states';
+
 const colorMode = useColorMode();
 
 // センサーのソース
@@ -10,10 +12,38 @@ const preChimeSourceState = preChimeSource();
 // タイマーのアラート音源
 const timerAlertSourceState = timerAlertSource();
 
-// チャイムの有効/無効
-const isChimeEnabledState = isChimeEnabled();
-// 予鈴の有効/無効
-const isPreChimeEnabledState = isPreChimeEnabled();
+const chimeComputed = computed<boolean>(
+  {
+    get() {
+      if (process.client) {
+        return JSON.parse(localStorage.getItem('isChimeEnabled') ?? 'false');
+      } else {
+        return false;
+      }
+    },
+    set(value) {
+      if (typeof localStorage !== 'undefined')
+        localStorage.setItem('isChimeEnabled', JSON.stringify(value));
+      isChimeEnabled().value = value;
+    }
+  }
+);
+const preChimeComputed = computed<boolean>(
+  {
+    get() {
+      if (typeof localStorage !== 'undefined') {
+        return JSON.parse(localStorage.getItem('isPreChimeEnabled') ?? 'false');
+      } else {
+        return false;
+      }
+    },
+    set(value) {
+      if (typeof localStorage !== 'undefined')
+        localStorage.setItem('isPreChimeEnabled', JSON.stringify(value));
+      isPreChimeEnabled().value = value;
+    }
+  }
+);
 
 const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
 const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
@@ -150,11 +180,11 @@ onMounted(() => {
 
         <label class="label cursor-pointer mt-4">
           <span class="label-text">チャイム鳴動状態</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
+          <input type="checkbox" class="toggle toggle-secondary" v-model="chimeComputed" />
         </label>
         <label class="label cursor-pointer mt-4">
           <span class="label-text">予鈴鳴動状態</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
+          <input type="checkbox" class="toggle toggle-secondary" v-model="preChimeComputed" />
         </label>
       </p>
     </div>

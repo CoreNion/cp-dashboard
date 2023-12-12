@@ -11,9 +11,6 @@ const intervalState = interval();
 const isTimerActiveState = isTimerActive();
 const timerState = timer();
 
-// チャイムの有効/無効
-const isChimeEnabledState = isChimeEnabled();
-
 // タイマー設定用時間 (h:m:s)
 const timerSettingState: Ref<number[]> = useState('timerSetting', () => [0, 0, 0]);
 
@@ -119,11 +116,6 @@ function duration2ArrayTime(duration: duration.Duration) {
           "スタート" }}</button>
         <button class="btn btn-neutral" @click="resetTimer()">clear</button>
       </div>
-
-      <label class="label cursor-pointer">
-        <span class="label-text">チャイム機能</span>
-        <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
-      </label>
     </div>
   </div>
 </template>
