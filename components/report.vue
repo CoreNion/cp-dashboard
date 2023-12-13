@@ -9,7 +9,7 @@ dayjs.locale("ja");
 const date = useState(() => dayjs().toDate());
 
 // 今月15日
-const thisMonthLimit = useState(() => dayjs(date.value).date(15).hour(0).minute(59).second(59).toDate());
+const thisMonthLimit = useState(() => dayjs(date.value).date(15).hour(23).minute(59).second(59).toDate());
 
 // 毎月15日のレポート提出期限
 const reportMonthDeadline = useState(() => dayjs()
