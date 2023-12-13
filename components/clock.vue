@@ -27,6 +27,9 @@ let preChimeCount = preChimeTimes.length - preChimeTimes.filter((preChimeTime) =
   return preChime.diff(dayjs()) > 0;
 }).length;
 
+let chimePlayed = false;
+let preChimePlayed = false;
+
 // 100msごとに現在時刻を更新
 useIntervalFn(async () => {
   const now = dayjs();
@@ -35,29 +38,41 @@ useIntervalFn(async () => {
   // チャイムを鳴らす時間か確認
   const chime = dayjs().hour(chimeTimes[chimeCount][0]).minute(chimeTimes[chimeCount][1]).second(0).millisecond(0);
   if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
-    // カウントを増やし、チャイムを鳴らす
-    chimeCount++;
-    const audio = new Audio(chimeSource().value);
-    audio.play();
+    if (!chimePlayed) {
+      // カウントを増やし、チャイムを鳴らす
+      chimePlayed = true;
+      chimeCount++;
+      const audio = new Audio(chimeSource().value);
+      audio.play();
 
-    if (chimeCount === chimeTimes.length) {
-      // 全てのチャイムが鳴ったらカウントをリセット
-      chimeCount = 0;
+      if (chimeCount === chimeTimes.length) {
+        // 全てのチャイムが鳴ったらカウントをリセット
+        chimeCount = 0;
+      }
     }
+  } else {
+    // 予定時間外はフラグをリセット
+    chimePlayed = false;
   }
 
   // 予鈴を鳴らす時間か確認
   const preChime = dayjs().hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
   if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
-    // カウントを増やし、予鈴を鳴らす
-    preChimeCount++;
-    const audio = new Audio(preChimeSource().value);
-    audio.play();
+    if (!preChimePlayed) {
+      // カウントを増やし、予鈴を鳴らす
+      preChimePlayed = true;
+      preChimeCount++;
+      const audio = new Audio(preChimeSource().value);
+      audio.play();
 
-    if (preChimeCount === preChimeTimes.length) {
-      // 全ての予鈴が鳴ったらカウントをリセット
-      preChimeCount = 0;
+      if (preChimeCount === preChimeTimes.length) {
+        // 全ての予鈴が鳴ったらカウントをリセット
+        preChimeCount = 0;
+      }
     }
+  } else {
+    // 予定時間外はフラグをリセット
+    preChimePlayed = false;
   }
 }, 100);
 
