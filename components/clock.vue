@@ -8,7 +8,7 @@ dayjs.extend(duration);
 dayjs.locale("ja");
 
 // 現在時刻
-const timeState = useState('time', () => dayjs().toDate());
+const timeState = time();
 // タイマーの残り時間
 const timerState = timer();
 

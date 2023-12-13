@@ -1,4 +1,13 @@
 import type { Pausable } from "@vueuse/core";
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import 'dayjs/locale/ja';
+
+dayjs.extend(duration);
+dayjs.locale("ja");
+
+// 現在時刻
+export const time = () => useState<Date>('time', () => dayjs().toDate());
 
 // 現在のセンサー情報のソース
 export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
