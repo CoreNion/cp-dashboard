@@ -85,7 +85,7 @@ const removeAudio = (fileName: string, sourceState: globalThis.Ref<string>, stor
 
   // メモリ上の音源/名前を元に戻す
   fileNameState.value = 'デフォルトの音声';
-  sourceState.value = "/alert.mp3";
+  sourceState.value = defaultAlertAudioSource().value;
 }
 
 const onAlertAudioChange = async (e: Event) => {

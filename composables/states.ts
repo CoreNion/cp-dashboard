@@ -11,12 +11,16 @@ export const time = () => useState<Date>('time', () => dayjs().toDate());
 
 // 現在のセンサー情報のソース
 export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
+
+// alert.mp3のソース
+export const defaultAlertAudioSource = () => useState<string>('defaultAlertAudioSource', () => '/alert.mp3');
+
 // タイマーの音声のソース
-export const timerAlertSource = () => useState<string>('timerSource', () => "/alert.mp3");
+export const timerAlertSource = () => useState<string>('timerSource', () => defaultAlertAudioSource().value);
 // チャイムの音声ソース
-export const chimeSource = () => useState<string>('chimeSource', () => "/alert.mp3");
+export const chimeSource = () => useState<string>('chimeSource', () => defaultAlertAudioSource().value);
 // 予鈴の音声ソース
-export const preChimeSource = () => useState<string>('preChimeSource', () => "/alert.mp3");
+export const preChimeSource = () => useState<string>('preChimeSource', () => defaultAlertAudioSource().value);
 
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);

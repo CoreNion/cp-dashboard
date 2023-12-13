@@ -30,6 +30,8 @@ useHead({
   ],
 });
 
+defaultAlertAudioSource().value = `${useRuntimeConfig().app.baseURL}alert.mp3`;
+
 onMounted(async () => {
   try {
     // スリープを無効化
