@@ -14,6 +14,7 @@ const timerState = timer();
 
 // チャイムの有効/無効
 const isChimeEnabledState = isChimeEnabled();
+const isPreChimeEnabledState = isPreChimeEnabled();
 
 // 予定時刻を過ぎたチャイム数を計算 (全数 - 過ぎてないチャイムの数)
 let chimeCount = chimeTimes.length - chimeTimes.filter((chimeTime) => {
@@ -47,7 +48,7 @@ useIntervalFn(async () => {
 
   // 予鈴を鳴らす時間か確認
   const preChime = dayjs().hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
-  if (preChime.diff(now) <= 0 && isChimeEnabledState.value) {
+  if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
     // カウントを増やし、予鈴を鳴らす
     preChimeCount++;
     const audio = new Audio(preChimeSource().value);

@@ -49,12 +49,23 @@ onMounted(async () => {
   // OPFSからチャイム音源とアラート音源を読み込む
   const opfsRoot = await navigator.storage.getDirectory();
 
+  // チャイムの有効/無効を読み込む
+  const storageChimeStatus = localStorage.getItem('isChimeEnabled');
+  if (storageChimeStatus != null) {
+    isChimeEnabled().value = storageChimeStatus === 'true';
+  } 
+  const storagePreChimeStatus = localStorage.getItem('isPreChimeEnabled');
+  if (storagePreChimeStatus != null) {
+    isPreChimeEnabled().value = storagePreChimeStatus === 'true';
+  }
+
   // チャイム音源を読み込む
   try {
     const chimeHandle = await opfsRoot.getFileHandle('chime.mp3', { create: false });
     const chimeBuffer = await chimeHandle.getFile();
     chimeSource().value = URL.createObjectURL(chimeBuffer);
   } catch (e) {
+    console.warn(e);
   }
 
   // アラート音源を読み込む
@@ -62,8 +73,8 @@ onMounted(async () => {
     const alertHandle = await opfsRoot.getFileHandle('alert.mp3', { create: false });
     const alertBuffer = await alertHandle.getFile();
     timerAlertSource().value = URL.createObjectURL(alertBuffer);
-  } catch {
-    
+  } catch(e) {
+    console.warn(e);
   }
 });
 </script>

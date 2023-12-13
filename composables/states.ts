@@ -29,9 +29,9 @@ export const isTimerActive = () => useState('isTimerActive', () => false);
 // タイマー残り時間 (h:m:s)
 export const timer = () => useState<number[] | null>('timer', () => null);
 // チャイムの有効/無効
-export const isChimeEnabled = () => useState<boolean>('isChimeEnabled', () => true);
+export const isChimeEnabled = () => useState<boolean>('isChimeEnabled', () => false);
 // 予鈴の有効/無効
-export const isPreChimeEnabled = () => useState<boolean>('isPreChimeEnabled', () => true);
+export const isPreChimeEnabled = () => useState<boolean>('isPreChimeEnabled', () => false);
 
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
