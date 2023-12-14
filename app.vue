@@ -92,9 +92,9 @@ onMounted(async () => {
         <clock></clock>
       </div>
 
-      <div class="basis-[25.0%] flex flex-col items-end gap-4">
+      <div class="basis-[25.0%] flex flex-col items-center gap-4">
         <report></report>
-        <div class="grow m-2 flex flex-col justify-end items-center gap-2">
+        <div class="grow m-2 flex flex-col justify-end gap-2">
           <TimerSetting></TimerSetting>
           <span>Copyright © 2023 CoreNion</span>
           <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
