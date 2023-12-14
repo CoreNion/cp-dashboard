@@ -49,7 +49,7 @@ export function calcReportLimitDays(nextReportDeadline: dayjs.Dayjs, date: dayjs
  * @param date 日付
  */
 export function needReportAlert(nextReportDeadline: dayjs.Dayjs, date: dayjs.Dayjs = dayjs()) {
-  return calcReportLimitDays(nextReportDeadline, date) <= 5;
+  return calcReportLimitDays(nextReportDeadline, date) <= 4;
 }
 
 /**

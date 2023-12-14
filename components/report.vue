@@ -9,6 +9,8 @@ dayjs.locale("ja");
 // 現在時刻
 const timeState = time();
 
+// レポートの残り時間 (ms)
+const reportMonthLimit = useState('reportMonthLimit', () => 0);
 // レポートの残り日数
 const reportMonthLimitDays = useState('reportMonthLimitDays', () => 0);
 // 赤くするかどうか
@@ -23,6 +25,7 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
   const nextReportDeadline = calcNextReportDeadline(djs);
 
   // レポートの残り時間
+  reportMonthLimit.value = calcReportLimit(nextReportDeadline, djs);
   reportMonthLimitDays.value = calcReportLimitDays(nextReportDeadline, djs);
   needReportMonthAlert.value = needReportAlert(nextReportDeadline, djs);
   reportRatio.value = calcReportRatio(nextReportDeadline, djs);
@@ -33,7 +36,7 @@ onMounted(() => {
   refleshReportStatus(dayjs(timeState.value));
   setInterval(() => {
     refleshReportStatus(dayjs(timeState.value));
-  }, 2000);
+  }, 1000);
 });
 </script>
 
@@ -45,6 +48,14 @@ onMounted(() => {
       <div :class="['radial-progress', 'text-[3vw]', 'font-bold', needReportMonthAlert ? 'text-red-600' : 'text-primary']"
         :style="{ '--value': reportRatio, '--size': '12vw', '--thickness': '1.5vw' }">
         {{ Math.floor(reportMonthLimitDays) }}日
+      </div>
+      <div v-if="needReportMonthAlert" class="mt-3 flex flex-col items-center">
+        <span class="text-[1.6vw]">残り時間</span>
+        <div class="countdown text-[2.5vw] font-bold text-red-600">
+          <span :style="{ '--value': Math.floor(dayjs.duration(reportMonthLimit).asHours()) }"></span>:
+          <span :style="{ '--value': dayjs.duration(reportMonthLimit).minutes()  }"></span>:
+          <span :style="{ '--value': dayjs.duration(reportMonthLimit).seconds()  }"></span>
+        </div>
       </div>
     </ClientOnly>
   </div>
