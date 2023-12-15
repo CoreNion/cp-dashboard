@@ -33,6 +33,13 @@ export const isChimeEnabled = () => useState<boolean>('isChimeEnabled', () => fa
 // 予鈴の有効/無効
 export const isPreChimeEnabled = () => useState<boolean>('isPreChimeEnabled', () => false);
 
+// 天気の広域地方番号
+export const weatherWideRegionNumber = () => useState<string>('weatherWideRegionNumber', () => "010300");
+// 天気のoffice番号
+export const weatherOfficeNumber = () => useState<string>('weatherOfficeNumber', () => "130000");
+// 天気の地域番号
+export const weatherAreaNumber = () => useState<string>('weatherAreaNumber', () => "130010");
+
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
 // 現在の気圧

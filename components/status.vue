@@ -120,18 +120,37 @@ async function refleshStatus() {
   sensorInterval?.resume();
 }
 
-// 10分ごとに天気を更新
-async function refleshWeather() {
-  const djs = dayjs();
+// クライアントサイドのみで実行
+onMounted(async () => {
+  // 2秒ごとに温度を更新 (1秒だとシリアル通信が追いつかない?
+  await refleshStatus();
+  sensorInterval = useIntervalFn(refleshStatus, 2000);
+
+  // 10分ごとに天気を更新
+  await refleshWeather();
+  useIntervalFn(refleshWeather, 10000);
+});
+</script>
+
+<script lang="ts">
+/**
+ * 表示されている天気を更新する
+ */
+export async function refleshWeather() {
+  // 現在の気圧
+  const pressureState = pressure();
+  // 現在の外気温
+  const outTmpState = outTmp();
+  // 天気
+  const weatherState = weather();
 
   // アメダスの番号 (44132: 東京)
   const amedasNumber = 44132;
   // office番号 (東京地方)
-  const officeNumber = 130000;
-  const areaNumber = 130010;
+  const weatherOfficeNumberState = weatherOfficeNumber();
 
   // 最新の気象データの時刻を取得
-  const latestTime = dayjs(await $fetch<string>('https://www.jma.go.jp/bosai/amedas/data/latest_time.txt'));
+  const latestTime = dayjs(await $fetch < string > ('https://www.jma.go.jp/bosai/amedas/data/latest_time.txt'));
   // 最新のJSONファイル名 (3時間ごとに別ファイル)
   const latestJsonName = `${latestTime.format("YYYYMMDD")}_${(Math.floor(latestTime.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
 
@@ -140,7 +159,7 @@ async function refleshWeather() {
     // アメダスのデータ
     $fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
     // 天気予報のデータ
-    $fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${officeNumber}.json`)
+    $fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${weatherOfficeNumberState.value}.json`)
   ]).catch((e) => {
     console.error(e);
     return;
@@ -163,20 +182,13 @@ async function refleshWeather() {
   const forecastData = Array(data[1]);
 
   // 今日の天気を取得
-  const todayWeatherCode = Object(forecastData[0])[0].timeSeries[0].areas[0].weatherCodes[0];
+  const todayForecast = Object(forecastData[0])[0].timeSeries[0].areas as Array<any>;
+  // 設定されている地域のインデックスを取得
+  const areaIndex = todayForecast.findIndex((value) => value.area.code == weatherAreaNumber().value);
+  const todayWeatherCode = todayForecast[areaIndex].weatherCodes[0];
+
   weatherState.value = weather2str(todayWeatherCode);
 }
-
-// クライアントサイドのみで実行
-onMounted(async () => {
-  // 2秒ごとに温度を更新 (1秒だとシリアル通信が追いつかない?
-  await refleshStatus();
-  sensorInterval = useIntervalFn(refleshStatus, 2000);
-
-  // 10分ごとに天気を更新
-  await refleshWeather();
-  useIntervalFn(refleshWeather, 600000);
-});
 </script>
 
 <template>
@@ -190,13 +202,13 @@ onMounted(async () => {
       </div>
 
       <div v-else class="stat-value text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-      <Icon name="uil:celsius" size="4vw" />
+        <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
     <div class="stat">
       <div class="stat-title text-[3vw]">気圧*</div>
       <div class="stat-value leading-none flex flex-col">
-        <span class="text-[4.6vw]">{{ pressureState != null ? pressureState.toFixed(1): "-" }}</span>
+        <span class="text-[4.6vw]">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
         <span class="text-[3vw]">hPa</span>
       </div>
     </div>
@@ -208,7 +220,8 @@ onMounted(async () => {
     </div>
     <div class="stat">
       <div class="stat-title text-[3vw]">天気*</div>
-      <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value m-auto leading-none" size="5vw" />
+      <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'"
+        class="stat-value m-auto leading-none" size="5vw" />
     </div>
 
     <div class="stat m-auto gap-2">

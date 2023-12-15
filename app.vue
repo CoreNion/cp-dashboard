@@ -46,6 +46,20 @@ onMounted(async () => {
     console.warn(e);
   }
 
+  // 天気の各設定コードを取得
+  const wideRegion = localStorage.getItem('weatherWideRegion');
+  if (wideRegion != null) {
+    weatherWideRegionNumber().value = wideRegion;
+  }
+  const officeNumber = localStorage.getItem('weatherOfficeNumber');
+  if (officeNumber != null) {
+    weatherOfficeNumber().value = officeNumber;
+  }
+  const areaNumber = localStorage.getItem('weatherAreaNumber');
+  if (areaNumber != null) {
+    weatherAreaNumber().value = areaNumber;
+  }
+
   // OPFSからチャイム音源とアラート音源を読み込む
   const opfsRoot = await navigator.storage.getDirectory();
 

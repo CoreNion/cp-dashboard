@@ -162,6 +162,8 @@ onMounted(() => {
             <option value="rpi">Raspberry Pi</option>
           </select>
         </label>
+
+        <WeatherSetting></WeatherSetting>
       </p>
 
       <div class="divider"></div>
