@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
+    'nuxt3-leaflet',
     'nuxt-icon',
     '@vite-pwa/nuxt'
   ],

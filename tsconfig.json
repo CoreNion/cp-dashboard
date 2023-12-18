@@ -3,7 +3,8 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "types": [
-      "@types/w3c-web-serial"
+      "@types/w3c-web-serial",
+      "@types/leaflet"
     ]
   },
 }

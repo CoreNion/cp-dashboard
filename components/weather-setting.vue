@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { refleshWeather } from './status.vue';
-import { regionCodeName } from '#imports';
+import { amedasInfo, regionCodeName } from '#imports';
 
 // 広域地方 (コード)
 const selectedWideRegion = weatherWideRegionNumber();
@@ -16,13 +16,33 @@ const localRegionOptions = useState<Array<regionCodeName>>(() => []);
 // 地域の選択肢
 const regionOptions = useState<Array<regionCodeName>>(() => []);
 
+// マーカーの位置
+const markerPlaces = useState<Array<amedasInfo>>(() => []);
+
 let refleshLocalRegion: (e: Event) => void;
 let refleshRegion: (e: Event) => void;
 let setAreaNumber: (e: Event) => void;
 
+// 天気予報エリア一覧
+let areas = "";
+// アメダスの地点一覧
+let amedasInfos: Array<amedasInfo> = [];
+
 onMounted(async () => {
   // エリア情報を取得
-  const areas = (await $fetch<string>('https://www.jma.go.jp/bosai/common/const/area.json'));
+  const data = await Promise.all([
+    $fetch<string>('https://www.jma.go.jp/bosai/common/const/area.json'),
+    $fetch<string>('https://www.jma.go.jp/bosai/amedas/const/amedastable.json'),
+  ]).catch((e) => {
+    console.error(e);
+    return;
+  });
+  if (data == null) {
+    console.error('data is null');
+    return;
+  }
+  areas = data[0];
+  amedasInfos = convertAmedasInfos(data[1]);
 
   // 広域地方, 地方, 地域のコードを取得
   const regions = Object(areas)["centers"];
@@ -75,6 +95,19 @@ onMounted(async () => {
     await refleshWeather();
   }
 });
+
+function onMapChanged(e: any) {
+  // 既存のマーカーの削除
+  markerPlaces.value = [];
+
+  const target = e.target;
+  if (target.getZoom() < 8) return;
+
+  // マップに表示されている範囲に存在するアメダスの地点を取得
+  const bounds = target.getBounds();
+  // マップを更新
+  markerPlaces.value = filterByMapArea(amedasInfos, bounds);
+}
 </script>
 
 <template>
@@ -117,6 +150,29 @@ onMounted(async () => {
             </option>
           </select>
         </label>
+
+      <div class="divider"></div>
+
+      <h3 class="font-bold text-lg">アメダスの地点設定</h3>
+      <label class="label">
+        <span class="label-text">現在の設定地点</span>
+        <span class="label-text font-bold"></span>
+      </label>
+
+      <p class="min-w-full h-[433px] mt-3">
+        <LMap ref="map" :zoom="4" @zoomend="onMapChanged" @moveend="onMapChanged" :center="[32.592850, 137.273600]">
+          <LTileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&amp;copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors"
+            name="OpenStreetMap" />
+          <LMarker v-for="place of markerPlaces" :lat-lng="[place.lat, place.lon]">
+            <LPopup>
+              <span>{{ place.name }}</span>
+              <br />
+              <button class="btn btn-xs" @click="console.log(place.name)">設定</button>
+            </LPopup>
+          </LMarker>
+        </LMap>
+      </p>
       </p>
     </div>
   </dialog>

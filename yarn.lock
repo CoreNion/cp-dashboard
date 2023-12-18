@@ -2339,7 +2339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:3.8.2, @nuxt/kit@npm:^3.8.1, @nuxt/kit@npm:^3.8.2":
+"@nuxt/kit@npm:3.8.2, @nuxt/kit@npm:^3.5.2, @nuxt/kit@npm:^3.8.1, @nuxt/kit@npm:^3.8.2":
   version: 3.8.2
   resolution: "@nuxt/kit@npm:3.8.2"
   dependencies:
@@ -3055,12 +3055,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:*":
+  version: 7946.0.13
+  resolution: "@types/geojson@npm:7946.0.13"
+  checksum: 4450d070f2591500bd3ce13a898d8e4b53a6b75dfb08c002c2553a1bb135cdde9980dee6193d9fe2179c7b5fb6c52470acd116a3db91b33d8c6ba9ae3ae44e11
+  languageName: node
+  linkType: hard
+
 "@types/http-proxy@npm:^1.17.14":
   version: 1.17.14
   resolution: "@types/http-proxy@npm:1.17.14"
   dependencies:
     "@types/node": "npm:*"
   checksum: c4bffd87be9aff7e879c05bd2c28716220e0eb39788e3f8d314eee665324ad8f5f0919041cbd710254d553cd9cea023f8b776d4b1ec31d2188eac60af18c3022
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:^1, @types/leaflet@npm:^1.9.3":
+  version: 1.9.8
+  resolution: "@types/leaflet@npm:1.9.8"
+  dependencies:
+    "@types/geojson": "npm:*"
+  checksum: 9a635d8ced35da27d8dfe972954bd5b4c91354beef710d7cfcca0e7bff3d189eb4cfd36ff68dac2bdc4b002d50f9ed5036c2e659683131e50d227a2050c72895
   languageName: node
   linkType: hard
 
@@ -3261,6 +3277,21 @@ __metadata:
     "@volar/language-core": "npm:1.11.1"
     path-browserify: "npm:^1.0.1"
   checksum: 86fe153db3a14d8eb3632784a1d7fcbfbfb51fa5517c3878bfdd49ee8d15a83b1a09f9c589454b7396454c104d3a8e2db3a987dc99b37c33816772fc3e292bf2
+  languageName: node
+  linkType: hard
+
+"@vue-leaflet/vue-leaflet@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@vue-leaflet/vue-leaflet@npm:0.10.1"
+  dependencies:
+    vue: "npm:^3.2.25"
+  peerDependencies:
+    "@types/leaflet": ^1.5.7
+    leaflet: ^1.6.0
+  peerDependenciesMeta:
+    "@types/leaflet":
+      optional: true
+  checksum: 0e44e340821f4007beef9132378f756b95daeb6d2d5434b9f20559fcc4a21424586e9200e21ae46ca3b5fbde4c1b6cf282145245a72b225ee464d11db8ac4cf4
   languageName: node
   linkType: hard
 
@@ -6962,6 +6993,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: f639441dbb7eb9ae3fcd29ffd7d3508f6c6106892441634b0232fafb9ffb1588b05a8244ec7085de2c98b5ed703894df246898477836cfd0ce5b96d4717b5ca1
+  languageName: node
+  linkType: hard
+
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -7957,6 +7995,7 @@ __metadata:
     "@nuxt/devtools": "npm:^1.0.3"
     "@nuxtjs/color-mode": "npm:^3.3.2"
     "@nuxtjs/tailwindcss": "npm:^6.10.1"
+    "@types/leaflet": "npm:^1"
     "@types/w3c-web-serial": "npm:^1.0.6"
     "@vite-pwa/assets-generator": "npm:^0.1.0"
     "@vite-pwa/nuxt": "npm:^0.3.5"
@@ -7964,9 +8003,11 @@ __metadata:
     autoprefixer: "npm:^10.4.16"
     daisyui: "npm:^4.4.2"
     dayjs: "npm:^1.11.10"
+    leaflet: "npm:^1.9.4"
     mcp-spi-adc: "npm:^3.2.0"
     nuxt: "npm:^3.8.0"
     nuxt-icon: "npm:^0.6.6"
+    nuxt3-leaflet: "npm:^1.0.12"
     postcss: "npm:^8.4.31"
     typescript: "npm:^5.2.2"
     vue: "npm:^3.3.7"
@@ -7984,6 +8025,18 @@ __metadata:
     "@nuxt/devtools-kit": "npm:^1.0.4"
     "@nuxt/kit": "npm:^3.8.2"
   checksum: d40b1845e90f845cec6beed89dbcc39a912151ab8fe70e388187a1941d5f5f9b0eb46666feb3a27991e3a7ace7b441e5e66da0ba67fdf0ef4d467df50fb09f7d
+  languageName: node
+  linkType: hard
+
+"nuxt3-leaflet@npm:^1.0.12":
+  version: 1.0.12
+  resolution: "nuxt3-leaflet@npm:1.0.12"
+  dependencies:
+    "@nuxt/kit": "npm:^3.5.2"
+    "@types/leaflet": "npm:^1.9.3"
+    "@vue-leaflet/vue-leaflet": "npm:^0.10.1"
+    leaflet: "npm:^1.9.4"
+  checksum: 871c2a659a7f3393a37ad010e0e771356005b878d9340cb6cba91ea1e2aa76627b4c2b1d89a9217eb28e760e6f8b568c4c5e8760a2c4efa36d905f5966e7a2ce
   languageName: node
   linkType: hard
 
@@ -11277,7 +11330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.3.7, vue@npm:^3.3.8":
+"vue@npm:^3.2.25, vue@npm:^3.3.7, vue@npm:^3.3.8":
   version: 3.3.11
   resolution: "vue@npm:3.3.11"
   dependencies:
