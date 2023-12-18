@@ -115,6 +115,7 @@ const removePreChimeAudio = () => {
 // 音源を再生
 const playAudio = (link: string) => {
   const audio = new Audio(link);
+  audio.volume = 1.0;
   audio.play();
 }
 

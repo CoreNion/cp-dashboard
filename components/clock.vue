@@ -42,7 +42,9 @@ useIntervalFn(async () => {
       // カウントを増やし、チャイムを鳴らす
       chimePlayed = true;
       chimeCount++;
+
       const audio = new Audio(chimeSource().value);
+      audio.volume = 1.0;
       audio.play();
 
       if (chimeCount === chimeTimes.length) {
@@ -62,7 +64,9 @@ useIntervalFn(async () => {
       // カウントを増やし、予鈴を鳴らす
       preChimePlayed = true;
       preChimeCount++;
+
       const audio = new Audio(preChimeSource().value);
+      audio.volume = 1.0;
       audio.play();
 
       if (preChimeCount === preChimeTimes.length) {
