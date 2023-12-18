@@ -9,29 +9,45 @@ dayjs.locale("ja");
 // 現在時刻
 const timeState = time();
 
-// レポートの残り時間 (ms)
-const reportMonthLimit = useState('reportMonthLimit', () => 0);
-// レポートの残り日数
-const reportMonthLimitDays = useState('reportMonthLimitDays', () => 0);
+// カウントダウン名
+const countdownName = useState('countdownName', () => 'レポート日数');
+
+// イベントまでの残り時間 (ms)
+const countdownLimit = useState('countdownLimit', () => 0);
+// イベントまでの残り日数
+const countdownLimitDays = useState('countdownLimitDays', () => 0);
 // 赤くするかどうか
-const needReportMonthAlert = useState('needReportMonthAlert', () => false);
+const needCountdownAlert = useState('needCountdownAlert', () => false);
 
-// 消費したレポート日数の割合
-const reportRatio = useState('reportRatio', () => 0);
+// 消費した日数の割合
+const countdownRatio = useState('countdownRatio', () => 0);
 
-/// レポートのステータスを更新
+/// イベントカウントダウンのステータスを更新
 function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
-  // 次のレポートの期限を計算
-  const nextReportDeadline = calcNextReportDeadline(djs);
-
   // レポートの残り時間
-  reportMonthLimit.value = calcReportLimit(nextReportDeadline, djs);
-  reportMonthLimitDays.value = calcReportLimitDays(nextReportDeadline, djs);
-  needReportMonthAlert.value = needReportAlert(nextReportDeadline, djs);
-  reportRatio.value = calcReportRatio(nextReportDeadline, djs);
+  if ((timeState.value.getMonth() == 11 && timeState.value.getDate() < 16)
+  || (timeState.value.getMonth() >= 3 && timeState.value.getMonth() <= 10)) {
+    // 次のレポートの期限を計算
+    const nextReportDeadline = calcNextReportDeadline(djs);
+
+    // レポートの残り時間
+    countdownLimit.value = calcLimit(nextReportDeadline, djs);
+    countdownLimitDays.value = calcLimitDays(nextReportDeadline, djs);
+    needCountdownAlert.value = needAlert(nextReportDeadline, djs);
+    countdownRatio.value = calcRatio(nextReportDeadline, djs);
+  } else {
+    // クリスマスまでのカウントダウン
+    countdownName.value = 'クリスマスまで';
+    const eventDay = dayjs("2023-12-25");
+    
+    countdownLimit.value = calcLimit(eventDay, djs);
+    countdownLimitDays.value = calcLimitDays(eventDay, djs);
+    needCountdownAlert.value = needAlert(eventDay, djs);
+    countdownRatio.value = calcRatio(eventDay, djs);
+  }
 }
 
-// 10分ごとにレポート期限の割合を更新
+// 10分ごとにイベント期限の割合を更新
 onMounted(() => {
   refleshReportStatus(dayjs(timeState.value));
   setInterval(() => {
@@ -41,20 +57,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="(timeState.getMonth() == 11 && timeState.getDate() < 16) || (timeState.getMonth() >= 3 && timeState.getMonth() <= 10)"
-    class="m-2">
-    <h2 class="text-[2vw] mb-3">レポート日数</h2>
+  <div class="m-2">
+    <h2 class="text-[2vw] mb-3">{{ countdownName }}</h2>
     <ClientOnly>
-      <div :class="['radial-progress', 'text-[3vw]', 'font-bold', needReportMonthAlert ? 'text-red-600' : 'text-primary']"
-        :style="{ '--value': reportRatio, '--size': '12vw', '--thickness': '1.5vw' }">
-        {{ Math.floor(reportMonthLimitDays) }}日
+      <div :class="['radial-progress', 'text-[3vw]', 'font-bold', needCountdownAlert ? 'text-red-600' : 'text-primary']"
+        :style="{ '--value': countdownRatio, '--size': '12vw', '--thickness': '1.5vw' }">
+        {{ Math.floor(countdownLimitDays) }}日
       </div>
-      <div v-if="needReportMonthAlert" class="mt-3 flex flex-col items-center">
+      <div v-if="needCountdownAlert" class="mt-3 flex flex-col items-center">
         <span class="text-[1.6vw]">残り時間</span>
         <div class="countdown text-[2.5vw] font-bold text-red-600">
-          <span :style="{ '--value': Math.floor(dayjs.duration(reportMonthLimit).asHours()) }"></span>:
-          <span :style="{ '--value': dayjs.duration(reportMonthLimit).minutes()  }"></span>:
-          <span :style="{ '--value': dayjs.duration(reportMonthLimit).seconds()  }"></span>
+          <span :style="{ '--value': Math.floor(dayjs.duration(countdownLimit).asHours()) }"></span>:
+          <span :style="{ '--value': dayjs.duration(countdownLimit).minutes() }"></span>:
+          <span :style="{ '--value': dayjs.duration(countdownLimit).seconds() }"></span>
         </div>
       </div>
     </ClientOnly>
