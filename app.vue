@@ -59,6 +59,10 @@ onMounted(async () => {
   if (areaNumber != null) {
     weatherAreaNumber().value = areaNumber;
   }
+  const amedasCode = localStorage.getItem('weatherAmedasCode');
+  if (amedasCode != null) {
+    weatherAmedasCode().value = amedasCode;
+  }
 
   // OPFSからチャイム音源とアラート音源を読み込む
   const opfsRoot = await navigator.storage.getDirectory();

@@ -8,6 +8,8 @@ const selectedWideRegion = weatherWideRegionNumber();
 const selectedLocalRegion = weatherOfficeNumber();
 // 地域 (コード)
 const selectedRegion = weatherAreaNumber();
+// アメダスの地点 (コード)
+const selectedAmedasCode = weatherAmedasCode();
 
 // 広域地方の選択肢
 const wideRegionOptions = useState<Array<regionCodeName>>(() => []);
@@ -108,6 +110,17 @@ function onMapChanged(e: any) {
   // マップを更新
   markerPlaces.value = filterByMapArea(amedasInfos, bounds);
 }
+
+function setAmedasLocation(code: string) {
+  // メモリ上
+  selectedAmedasCode.value = code;
+
+  // ストレージ
+  localStorage.setItem('weatherAmedasCode', selectedAmedasCode.value);
+
+  // 天気を更新
+  refleshWeather();
+}
 </script>
 
 <template>
@@ -156,7 +169,7 @@ function onMapChanged(e: any) {
       <h3 class="font-bold text-lg">アメダスの地点設定</h3>
       <label class="label">
         <span class="label-text">現在の設定地点</span>
-        <span class="label-text font-bold"></span>
+        <span class="label-text font-bold">{{ amedasInfos.find((amedasInfo) => amedasInfo.code === selectedAmedasCode)?.name }}</span>
       </label>
 
       <p class="min-w-full h-[433px] mt-3">
@@ -168,7 +181,7 @@ function onMapChanged(e: any) {
             <LPopup>
               <span>{{ place.name }}</span>
               <br />
-              <button class="btn btn-xs" @click="console.log(place.name)">設定</button>
+              <button class="btn btn-xs" @click="setAmedasLocation(place.code)">設定</button>
             </LPopup>
           </LMarker>
         </LMap>

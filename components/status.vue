@@ -144,8 +144,8 @@ export async function refleshWeather() {
   // 天気
   const weatherState = weather();
 
-  // アメダスの番号 (44132: 東京)
-  const amedasNumber = 44132;
+  // アメダスの番号
+  const amedasCodeState = weatherAmedasCode();
   // office番号 (東京地方)
   const weatherOfficeNumberState = weatherOfficeNumber();
 
@@ -157,7 +157,7 @@ export async function refleshWeather() {
   // アメダス/天気予報のデータを取得
   const data = await Promise.all([
     // アメダスのデータ
-    $fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasNumber}/${latestJsonName}`),
+    $fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${amedasCodeState.value}/${latestJsonName}`),
     // 天気予報のデータ
     $fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${weatherOfficeNumberState.value}.json`)
   ]).catch((e) => {

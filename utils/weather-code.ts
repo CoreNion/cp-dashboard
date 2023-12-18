@@ -56,7 +56,7 @@ export function convertAmedasInfos(amedasObj:any) {
     const info = amedasObj[key];
 
     // 気温と気圧のデータがないアメダスは除外する
-    if (info["elems"].charAt(0) !== "1" && info["elems"].charAt(7) !== "1") return;
+    if (info["elems"].charAt(0) !== "1" || info["elems"].charAt(7) !== "1") return;
 
     amedasInfos.push(new amedasInfo(key,
       info["kjName"],

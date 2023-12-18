@@ -39,6 +39,8 @@ export const weatherWideRegionNumber = () => useState<string>('weatherWideRegion
 export const weatherOfficeNumber = () => useState<string>('weatherOfficeNumber', () => "130000");
 // 天気の地域番号
 export const weatherAreaNumber = () => useState<string>('weatherAreaNumber', () => "130010");
+// 天気のアメダス番号
+export const weatherAmedasCode = () => useState<string>('weatherAmedasCode', () => "44132");
 
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
