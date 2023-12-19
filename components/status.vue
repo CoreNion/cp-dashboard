@@ -122,13 +122,13 @@ async function refleshStatus() {
 
 // クライアントサイドのみで実行
 onMounted(async () => {
-  // 2秒ごとに温度を更新 (1秒だとシリアル通信が追いつかない?
+  // 10秒ごとに温度を更新 (1秒だとシリアル通信が追いつかない?
   await refleshStatus();
-  sensorInterval = useIntervalFn(refleshStatus, 2000);
+  sensorInterval = useIntervalFn(refleshStatus, 10000);
 
   // 10分ごとに天気を更新
   await refleshWeather();
-  useIntervalFn(refleshWeather, 10000);
+  useIntervalFn(refleshWeather, 600000);
 });
 </script>
 
