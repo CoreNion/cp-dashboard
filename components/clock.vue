@@ -16,69 +16,68 @@ const timerState = timer();
 const isChimeEnabledState = isChimeEnabled();
 const isPreChimeEnabledState = isPreChimeEnabled();
 
-// 予定時刻を過ぎたチャイム数を計算 (全数 - 過ぎてないチャイムの数)
-let chimeCount = chimeTimes.length - chimeTimes.filter((chimeTime) => {
-  const chime = dayjs().hour(chimeTime[0]).minute(chimeTime[1]).second(0).millisecond(0);
-  return chime.diff(dayjs()) > 0;
-}).length;
-// 予定時刻を過ぎた予鈴数を計算 (全数 - 過ぎてない予鈴の数)
-let preChimeCount = preChimeTimes.length - preChimeTimes.filter((preChimeTime) => {
-  const preChime = dayjs().hour(preChimeTime[0]).minute(preChimeTime[1]).second(0).millisecond(0);
-  return preChime.diff(dayjs()) > 0;
-}).length;
-
 let chimePlayed = false;
 let preChimePlayed = false;
 
-// 100msごとに現在時刻を更新
-useIntervalFn(async () => {
-  const now = dayjs();
-  timeState.value = now.toDate();
+onMounted(() => {
+  // 予定時刻を過ぎたチャイム数を計算 (全数 - 過ぎてないチャイムの数)
+  let chimeCount = chimeTimes.length - chimeTimes.filter((chimeTime) => {
+    const chime = dayjs().hour(chimeTime[0]).minute(chimeTime[1]).second(0).millisecond(0);
+    return chime.diff(dayjs()) > 0;
+  }).length;
+  // 予定時刻を過ぎた予鈴数を計算 (全数 - 過ぎてない予鈴の数)
+  let preChimeCount = preChimeTimes.length - preChimeTimes.filter((preChimeTime) => {
+    const preChime = dayjs().hour(preChimeTime[0]).minute(preChimeTime[1]).second(0).millisecond(0);
+    return preChime.diff(dayjs()) > 0;
+  }).length;
 
-  // チャイムを鳴らす時間か確認
-  const chime = dayjs().hour(chimeTimes[chimeCount][0]).minute(chimeTimes[chimeCount][1]).second(0).millisecond(0);
-  if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
-    if (!chimePlayed) {
-      // カウントを増やし、チャイムを鳴らす
-      chimePlayed = true;
-      chimeCount++;
+  // 500msごとに現在時刻を更新
+  useIntervalFn(async () => {
+    const now = dayjs();
+    timeState.value = now.toDate();
 
-      const audio = new Audio(chimeSource().value);
-      audio.volume = 1.0;
-      audio.play();
+    // チャイムを鳴らす時間か確認 (最後のチャイムの時間を過ぎたらならさない)
+    if (!(chimeCount === chimeTimes.length)) {
+      const chime = now.hour(chimeTimes[chimeCount][0]).minute(chimeTimes[chimeCount][1]).second(0).millisecond(0);
+      if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
+        if (!chimePlayed) {
+          // カウントを増やし、チャイムを鳴らす
+          chimePlayed = true;
+          chimeCount++;
 
-      if (chimeCount === chimeTimes.length) {
-        // 全てのチャイムが鳴ったらカウントをリセット
-        chimeCount = 0;
+          const audio = new Audio(chimeSource().value);
+          audio.volume = 1.0;
+          await audio.play();
+        }
+      } else {
+        // 予定時間外はフラグをリセット
+        chimePlayed = false;
       }
+    } else if (now.hour(chimeTimes[0][0]).minute(chimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
+      // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
+      chimeCount = 0;
     }
-  } else {
-    // 予定時間外はフラグをリセット
-    chimePlayed = false;
-  }
 
-  // 予鈴を鳴らす時間か確認
-  const preChime = dayjs().hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
-  if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
-    if (!preChimePlayed) {
-      // カウントを増やし、予鈴を鳴らす
-      preChimePlayed = true;
-      preChimeCount++;
+    // 予鈴を鳴らす時間か確認
+    if (!(preChimeCount === preChimeTimes.length)) {
+      const preChime = dayjs().hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
+      if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
+        if (!preChimePlayed) {
+          // カウントを増やし、予鈴を鳴らす
+          preChimePlayed = true;
+          preChimeCount++;
 
-      const audio = new Audio(preChimeSource().value);
-      audio.volume = 1.0;
-      audio.play();
-
-      if (preChimeCount === preChimeTimes.length) {
-        // 全ての予鈴が鳴ったらカウントをリセット
+          const audio = new Audio(preChimeSource().value);
+          audio.volume = 1.0;
+          await audio.play();
+        }
+      } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
+        // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
         preChimeCount = 0;
       }
     }
-  } else {
-    // 予定時間外はフラグをリセット
-    preChimePlayed = false;
-  }
-}, 100);
+  }, 100);
+})
 
 </script>
 
