@@ -86,6 +86,15 @@ onMounted(async () => {
     console.warn(e);
   }
 
+  // 予鈴音源を読み込む
+  try {
+    const preChimeHandle = await opfsRoot.getFileHandle('pre-chime.mp3', { create: false });
+    const preChimeBuffer = await preChimeHandle.getFile();
+    preChimeSource().value = URL.createObjectURL(preChimeBuffer);
+  } catch (e) {
+    console.warn(e);
+  }
+
   // アラート音源を読み込む
   try {
     const alertHandle = await opfsRoot.getFileHandle('alert.mp3', { create: false });
