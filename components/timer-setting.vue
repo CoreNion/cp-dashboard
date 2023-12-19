@@ -43,7 +43,7 @@ function startTimer() {
     timerState.value = duration2ArrayTime(duration);
 
     // 残り時間が0になったらアラームを流して タイマーを止める
-    if (duration.seconds() <= 0) {
+    if (duration.asSeconds() <= 0) {
       audio.play();
       resetTimer();
     }
