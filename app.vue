@@ -91,13 +91,25 @@ onMounted(async () => {
     const alertHandle = await opfsRoot.getFileHandle('alert.mp3', { create: false });
     const alertBuffer = await alertHandle.getFile();
     timerAlertSource().value = URL.createObjectURL(alertBuffer);
-  } catch(e) {
+  } catch (e) {
     console.warn(e);
   }
+
+  // 雪の設定状態を読み込む
+  const snowStatus = localStorage.getItem('isSnowEnabled') === 'true';
+  if (snowStatus != null) {
+    isSnowEnabled().value = snowStatus;
+  }
+  // @ts-ignore
+  await import("pure-snow.js").then(({ createSnow, showSnow }) => {
+    createSnow();
+    showSnow(snowStatus);
+  });
 });
 </script>
 
 <template>
+  <div id="snow"></div>
   <NuxtPwaManifest />
   <NuxtLayout>
     <!-- 全画面時の表示 -->

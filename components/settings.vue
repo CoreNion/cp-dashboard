@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { isChimeEnabled } from '~/composables/states';
 
 const colorMode = useColorMode();
 
@@ -11,6 +10,28 @@ const chimeSourceState = chimeSource();
 const preChimeSourceState = preChimeSource();
 // タイマーのアラート音源
 const timerAlertSourceState = timerAlertSource();
+
+const snowModeComputed = computed<boolean>(
+  {
+    get() {
+      if (process.client) {
+        return JSON.parse(localStorage.getItem('isSnowEnabled') ?? 'false');
+      } else {
+        return false;
+      }
+    },
+    async set(value) {
+      if (typeof localStorage !== 'undefined')
+        localStorage.setItem('isSnowEnabled', JSON.stringify(value));
+        isSnowEnabled().value = value;
+
+      // @ts-ignore
+      await import("pure-snow.js").then(({ createSnow, showSnow }) => {
+        showSnow(value);
+      });
+    }
+  }
+);
 
 const chimeComputed = computed<boolean>(
   {
@@ -162,6 +183,11 @@ onMounted(() => {
             <option value="serial">Arduino (シリアル接続)</option>
             <option value="rpi">Raspberry Pi</option>
           </select>
+        </label>
+        
+        <label class="label cursor-pointer mt-4">
+          <span class="label-text">Snow❄︎</span>
+          <input type="checkbox" class="toggle toggle-secondary" v-model="snowModeComputed" />
         </label>
 
         <WeatherSetting></WeatherSetting>

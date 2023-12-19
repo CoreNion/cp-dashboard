@@ -27,6 +27,7 @@
     "nuxt-icon": "^0.6.6",
     "nuxt3-leaflet": "^1.0.12",
     "postcss": "^8.4.31",
+    "pure-snow.js": "^2.1.0",
     "typescript": "^5.2.2",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5",

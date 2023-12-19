@@ -9,6 +9,9 @@ dayjs.locale("ja");
 // 現在時刻
 export const time = () => useState<Date>('time', () => dayjs().toDate());
 
+// 降雪モード
+export const isSnowEnabled = () => useState<boolean>('isSnowEnabled', () => false);
+
 // 現在のセンサー情報のソース
 export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
 
