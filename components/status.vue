@@ -193,7 +193,7 @@ export async function refleshWeather() {
 
 <template>
   <div class="min-w-full stats stats-vertical shadow">
-    <div class="stat">
+    <div class="stat px-0">
       <div class="stat-title text-[3vw]">室温</div>
       <div v-if="sensorSourceState === 'serial' && !isSerialReady">
         <span class="font-bold text-xl">接続設定が必要です</span>
@@ -205,20 +205,20 @@ export async function refleshWeather() {
         <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
-    <div class="stat">
+    <div class="stat px-0 py-1">
       <div class="stat-title text-[3vw]">気圧*</div>
       <div class="stat-value leading-none flex flex-col">
         <span class="text-[4.6vw]">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
         <span class="text-[3vw]">hPa</span>
       </div>
     </div>
-    <div class="stat">
+    <div class="stat py-1">
       <div class="stat-title text-[3vw]">外気温*</div>
       <div class="stat-value text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
         <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
-    <div class="stat">
+    <div class="stat py-1">
       <div class="stat-title text-[3vw]">天気*</div>
       <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'"
         class="stat-value m-auto leading-none" size="5vw" />

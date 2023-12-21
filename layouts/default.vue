@@ -7,6 +7,7 @@
 <style>
 body {
   background: none;
+  overflow: hidden;
 }
 
 .snowflake {
