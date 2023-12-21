@@ -30,9 +30,19 @@ useHead({
   ],
 });
 
+const widthState = widthScreenSize();
+
 defaultAlertAudioSource().value = `${useRuntimeConfig().app.baseURL}alert.mp3`;
 
 onMounted(async () => {
+  // ウィンドウサイズを取得
+  widthState.value = window.innerWidth;
+
+  // 画面サイズ更新時にstateを更新するようにする
+  window.addEventListener('resize', () => {
+    widthState.value = window.innerWidth;
+  });
+
   try {
     // スリープを無効化
     await navigator.wakeLock.request('screen');
@@ -121,8 +131,8 @@ onMounted(async () => {
   <div id="snow"></div>
   <NuxtPwaManifest />
   <NuxtLayout>
-    <!-- 全画面時の表示 -->
-    <div class="max-2xl:hidden min-h-screen flex flex-row text-center gap-2">
+    <!-- 大画面デバイスの表示 -->
+    <div v-if="widthState >= 1536" class="min-h-screen flex flex-row text-center gap-2">
       <div class="basis-[30.0%] flex flex-row justify-between">
         <status></status>
       </div>
@@ -141,7 +151,8 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="2xl:hidden min-h-screen min-w-full flex flex-col items-center text-center">
+    <!-- 小画面デバイスの表示　-->
+    <div v-if="widthState < 1536" class="min-h-screen min-w-full flex flex-col items-center text-center">
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
       <div class="flex flex-row gap-5">

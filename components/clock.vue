@@ -60,7 +60,7 @@ onMounted(() => {
 
     // 予鈴を鳴らす時間か確認
     if (!(preChimeCount === preChimeTimes.length)) {
-      const preChime = dayjs().hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
+      const preChime = now.hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
       if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
         if (!preChimePlayed) {
           // カウントを増やし、予鈴を鳴らす

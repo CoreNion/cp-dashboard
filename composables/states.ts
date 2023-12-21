@@ -6,6 +6,9 @@ import 'dayjs/locale/ja';
 dayjs.extend(duration);
 dayjs.locale("ja");
 
+// 画面の横幅
+export const widthScreenSize = () => useState<number>('widthScreenSize', () => 1536);
+
 // 現在時刻
 export const time = () => useState<Date>('time', () => dayjs().toDate());
 
@@ -17,7 +20,6 @@ export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
 
 // alert.mp3のソース
 export const defaultAlertAudioSource = () => useState<string>('defaultAlertAudioSource', () => '/alert.mp3');
-
 // タイマーの音声のソース
 export const timerAlertSource = () => useState<string>('timerSource', () => defaultAlertAudioSource().value);
 // チャイムの音声ソース
