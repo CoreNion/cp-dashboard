@@ -11,6 +11,9 @@ const intervalState = interval();
 const isTimerActiveState = isTimerActive();
 const timerState = timer();
 
+const chimeStatus = chimeComputed();
+const preChimeStatus = preChimeComputed();
+
 // タイマー設定用時間 (h:m:s)
 const timerSettingState: Ref<number[]> = useState('timerSetting', () => [0, 0, 0]);
 
@@ -88,7 +91,18 @@ function duration2ArrayTime(duration: duration.Duration) {
 </script>
 
 <template>
-  <div class="flex max-2xl:flex-row flex-col justify-center items-center gap-2">
+  <div class="min-w-full flex max-xl:flex-row flex-col justify-center items-center gap-2 max-sm:flex-wrap">
+    <div class="2xl:min-w-full flex flex-col gap-1">
+      <label class="label cursor-pointer">
+        <span class="label-text">チャイム</span>
+        <input type="checkbox" class="toggle toggle-secondary" v-model="chimeStatus" />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">予鈴</span>
+        <input type="checkbox" class="toggle toggle-secondary" v-model="preChimeStatus" />
+      </label>
+    </div>
+
     <div>
       <h3 class="text-xl font-bold">タイマー設定</h3>
 

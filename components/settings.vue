@@ -33,38 +33,8 @@ const snowModeComputed = computed<boolean>(
   }
 );
 
-const chimeComputed = computed<boolean>(
-  {
-    get() {
-      if (process.client) {
-        return JSON.parse(localStorage.getItem('isChimeEnabled') ?? 'false');
-      } else {
-        return false;
-      }
-    },
-    set(value) {
-      if (typeof localStorage !== 'undefined')
-        localStorage.setItem('isChimeEnabled', JSON.stringify(value));
-      isChimeEnabled().value = value;
-    }
-  }
-);
-const preChimeComputed = computed<boolean>(
-  {
-    get() {
-      if (typeof localStorage !== 'undefined') {
-        return JSON.parse(localStorage.getItem('isPreChimeEnabled') ?? 'false');
-      } else {
-        return false;
-      }
-    },
-    set(value) {
-      if (typeof localStorage !== 'undefined')
-        localStorage.setItem('isPreChimeEnabled', JSON.stringify(value));
-      isPreChimeEnabled().value = value;
-    }
-  }
-);
+const chimeStatus = chimeComputed();
+const preChimeStatus = preChimeComputed();
 
 const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
 const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
@@ -209,11 +179,11 @@ onMounted(() => {
 
         <label class="label cursor-pointer mt-4">
           <span class="label-text">チャイム鳴動状態</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="chimeComputed" />
+          <input type="checkbox" class="toggle toggle-secondary" v-model="chimeStatus" />
         </label>
         <label class="label cursor-pointer mt-4">
           <span class="label-text">予鈴鳴動状態</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="preChimeComputed" />
+          <input type="checkbox" class="toggle toggle-secondary" v-model="preChimeStatus" />
         </label>
       </p>
     </div>
