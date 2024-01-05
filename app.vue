@@ -145,7 +145,7 @@ onMounted(async () => {
         <report></report>
         <div class="grow m-2 flex flex-col justify-end gap-2">
           <TimerSetting></TimerSetting>
-          <span>Copyright © 2023 CoreNion</span>
+          <span>Copyright © 2024 CoreNion</span>
           <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
         </div>
       </div>
@@ -156,7 +156,7 @@ onMounted(async () => {
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
       <div class="flex flex-row gap-5">
-        <span>Copyright © 2023 CoreNion</span>
+        <span>Copyright © 2024 CoreNion</span>
         <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
       </div>
     </div>
