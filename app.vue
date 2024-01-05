@@ -132,7 +132,7 @@ onMounted(async () => {
   <NuxtPwaManifest />
   <NuxtLayout>
     <!-- 大画面デバイスの表示 -->
-    <div v-if="widthState >= 1536" class="min-h-screen flex flex-row text-center gap-2">
+    <div v-if="widthState >= 1280" class="min-h-screen flex flex-row text-center gap-2">
       <div class="basis-[20.0%] flex flex-row justify-between">
         <status></status>
       </div>
@@ -141,7 +141,7 @@ onMounted(async () => {
         <clock></clock>
       </div>
 
-      <div class="basis-[20.0%] flex flex-col items-end m-3 gap-4">
+      <div class="basis-[15.0%] flex flex-col items-end m-3 gap-4">
         <report></report>
         <div class="grow m-2 flex flex-col justify-end gap-2">
           <TimerSetting></TimerSetting>
@@ -152,7 +152,7 @@ onMounted(async () => {
     </div>
 
     <!-- 小画面デバイスの表示　-->
-    <div v-if="widthState < 1536" class="min-h-screen min-w-full flex flex-col items-center text-center">
+    <div v-if="widthState <= 1280" class="min-h-screen min-w-full flex flex-col items-center text-center">
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
       <div class="flex flex-row gap-5">

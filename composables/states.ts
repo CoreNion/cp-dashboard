@@ -7,7 +7,7 @@ dayjs.extend(duration);
 dayjs.locale("ja");
 
 // 画面の横幅
-export const widthScreenSize = () => useState<number>('widthScreenSize', () => 1536);
+export const widthScreenSize = () => useState<number>('widthScreenSize', () => 1280);
 
 // 現在時刻
 export const time = () => useState<Date>('time', () => dayjs().toDate());

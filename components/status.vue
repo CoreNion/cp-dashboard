@@ -201,20 +201,20 @@ export async function refleshWeather() {
         <button class="btn btn-primary btn-sm mt-1" @click="connectSerialDevice()">設定する</button>
       </div>
 
-      <div v-else class="stat-value text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
+      <div v-else class="stat-value font-semibold text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
         <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
     <div class="stat px-0 py-1">
       <div class="stat-title text-[3vw]">気圧*</div>
-      <div class="stat-value leading-none flex flex-col">
+      <div class="stat-value font-semibold leading-none flex flex-col">
         <span class="text-[4.6vw]">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
         <span class="text-[3vw]">hPa</span>
       </div>
     </div>
     <div class="stat py-1">
       <div class="stat-title text-[3vw]">外気温*</div>
-      <div class="stat-value text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
+      <div class="stat-value font-semibold text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
         <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>

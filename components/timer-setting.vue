@@ -91,8 +91,8 @@ function duration2ArrayTime(duration: duration.Duration) {
 </script>
 
 <template>
-  <div class="min-w-full flex max-xl:flex-row flex-col justify-center items-center gap-2 max-sm:flex-wrap">
-    <div class="2xl:min-w-full flex flex-col gap-1">
+  <div class="min-w-full flex flex-row flex-wrap justify-center items-center gap-2 ">
+    <div class="xl:min-w-full flex flex-col gap-1">
       <label class="label cursor-pointer">
         <span class="label-text">チャイム</span>
         <input type="checkbox" class="toggle toggle-secondary" v-model="chimeStatus" />
@@ -120,16 +120,16 @@ function duration2ArrayTime(duration: duration.Duration) {
 
     <div class="flex flex-col gap-2">
       <div class="flex flex-row gap-2">
-        <button class="btn btn-outline btn-secondary" @click="addTimerLimit([0, 5, 0])">+5分</button>
-        <button class="btn btn-outline btn-secondary" @click="addTimerLimit([0, 1, 0])">+1分</button>
-        <button class="btn btn-outline btn-secondary" @click="addTimerLimit([0, 0, 10])">+10秒</button>
+        <button class="btn btn-outline btn-secondary max-2xl:btn-sm" @click="addTimerLimit([0, 5, 0])">+5分</button>
+        <button class="btn btn-outline btn-secondary max-2xl:btn-sm" @click="addTimerLimit([0, 1, 0])">+1分</button>
+        <button class="btn btn-outline btn-secondary max-2xl:btn-sm" @click="addTimerLimit([0, 0, 10])">+10秒</button>
       </div>
 
       <div class="flex gap-2 justify-center">
-        <button class="btn btn-primary" @click="isTimerActiveState ? pauseTimer() : startTimer()"> {{ isTimerActiveState ?
+        <button class="btn btn-primary max-2xl:btn-sm" @click="isTimerActiveState ? pauseTimer() : startTimer()"> {{ isTimerActiveState ?
           "一時停止" :
           "スタート" }}</button>
-        <button class="btn btn-neutral" @click="resetTimer()">clear</button>
+        <button class="btn btn-neutral max-2xl:btn-sm" @click="resetTimer()">clear</button>
       </div>
     </div>
   </div>
