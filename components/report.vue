@@ -36,7 +36,7 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
     needCountdownAlert.value = needAlert(nextReportDeadline, djs);
     countdownRatio.value = calcRatio(nextReportDeadline, djs);
   } else {
-    countdownName.value = '最終登校日まで';
+    countdownName.value = '最終登校まで';
     const eventDay = dayjs("2024-03-15");
     
     countdownLimit.value = calcLimit(eventDay, djs);

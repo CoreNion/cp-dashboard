@@ -23,7 +23,7 @@
       "request": "launch",
       "name": "fullstack: nuxt",
       "outputCapture": "std",
-      "command": "yarn dev",
+      "command": "yarn dev --host",
       "serverReadyAction":{
         "pattern": "➜ Local:    (.*)",
         "uriFormat": "%s",
