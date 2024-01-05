@@ -48,8 +48,8 @@ async function refleshStatus() {
   // センサーのソース設定を取得
   const sensorSource = localStorage.getItem('sensorSource');
   if (sensorSource == null) {
-    // ない場合は初期値のラズパイに設定
-    localStorage.setItem('sensorSource', 'rpi');
+    // ない場合は初期値のシリアルに設定
+    localStorage.setItem('sensorSource', 'serial');
   } else {
     sensorSourceState.value = sensorSource;
   }

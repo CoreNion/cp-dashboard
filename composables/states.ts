@@ -16,7 +16,7 @@ export const time = () => useState<Date>('time', () => dayjs().toDate());
 export const isSnowEnabled = () => useState<boolean>('isSnowEnabled', () => false);
 
 // 現在のセンサー情報のソース
-export const sensorSource = () => useState<string>('sensorSource', () => "rpi");
+export const sensorSource = () => useState<string>('sensorSource', () => "serial");
 
 // alert.mp3のソース
 export const defaultAlertAudioSource = () => useState<string>('defaultAlertAudioSource', () => '/alert.mp3');
