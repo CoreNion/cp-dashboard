@@ -2472,6 +2472,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nuxtjs/google-fonts@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@nuxtjs/google-fonts@npm:3.1.3"
+  dependencies:
+    "@nuxt/kit": "npm:^3.8.2"
+    google-fonts-helper: "npm:^3.4.1"
+    pathe: "npm:^1.1.1"
+  checksum: 15eeab02bca923d89ecee836a04ee3e9a181ae63336c01a89ad67bd61c90ff1cd21d9706c3be3baf9d58492423d00310f9a5eed833353e8a12f209302bb40f49
+  languageName: node
+  linkType: hard
+
 "@nuxtjs/tailwindcss@npm:^6.10.1":
   version: 6.10.1
   resolution: "@nuxtjs/tailwindcss@npm:6.10.1"
@@ -4797,7 +4808,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.2.2":
+"deepmerge@npm:^4.2.2, deepmerge@npm:^4.3.1":
   version: 4.3.1
   resolution: "deepmerge@npm:4.3.1"
   checksum: e53481aaf1aa2c4082b5342be6b6d8ad9dfe387bc92ce197a66dea08bd4265904a087e75e464f14d1347cf2ac8afe1e4c16b266e0561cc5df29382d3c5f80044
@@ -5955,6 +5966,18 @@ __metadata:
     slash: "npm:^5.1.0"
     unicorn-magic: "npm:^0.1.0"
   checksum: 6d98738a419f948ef23da019275b15ca5c65bb7e354ecea52a3015f4dae6b28a713fcf73bf3aab1c04039f4f62da71cff191a7ececc37c0e4c9b4320a047505f
+  languageName: node
+  linkType: hard
+
+"google-fonts-helper@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "google-fonts-helper@npm:3.4.1"
+  dependencies:
+    deepmerge: "npm:^4.3.1"
+    hookable: "npm:^5.5.3"
+    ofetch: "npm:^1.3.3"
+    ufo: "npm:^1.3.2"
+  checksum: 285af2a0e77aa2e0812d83adb5edd027e7235f6ca49d1a4ef5245e9674f14a12b396d31f5b73818ef17d86dd266455eb00f3d578dad71359d394bd0a4236226e
   languageName: node
   linkType: hard
 
@@ -7994,6 +8017,7 @@ __metadata:
   dependencies:
     "@nuxt/devtools": "npm:^1.0.3"
     "@nuxtjs/color-mode": "npm:^3.3.2"
+    "@nuxtjs/google-fonts": "npm:^3.1.3"
     "@nuxtjs/tailwindcss": "npm:^6.10.1"
     "@types/leaflet": "npm:^1"
     "@types/w3c-web-serial": "npm:^1.0.6"

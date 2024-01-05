@@ -18,4 +18,8 @@ body {
   border-radius: 50%;
   filter: drop-shadow(0 0 15px #C7D4E0);
 }
+
+[data-theme="dash"] body {
+  font-family: 'BIZ UDPGothic', sans-serif;
+}
 </style>

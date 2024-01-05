@@ -9,12 +9,18 @@ export default defineNuxtConfig({
   },
   build: {},
   modules: [
+    '@nuxtjs/google-fonts',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'nuxt3-leaflet',
     'nuxt-icon',
     '@vite-pwa/nuxt'
   ],
+  googleFonts: {
+    families: {
+      "BIZ+UDPGothic": [400, 700],
+    }
+  },
   pwa: {
     manifest: {
       name: 'Campus Dashboard',
