@@ -55,13 +55,13 @@ export function needAlert(eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs()) {
 /**
  * イベント日の残り時間の経過割合を計算する
  * @param eventDay 次のイベント日
+ * @param startDay 期間のスタート日 (イベント日の1ヶ月前)
  * @param date 日付
  * @returns 
  */
-export function calcRatio(eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs()) {
-  // レポートの期間の全時間を計算する
-  const reportMonthStart = dayjs(eventDay).subtract(1, 'month');
-  const allReportTime = eventDay.diff(reportMonthStart, 'millisecond');
+export function calcRatio(eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs(), startDay: dayjs.Dayjs = dayjs(eventDay).subtract(1, 'month'),) {
+  // 全期間を計算
+  const allTime = eventDay.diff(startDay, 'millisecond');
 
-  return ((allReportTime - calcLimit(eventDay, date)) / allReportTime) * 100;
+  return ((allTime - calcLimit(eventDay, date)) / allTime) * 100;
 }

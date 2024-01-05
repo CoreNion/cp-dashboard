@@ -36,14 +36,13 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
     needCountdownAlert.value = needAlert(nextReportDeadline, djs);
     countdownRatio.value = calcRatio(nextReportDeadline, djs);
   } else {
-    // クリスマスまでのカウントダウン
-    countdownName.value = 'クリスマスまで';
-    const eventDay = dayjs("2023-12-25");
+    countdownName.value = '最終登校日まで';
+    const eventDay = dayjs("2024-03-15");
     
     countdownLimit.value = calcLimit(eventDay, djs);
     countdownLimitDays.value = calcLimitDays(eventDay, djs);
     needCountdownAlert.value = needAlert(eventDay, djs);
-    countdownRatio.value = calcRatio(eventDay, djs);
+    countdownRatio.value = calcRatio(eventDay, djs, dayjs("2024-01-01"));
   }
 }
 
