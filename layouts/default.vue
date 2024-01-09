@@ -20,6 +20,6 @@ body {
 }
 
 [data-theme="dash"] body {
-  font-family: 'Inter', 'BIZ UDPGothic', sans-serif;
+  font-family: 'Murecho', sans-serif;
 }
 </style>

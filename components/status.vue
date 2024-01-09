@@ -204,7 +204,7 @@ export async function refleshWeather() {
       </div>
 
       <div v-else class="stat-value font-semibold text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-        <Icon name="uil:celsius" size="4vw" />
+        <IconCSS name="uil:celsius" size="4vw" />
       </div>
     </div>
     <div class="stat py-1">
@@ -214,7 +214,7 @@ export async function refleshWeather() {
       </div>
 
       <div v-else class="stat-value font-semibold text-[4.6vw]">{{ humidityState != null ? humidityState.toFixed(1) : "-" }}
-        <Icon name="uil:percentage" size="4vw" />
+        <IconCSS name="uil:percentage" size="4vw" />
       </div>
     </div>
     <div class="stat px-0 py-1">
@@ -227,7 +227,7 @@ export async function refleshWeather() {
     <div class="stat py-1">
       <div class="stat-title text-[3vw]">外気温*</div>
       <div class="stat-value font-semibold text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
-        <Icon name="uil:celsius" size="4vw" />
+        <IconCSS name="uil:celsius" size="4vw" />
       </div>
     </div>
 

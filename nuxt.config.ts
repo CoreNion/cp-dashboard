@@ -17,9 +17,11 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt'
   ],
   googleFonts: {
+    overwriting: true,
+    base64: true,
+    inject: false,
     families: {
-      "BIZ+UDPGothic": [400, 700],
-      "Inter": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      "Murecho": "100..900",
     }
   },
   pwa: {
@@ -58,4 +60,7 @@ export default defineNuxtConfig({
     dataValue: 'theme', // activate data-theme in <html> tag
     classSuffix: '',
   },
+  experimental: {
+    payloadExtraction: false,
+  }
 })
