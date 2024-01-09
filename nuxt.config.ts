@@ -17,11 +17,9 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt'
   ],
   googleFonts: {
-    overwriting: true,
-    base64: true,
-    inject: false,
     families: {
-      "Murecho": "100..900",
+      "BIZ+UDPGothic": [400, 700],
+      "Inter": "100..900",
     }
   },
   pwa: {
