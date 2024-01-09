@@ -139,6 +139,9 @@ onMounted(async () => {
  * 表示されている天気を更新する
  */
 export async function refleshWeather() {
+  // センサーのソース
+  const sensorSourceState = sensorSource();
+
   // 現在の気圧
   const pressureState = pressure();
   // 現在の外気温
@@ -152,7 +155,7 @@ export async function refleshWeather() {
   const weatherOfficeNumberState = weatherOfficeNumber();
 
   // 最新の気象データの時刻を取得
-  const latestTime = dayjs(await $fetch < string > ('https://www.jma.go.jp/bosai/amedas/data/latest_time.txt'));
+  const latestTime = dayjs(await $fetch<string>('https://www.jma.go.jp/bosai/amedas/data/latest_time.txt'));
   // 最新のJSONファイル名 (3時間ごとに別ファイル)
   const latestJsonName = `${latestTime.format("YYYYMMDD")}_${(Math.floor(latestTime.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
 
@@ -178,7 +181,9 @@ export async function refleshWeather() {
   // 最後にある最新の気象データを取得
   const latestWeather = Object(Object.values(amedasData).pop());
   outTmpState.value = latestWeather.temp[0];
-  pressureState.value = latestWeather.pressure[0];
+
+  if (sensorSourceState.value === "serial" &&  !(useState('isSerialReady').value))
+    pressureState.value = latestWeather.pressure[0];
 
   /* 天気予報のデータの処理 */
   const forecastData = Array(data[1]);
@@ -213,12 +218,15 @@ export async function refleshWeather() {
         <span class="font-bold text-xl">接続設定が必要</span>
       </div>
 
-      <div v-else class="stat-value font-semibold text-[4.6vw]">{{ humidityState != null ? humidityState.toFixed(1) : "-" }}
+      <div v-else class="stat-value font-semibold text-[4.6vw]">{{ humidityState != null ? humidityState.toFixed(1) : "-"
+      }}
         <IconCSS name="uil:percentage" size="4vw" />
       </div>
     </div>
     <div class="stat px-0 py-1">
-      <div class="stat-title text-[3vw]">気圧*</div>
+      <div class="stat-title text-[3vw]">
+        気圧{{ sensorSourceState === 'serial' && !isSerialReady ? '*' : '' }}
+      </div>
       <div class="stat-value font-semibold leading-none flex flex-col">
         <span class="text-[4.6vw]">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
         <span class="text-[3vw]">hPa</span>

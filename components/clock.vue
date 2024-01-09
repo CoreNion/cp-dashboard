@@ -106,7 +106,7 @@ onMounted(() => {
         </div>
         <span v-if="timerState == null" class="text-[7vw] xl:text-[4.5vw]">
           {{ dayjs(timeState).format('YYYY年MM月DD日(ddd)') }}
-          <IconCSS :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value m-auto leading-none" size="6vw" />
+          <IconCSS :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value m-auto leading-none" size="6vw" />*
         </span>
       </h2>
     </ClientOnly>
