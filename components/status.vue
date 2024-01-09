@@ -10,6 +10,8 @@ const isSerialReady = useState('isSerialReady', () => false);
 
 // 現在の室温
 const roomTmpState = roomTmp();
+// 現在の湿度
+const humidityState = humidity();
 // 現在の気圧
 const pressureState = pressure();
 // 現在の外気温
@@ -93,8 +95,10 @@ async function refleshStatus() {
 
           // 気温データを更新
           roomTmpState.value = data.temperature;
-          // 気圧データを更新 (まともに動作せず)
-          // pressureState.value = data.pressure;
+          // 湿度データを更新
+          humidityState.value = data.humidity;
+          // 気圧データを更新
+          pressureState.value = data.pressure;
 
           // 終了
           reader.releaseLock();
@@ -205,6 +209,16 @@ export async function refleshWeather() {
         <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
+    <div class="stat py-1">
+      <div class="stat-title text-[3vw]">室内湿度</div>
+      <div v-if="sensorSourceState === 'serial' && !isSerialReady">
+        <span class="font-bold text-xl">接続設定が必要</span>
+      </div>
+
+      <div v-else class="stat-value font-semibold text-[4.6vw]">{{ humidityState != null ? humidityState.toFixed(1) : "-" }}
+        <Icon name="uil:percentage" size="4vw" />
+      </div>
+    </div>
     <div class="stat px-0 py-1">
       <div class="stat-title text-[3vw]">気圧*</div>
       <div class="stat-value font-semibold leading-none flex flex-col">
@@ -217,11 +231,6 @@ export async function refleshWeather() {
       <div class="stat-value font-semibold text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
         <Icon name="uil:celsius" size="4vw" />
       </div>
-    </div>
-    <div class="stat py-1">
-      <div class="stat-title text-[3vw]">天気*</div>
-      <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'"
-        class="stat-value m-auto leading-none" size="5vw" />
     </div>
 
     <div class="stat m-auto gap-2">

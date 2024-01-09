@@ -49,6 +49,8 @@ export const weatherAmedasCode = () => useState<string>('weatherAmedasCode', () 
 
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
+// 現在の湿度
+export const humidity = () => useState<Number | null>('humidity', () => null);
 // 現在の気圧
 export const pressure = () => useState<Number | null>('pressure', () => null);
 // 現在の外気温
