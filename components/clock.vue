@@ -12,6 +12,9 @@ const timeState = time();
 // タイマーの残り時間
 const timerState = timer();
 
+// 天気
+const weatherState = weather();
+
 // チャイムの有効/無効
 const isChimeEnabledState = isChimeEnabled();
 const isPreChimeEnabledState = isPreChimeEnabled();
@@ -103,6 +106,7 @@ onMounted(() => {
         </div>
         <span v-if="timerState == null" class="text-[7vw] xl:text-[4.5vw]">
           {{ dayjs(timeState).format('YYYY年MM月DD日(ddd)') }}
+          <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value m-auto leading-none" size="6vw" />
         </span>
       </h2>
     </ClientOnly>

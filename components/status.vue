@@ -16,8 +16,6 @@ const humidityState = humidity();
 const pressureState = pressure();
 // 現在の外気温
 const outTmpState = outTmp();
-// 天気
-const weatherState = weather();
 
 // センサーのインターバル
 let sensorInterval: Pausable | null = null;
