@@ -73,6 +73,9 @@ onMounted(() => {
           const audio = new Audio(preChimeSource().value);
           audio.volume = 1.0;
           await audio.play();
+        } else {
+          // 予定時間外はフラグをリセット
+          preChimePlayed = false;
         }
       } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
         // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
@@ -106,7 +109,8 @@ onMounted(() => {
         </div>
         <span v-if="timerState == null" class="text-[7vw] xl:text-[4.5vw]">
           {{ dayjs(timeState).format('YYYY年MM月DD日(ddd)') }}
-          <IconCSS :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'" class="stat-value m-auto leading-none" size="6vw" />*
+          <IconCSS :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'"
+            class="stat-value m-auto leading-none" size="6vw" />*
         </span>
       </h2>
     </ClientOnly>
