@@ -1,8 +1,7 @@
-import DashWorker from '../worker.ts?worker';
 import dayjs from 'dayjs';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const worker = new DashWorker();
+  const worker = useNuxtApp().$worker;
 
   // 現在時刻State
   const timeState = time();
