@@ -37,6 +37,8 @@ export const timer = () => useState<number[] | null>('timer', () => null);
 export const isChimeEnabled = () => useState<boolean>('isChimeEnabled', () => false);
 // 予鈴の有効/無効
 export const isPreChimeEnabled = () => useState<boolean>('isPreChimeEnabled', () => false);
+// タイマーの設定時間 (h:m:s)
+export const timerSetting = () => useState('timerSetting', () => [0, 0, 0]);
 
 // 天気の広域地方番号
 export const weatherWideRegionNumber = () => useState<string>('weatherWideRegionNumber', () => "010300");

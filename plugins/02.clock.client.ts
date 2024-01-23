@@ -26,52 +26,55 @@ export default defineNuxtPlugin((nuxtApp) => {
   }).length;
 
   // workerからの時刻を用いて各種処理を行う
-  worker.addEventListener('message', async (event: MessageEvent<Date>) => {
-    const date = event.data;
-    timeState.value = date;
+  worker.addEventListener('message', async (event: MessageEvent<Date | Array<number>>) => {
+    const data = event.data;
 
-    const now = dayjs(date);
-    // チャイムを鳴らす時間か確認 (最後のチャイムの時間を過ぎたらならさない)
-    if (!(chimeCount === chimeTimes.length)) {
-      const chime = now.hour(chimeTimes[chimeCount][0]).minute(chimeTimes[chimeCount][1]).second(0).millisecond(0);
-      if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
-        if (!chimePlayed) {
-          // カウントを増やし、チャイムを鳴らす
-          chimePlayed = true;
-          chimeCount++;
+    if (data instanceof Date) {
+      timeState.value = data;
 
-          const audio = new Audio(chimeSource().value);
-          audio.volume = 1.0;
-          await audio.play();
-        }
-      } else {
-        // 予定時間外はフラグをリセット
-        chimePlayed = false;
-      }
-    } else if (now.hour(chimeTimes[0][0]).minute(chimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
-      // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
-      chimeCount = 0;
-    }
+      const now = dayjs(data);
+      // チャイムを鳴らす時間か確認 (最後のチャイムの時間を過ぎたらならさない)
+      if (!(chimeCount === chimeTimes.length)) {
+        const chime = now.hour(chimeTimes[chimeCount][0]).minute(chimeTimes[chimeCount][1]).second(0).millisecond(0);
+        if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
+          if (!chimePlayed) {
+            // カウントを増やし、チャイムを鳴らす
+            chimePlayed = true;
+            chimeCount++;
 
-    // 予鈴を鳴らす時間か確認
-    if (!(preChimeCount === preChimeTimes.length)) {
-      const preChime = now.hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
-      if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
-        if (!preChimePlayed) {
-          // カウントを増やし、予鈴を鳴らす
-          preChimePlayed = true;
-          preChimeCount++;
-
-          const audio = new Audio(preChimeSource().value);
-          audio.volume = 1.0;
-          await audio.play();
+            const audio = new Audio(chimeSource().value);
+            audio.volume = 1.0;
+            await audio.play();
+          }
         } else {
           // 予定時間外はフラグをリセット
-          preChimePlayed = false;
+          chimePlayed = false;
         }
-      } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
+      } else if (now.hour(chimeTimes[0][0]).minute(chimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
         // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
-        preChimeCount = 0;
+        chimeCount = 0;
+      }
+
+      // 予鈴を鳴らす時間か確認
+      if (!(preChimeCount === preChimeTimes.length)) {
+        const preChime = now.hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
+        if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
+          if (!preChimePlayed) {
+            // カウントを増やし、予鈴を鳴らす
+            preChimePlayed = true;
+            preChimeCount++;
+
+            const audio = new Audio(preChimeSource().value);
+            audio.volume = 1.0;
+            await audio.play();
+          } else {
+            // 予定時間外はフラグをリセット
+            preChimePlayed = false;
+          }
+        } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
+          // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
+          preChimeCount = 0;
+        }
       }
     }
   });
