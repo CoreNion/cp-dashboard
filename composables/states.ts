@@ -55,6 +55,9 @@ export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
 export const humidity = () => useState<Number | null>('humidity', () => null);
 // 現在の気圧
 export const pressure = () => useState<Number | null>('pressure', () => null);
+// 現在のガス抵抗値
+export const gas = () => useState<number | null>('gas', () => null);
+
 // 現在の外気温
 export const outTmp= () => useState<Number | null>('outTemp', () => null);
 // 天気

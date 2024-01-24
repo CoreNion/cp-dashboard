@@ -31,6 +31,7 @@ void setup()
   bme.setHumidityOversampling(BME680_OS_2X);
   bme.setPressureOversampling(BME680_OS_4X);
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+  bme.setGasHeater(320, 150);
 }
 
 void loop()
@@ -58,11 +59,15 @@ void loop()
       // 気圧 (hPa)
       float pressure = bme.pressure / 100.0;
 
+      // ガス抵抗 (kOhms)
+      float gas_resistance = bme.gas_resistance / 1000.0;
+
       // JSONを生成
       DynamicJsonDocument doc(200);
       doc["temperature"] = temperature;
       doc["humidity"] = humidity;
       doc["pressure"] = pressure;
+      doc["gas_resistance"] = gas_resistance;
 
       // JSON出力
       serializeJson(doc, Serial);

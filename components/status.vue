@@ -14,6 +14,9 @@ const roomTmpState = roomTmp();
 const humidityState = humidity();
 // 現在の気圧
 const pressureState = pressure();
+// ガス抵抗値
+const gasState = gas();
+
 // 現在の外気温
 const outTmpState = outTmp();
 
@@ -97,6 +100,8 @@ async function refleshStatus() {
           humidityState.value = data.humidity;
           // 気圧データを更新
           pressureState.value = data.pressure;
+          // ガス抵抗値を更新
+          gasState.value = data.gas_resistance;
 
           // 終了
           reader.releaseLock();
@@ -241,6 +246,8 @@ export async function refleshWeather() {
 
     <div class="stat m-auto gap-2">
       <span>*出典: 気象庁ホームページ</span>
+      
+      <AirStatus></AirStatus>
 
       <settings class="flex-1"></settings>
     </div>

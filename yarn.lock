@@ -1944,6 +1944,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@kurkle/color@npm:0.3.2"
+  checksum: a9e8e3e35dcd59dec4dd4f0105919c05e24823a96347bcf152965c29e48d6290b66d5fb96c071875db752e10930724c48ce6d338fefbd65e0ce5082d5c78970e
+  languageName: node
+  linkType: hard
+
 "@kwsites/file-exists@npm:^1.1.1":
   version: 1.1.1
   resolution: "@kwsites/file-exists@npm:1.1.1"
@@ -4040,6 +4047,15 @@ __metadata:
   version: 5.3.0
   resolution: "chalk@npm:5.3.0"
   checksum: 8297d436b2c0f95801103ff2ef67268d362021b8210daf8ddbe349695333eb3610a71122172ff3b0272f1ef2cf7cc2c41fdaa4715f52e49ffe04c56340feed09
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "chart.js@npm:4.4.1"
+  dependencies:
+    "@kurkle/color": "npm:^0.3.0"
+  checksum: ef0cd10118bfa66695b109cbb331be99193b19f1ac2bb7f35f8c71aa45a355f17d1c87d5fa6727a2b026ace4c7fa8ab557e9f61a9f13f1f39f58500bbd0c26d1
   languageName: node
   linkType: hard
 
@@ -7822,6 +7838,7 @@ __metadata:
     "@vite-pwa/nuxt": "npm:^0.4.0"
     "@vueuse/core": "npm:^10.7.2"
     autoprefixer: "npm:^10.4.17"
+    chart.js: "npm:^4.4.1"
     daisyui: "npm:^4.6.0"
     dayjs: "npm:^1.11.10"
     leaflet: "npm:^1.9.4"
@@ -7833,6 +7850,7 @@ __metadata:
     pure-snow.js: "npm:^2.1.0"
     typescript: "npm:^5.3.3"
     vue: "npm:^3.4.15"
+    vue-chartjs: "npm:^5.3.0"
     vue-router: "npm:^4.2.5"
     vue-tsc: "npm:^1.8.27"
   languageName: unknown
@@ -11144,6 +11162,16 @@ __metadata:
   dependencies:
     ufo: "npm:^1.2.0"
   checksum: 5d934be095334da4a415384e029302e499f7ba8ead552409ed7d59c342c61302197b8f2dbda428d6edc97a443102f1772ea440c31833587e54f2cba60b29c516
+  languageName: node
+  linkType: hard
+
+"vue-chartjs@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "vue-chartjs@npm:5.3.0"
+  peerDependencies:
+    chart.js: ^4.1.1
+    vue: ^3.0.0-0 || ^2.7.0
+  checksum: c6aebc4434d329843fbb7c5209317fd44a5a1fb91c60b43c2e03bc999c2427c0787eb30458fa5575e26004a426b5f4c764a3bdc5c6f9793379fc7d039c0575ff
   languageName: node
   linkType: hard
 
