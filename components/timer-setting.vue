@@ -8,8 +8,10 @@ dayjs.locale("ja");
 
 const isTimerActiveState = isTimerActive();
 
-const chimeStatus = chimeComputed();
-const preChimeStatus = preChimeComputed();
+// チャイムの鳴動状態
+const isChimeEnabledState = isChimeEnabled();
+// 予鈴の鳴動状態
+const isPreChimeEnabledState = isPreChimeEnabled();
 
 // タイマー設定用時間 (h:m:s)
 const timerSettingState = timerSetting();
@@ -20,11 +22,11 @@ const timerSettingState = timerSetting();
     <div class="xl:min-w-full flex flex-col gap-1">
       <label class="label cursor-pointer">
         <span class="label-text">チャイム</span>
-        <input type="checkbox" class="toggle toggle-secondary" v-model="chimeStatus" />
+        <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">予鈴</span>
-        <input type="checkbox" class="toggle toggle-secondary" v-model="preChimeStatus" />
+        <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
       </label>
     </div>
 

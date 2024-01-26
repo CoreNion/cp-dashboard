@@ -56,36 +56,8 @@ onMounted(async () => {
     console.warn(e);
   }
 
-  // 天気の各設定コードを取得
-  const wideRegion = localStorage.getItem('weatherWideRegion');
-  if (wideRegion != null) {
-    weatherWideRegionNumber().value = wideRegion;
-  }
-  const officeNumber = localStorage.getItem('weatherOfficeNumber');
-  if (officeNumber != null) {
-    weatherOfficeNumber().value = officeNumber;
-  }
-  const areaNumber = localStorage.getItem('weatherAreaNumber');
-  if (areaNumber != null) {
-    weatherAreaNumber().value = areaNumber;
-  }
-  const amedasCode = localStorage.getItem('weatherAmedasCode');
-  if (amedasCode != null) {
-    weatherAmedasCode().value = amedasCode;
-  }
-
   // OPFSからチャイム音源とアラート音源を読み込む
   const opfsRoot = await navigator.storage.getDirectory();
-
-  // チャイムの有効/無効を読み込む
-  const storageChimeStatus = localStorage.getItem('isChimeEnabled');
-  if (storageChimeStatus != null) {
-    isChimeEnabled().value = storageChimeStatus === 'true';
-  } 
-  const storagePreChimeStatus = localStorage.getItem('isPreChimeEnabled');
-  if (storagePreChimeStatus != null) {
-    isPreChimeEnabled().value = storagePreChimeStatus === 'true';
-  }
 
   // チャイム音源を読み込む
   try {
@@ -114,15 +86,10 @@ onMounted(async () => {
     console.warn(e);
   }
 
-  // 雪の設定状態を読み込む
-  const snowStatus = localStorage.getItem('isSnowEnabled') === 'true';
-  if (snowStatus != null) {
-    isSnowEnabled().value = snowStatus;
-  }
   // @ts-ignore
   await import("pure-snow.js").then(({ createSnow, showSnow }) => {
     createSnow();
-    showSnow(snowStatus);
+    showSnow(isSnowEnabled().value);
   });
 });
 </script>

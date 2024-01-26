@@ -1,6 +1,9 @@
 <script setup lang="ts">
-
+// テーマ設定
 const colorMode = useColorMode();
+
+// センサーのソース
+const isSnowEnabledState = isSnowEnabled();
 
 // センサーのソース
 const sensorSourceState = sensorSource();
@@ -11,30 +14,10 @@ const preChimeSourceState = preChimeSource();
 // タイマーのアラート音源
 const timerAlertSourceState = timerAlertSource();
 
-const snowModeComputed = computed<boolean>(
-  {
-    get() {
-      if (process.client) {
-        return JSON.parse(localStorage.getItem('isSnowEnabled') ?? 'false');
-      } else {
-        return false;
-      }
-    },
-    async set(value) {
-      if (typeof localStorage !== 'undefined')
-        localStorage.setItem('isSnowEnabled', JSON.stringify(value));
-        isSnowEnabled().value = value;
-
-      // @ts-ignore
-      await import("pure-snow.js").then(({ createSnow, showSnow }) => {
-        showSnow(value);
-      });
-    }
-  }
-);
-
-const chimeStatus = chimeComputed();
-const preChimeStatus = preChimeComputed();
+// チャイムの鳴動状態
+const isChimeEnabledState = isChimeEnabled();
+// 予鈴の鳴動状態
+const isPreChimeEnabledState = isPreChimeEnabled();
 
 const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
 const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
@@ -110,6 +93,16 @@ const playAudio = (link: string) => {
   audio.play();
 }
 
+const onSnowModeChange = async (e: Event) => {
+  if (!(e.target instanceof HTMLInputElement)) return;
+  const value = e.target.checked;
+
+  // @ts-ignore
+  await import("pure-snow.js").then(({ createSnow, showSnow }) => {
+    showSnow(value);
+  });
+}
+
 onMounted(() => {
   // ローカルストレージから元ファイル名を取得
   const alertFileName = localStorage.getItem('alert.mp3');
@@ -154,10 +147,11 @@ onMounted(() => {
             <option value="rpi">Raspberry Pi</option>
           </select>
         </label>
-        
+
         <label class="label cursor-pointer mt-4">
           <span class="label-text">Snow❄︎</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="snowModeComputed" />
+          <input type="checkbox" class="toggle toggle-secondary" @change="onSnowModeChange"
+            v-model="isSnowEnabledState" />
         </label>
 
         <WeatherSetting></WeatherSetting>
@@ -179,11 +173,11 @@ onMounted(() => {
 
         <label class="label cursor-pointer mt-4">
           <span class="label-text">チャイム鳴動状態</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="chimeStatus" />
+          <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
         </label>
         <label class="label cursor-pointer mt-4">
           <span class="label-text">予鈴鳴動状態</span>
-          <input type="checkbox" class="toggle toggle-secondary" v-model="preChimeStatus" />
+          <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
         </label>
       </p>
     </div>

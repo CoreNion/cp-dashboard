@@ -1,4 +1,4 @@
-import type { Pausable } from "@vueuse/core";
+import { useLocalStorage, type Pausable } from "@vueuse/core";
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import 'dayjs/locale/ja';
@@ -13,10 +13,10 @@ export const widthScreenSize = () => useState<number>('widthScreenSize', () => 1
 export const time = () => useState<Date>('time', () => dayjs().toDate());
 
 // 降雪モード
-export const isSnowEnabled = () => useState<boolean>('isSnowEnabled', () => false);
+export const isSnowEnabled = () => useLocalStorage<boolean>('isSnowEnabled', () => false);
 
 // 現在のセンサー情報のソース
-export const sensorSource = () => useState<string>('sensorSource', () => "serial");
+export const sensorSource = () => useLocalStorage<string>('sensorSource', () => "serial");
 
 // alert.mp3のソース
 export const defaultAlertAudioSource = () => useState<string>('defaultAlertAudioSource', () => '/alert.mp3');
@@ -34,20 +34,20 @@ export const isTimerActive = () => useState('isTimerActive', () => false);
 // タイマー残り時間 (h:m:s)
 export const timer = () => useState<number[] | null>('timer', () => null);
 // チャイムの有効/無効
-export const isChimeEnabled = () => useState<boolean>('isChimeEnabled', () => false);
+export const isChimeEnabled = () => useLocalStorage<boolean>('isChimeEnabled', () => false);
 // 予鈴の有効/無効
-export const isPreChimeEnabled = () => useState<boolean>('isPreChimeEnabled', () => false);
+export const isPreChimeEnabled = () => useLocalStorage<boolean>('isPreChimeEnabled', () => false);
 // タイマーの設定時間 (h:m:s)
 export const timerSetting = () => useState('timerSetting', () => [0, 0, 0]);
 
 // 天気の広域地方番号
-export const weatherWideRegionNumber = () => useState<string>('weatherWideRegionNumber', () => "010300");
+export const weatherWideRegionNumber = () => useLocalStorage<string>('weatherWideRegionNumber', () => "010300");
 // 天気のoffice番号
-export const weatherOfficeNumber = () => useState<string>('weatherOfficeNumber', () => "130000");
+export const weatherOfficeNumber = () => useLocalStorage<string>('weatherOfficeNumber', () => "130000");
 // 天気の地域番号
-export const weatherAreaNumber = () => useState<string>('weatherAreaNumber', () => "130010");
+export const weatherAreaNumber = () => useLocalStorage<string>('weatherAreaNumber', () => "130010");
 // 天気のアメダス番号
-export const weatherAmedasCode = () => useState<string>('weatherAmedasCode', () => "44132");
+export const weatherAmedasCode = () => useLocalStorage<string>('weatherAmedasCode', () => "44132");
 
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
