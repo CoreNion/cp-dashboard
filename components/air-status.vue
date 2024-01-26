@@ -10,11 +10,23 @@ const gasState = gas();
 
 watch(
   gasState,
-  (counter) => {
+  async (counter) => {
     if (counter == null) return;
 
+    // グラフのデータを更新
     const now = dayjs().format('HH:mm:ss');
     gasDatas.value.set(now, counter);
+
+    // CSVに書き込み
+    const opfsRoot = await navigator.storage.getDirectory();
+    const csvHandle = await opfsRoot.getFileHandle('gas.csv', { create: true });
+
+    // CSVの末尾に追記
+    const readable = await csvHandle.getFile();
+    const writable = await csvHandle.createWritable({ keepExistingData: true });
+    await writable.write({ type: 'write', data: `${now},${counter}\n`, position: readable.size })
+
+    await writable.close();
   }
 );
 </script>
@@ -32,12 +44,12 @@ watch(
             {
               label: 'ガス抵抗値',
               data: Array.from(gasDatas.values()),
+              borderColor: '#4c51bf',
             },
           ],
-        }" :options="{
-        }"
-        />
+        }" />
       </div>
+      <button class="btn btn-sm" @click="downloadCsvFile()">CSVをダウンロード</button>
     </div>
   </dialog>
 </template>
