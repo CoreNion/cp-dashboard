@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { refleshWeather } from './status.vue';
 import { amedasInfo, regionCodeName } from '#imports';
+import { refleshWeather } from '~/plugins/04.weather.client';
 
 // 広域地方 (コード)
 const selectedWideRegion = weatherWideRegionNumber();
