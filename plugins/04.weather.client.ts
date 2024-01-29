@@ -53,7 +53,7 @@ export async function refleshWeather() {
   const latestWeather = Object(Object.values(amedasData).pop());
   outTmpState.value = latestWeather.temp[0];
 
-  if (sensorSourceState.value === "serial" && !(useState('isSerialReady').value))
+  if (sensorSourceState.value === "serial" && !(isSerialReady().value))
     pressureState.value = latestWeather.pressure[0];
 
   /* 天気予報のデータの処理 */

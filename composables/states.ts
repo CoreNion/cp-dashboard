@@ -49,6 +49,13 @@ export const weatherAreaNumber = () => useLocalStorage<string>('weatherAreaNumbe
 // 天気のアメダス番号
 export const weatherAmedasCode = () => useLocalStorage<string>('weatherAmedasCode', () => "44132");
 
+// センサーのインターバル
+export const sensorInterval = () => useState<Pausable | null>('sensorInterval', () => null);
+// シリアル通信の準備ができているか
+export const isSerialReady = () => useState('isSerialReady', () => false);
+// シリアルポート
+export const serialPort = () => useState<SerialPort | null>('serialPort', () => null);
+
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
 // 現在の湿度
