@@ -4,6 +4,7 @@
   "compilerOptions": {
     "types": [
       "@types/w3c-web-serial",
+      "@types/wicg-file-system-access",
       "@types/leaflet"
     ]
   },
