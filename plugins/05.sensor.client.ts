@@ -1,4 +1,5 @@
 import { useIntervalFn, type Pausable } from "@vueuse/core";
+import dayjs from "dayjs";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   // 10秒ごとに温度を更新 (1秒だとシリアル通信が追いつかない?
@@ -89,8 +90,29 @@ export async function refleshStatus() {
 
     // シリアル通信のタスクが終了するまで待機
     await serialTask;
-  } else if (!isSerialReady().value) {
+  } else {
     return;
+  }
+
+  // センサー情報の記録を更新
+  const now = dayjs();
+  // CSVに書き込み
+  try {
+    const opfsRoot = await navigator.storage.getDirectory();
+    const csvHandle = await opfsRoot.getFileHandle(`sensor_${now.format("YYYYMMDD")}.csv`, { create: true });
+
+    const readable = await csvHandle.getFile();
+    const writable = await csvHandle.createWritable({ keepExistingData: true });
+
+    // 現在時刻,室温,湿度,気圧,ガス抵抗値
+    const line = `${now.format("HH:mm:ss")},${roomTmpState.value},${humidityState.value},${pressureState.value},${gasState.value}\n`;
+    // CSVの末尾に追記
+    await writable.write({ type: 'write', data: line, position: readable.size })
+
+    await writable.close();
+  } catch (e) {
+    console.error("センサー記録用のCSVの書き込みに失敗しました");
+    console.error(e);
   }
 
   // Intervalを再開

@@ -13,6 +13,9 @@ const pressureState = pressure();
 
 // 現在の外気温
 const outTmpState = outTmp();
+
+// センサー記録用のモーダルを表示するか
+const showSensorRecordModal = useState("showSensorRecordModal", () => false);
 </script>
 
 <template>
@@ -59,7 +62,8 @@ const outTmpState = outTmp();
     <div class="stat m-auto gap-2">
       <span>*出典: 気象庁ホームページ</span>
       
-      <AirStatus></AirStatus>
+      <a class="link" @click="showSensorRecordModal = true">センサーの記録</a>
+      <SensorRecord v-if="showSensorRecordModal"></SensorRecord>
 
       <settings class="flex-1"></settings>
     </div>
