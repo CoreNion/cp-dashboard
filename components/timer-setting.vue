@@ -20,6 +20,7 @@ const timerSettingState = timerSetting();
 <template>
   <div class="min-w-full flex flex-row flex-wrap justify-center items-center gap-2 ">
     <div class="xl:min-w-full flex flex-col gap-1">
+      <button class="btn btn-neutral" onclick="window.location.replace(window.location.href)">再読み込み</button>
       <label class="label cursor-pointer">
         <span class="label-text">チャイム</span>
         <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
