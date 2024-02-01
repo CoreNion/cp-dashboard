@@ -5,6 +5,11 @@ const colorMode = useColorMode();
 // センサーのソース
 const isSnowEnabledState = isSnowEnabled();
 
+// 情報スクロールの有効化
+const isInfoScrollEnabledSt = isInfoScrollEnabled();
+// 情報スクロールに表示する文字列
+const infoScrollTextSt = infoScrollText();
+
 // センサーのソース
 const sensorSourceState = sensorSource();
 // チャイムの音源
@@ -147,6 +152,13 @@ onMounted(() => {
             <option value="rpi">Raspberry Pi</option>
           </select>
         </label>
+
+        <label class="label cursor-pointer mt-4">
+          <span class="label-text">情報スクロールの有効化</span>
+          <input type="checkbox" class="toggle toggle-secondary" v-model="isInfoScrollEnabledSt" />
+        </label>
+        <input v-if="isInfoScrollEnabledSt" type="text" placeholder="スクロールに表示される文章を入力..."
+          class="input input-bordered w-full" v-model="infoScrollTextSt" />
 
         <label class="label cursor-pointer mt-4">
           <span class="label-text">Snow❄︎</span>

@@ -40,6 +40,11 @@ export const isPreChimeEnabled = () => useLocalStorage<boolean>('isPreChimeEnabl
 // タイマーの設定時間 (h:m:s)
 export const timerSetting = () => useState('timerSetting', () => [0, 0, 0]);
 
+// 情報スクロールを有効にするかどうか
+export const isInfoScrollEnabled = () => useLocalStorage<boolean>('isInfoScrollEnabled', () => false);
+// 情報スクロールに表示する文字列
+export const infoScrollText = () => useLocalStorage<string>('infoScrollText', () => "");
+
 // 天気の広域地方番号
 export const weatherWideRegionNumber = () => useLocalStorage<string>('weatherWideRegionNumber', () => "010300");
 // 天気のoffice番号

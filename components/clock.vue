@@ -11,6 +11,11 @@ const timeState = time();
 // タイマーの残り時間
 const timerState = timer();
 
+// 情報スクロールの有効化
+const isInfoScrollEnabledSt = isInfoScrollEnabled();
+// 情報スクロールに表示する文字列
+const infoScrollTextSt = infoScrollText();
+
 // 天気
 const weatherState = weather();
 </script>
@@ -35,7 +40,14 @@ const weatherState = weather();
             <span> {{ dayjs(timeState).format("HH:mm:ss") }}</span>
           </div>
         </div>
-        <span v-if="timerState == null" class="text-[7vw] xl:text-[4.5vw]">
+
+        <div v-else-if="isInfoScrollEnabledSt" class="flex flex-row items-center">
+          <span class="shrink max-md:text-[6vw] text-[4vw] mr-3 whitespace-nowrap"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
+          <div class="scrolling-text max-md:text-[11vw] text-[5.3vw] font-bold text-primary border-x-2">
+            <span> {{ infoScrollTextSt }}</span>
+          </div>
+        </div>
+        <span v-else class="text-[7vw] xl:text-[4.5vw] max-w-full">
           {{ dayjs(timeState).format('YYYY年MM月DD日(ddd)') }}
           <IconCSS :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'"
             class="stat-value m-auto leading-none" size="6vw" />*
@@ -44,3 +56,27 @@ const weatherState = weather();
     </ClientOnly>
   </div>
 </template>
+
+<style scoped>
+.scrolling-text {
+  white-space: nowrap;
+  overflow: hidden;
+
+  width: 36vw;
+}
+
+.scrolling-text span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll 8s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+</style>
