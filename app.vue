@@ -32,9 +32,17 @@ useHead({
 
 const widthState = widthScreenSize();
 
+// 一回でも画面がクリックされたかどうか
+const firstClick = useState(() => false);
+
 defaultAlertAudioSource().value = `${useRuntimeConfig().app.baseURL}alert.mp3`;
 
 onMounted(async () => {
+  // 画面がクリックされたらfirstClickをtrueにする
+  document.body.onclick = () => {
+    firstClick.value = true;
+  };
+
   // ウィンドウサイズを取得
   widthState.value = window.innerWidth;
 
@@ -98,6 +106,15 @@ onMounted(async () => {
   <div id="snow"></div>
   <NuxtPwaManifest />
   <NuxtLayout>
+    <div v-if="!firstClick" class="toast toast-top toast-center">
+      <div class="alert alert-warning">
+        <span>
+          <IconCSS class="icon" name="uil:exclamation-triangle" size="2vw" />
+          アラームを動作させるために、画面を一回以上クリックしてください！
+        </span>
+      </div>
+    </div>
+
     <!-- 大画面デバイスの表示 -->
     <div v-if="widthState >= 1280" class="min-h-screen flex flex-row text-center gap-2">
       <div class="basis-[20.0%] flex flex-row justify-between">
