@@ -3797,7 +3797,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bindings@npm:^1.4.0, bindings@npm:^1.5.0":
+"bindings@npm:^1.4.0":
   version: 1.5.0
   resolution: "bindings@npm:1.5.0"
   dependencies:
@@ -6932,13 +6932,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.clone@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.clone@npm:4.5.0"
-  checksum: e9e84b8727a24b6bdc6292dc0ff53fbdd379a65c652d9ba7a2cc3c02fb1c135b8dcd2e154c8c4199d4be7410d6f7ce3298df312822bc0e68f00472ec07da7d6d
-  languageName: node
-  linkType: hard
-
 "lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
@@ -7102,16 +7095,6 @@ __metadata:
     promise-retry: "npm:^2.0.1"
     ssri: "npm:^10.0.0"
   checksum: 43b9f6dcbc6fe8b8604cb6396957c3698857a15ba4dbc38284f7f0e61f248300585ef1eb8cc62df54e9c724af977e45b5cdfd88320ef7f53e45070ed3488da55
-  languageName: node
-  linkType: hard
-
-"mcp-spi-adc@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "mcp-spi-adc@npm:3.2.0"
-  dependencies:
-    lodash.clone: "npm:^4.5.0"
-    spi-device: "npm:^3.1.1"
-  checksum: 39948567eac0a772b068ed784e7a1412d2bbbce527d90376c44968a5109af7213f7a95e10d210493765533c7b2dba9579fd67ec5ecdbebf37b454b7e9f709374
   languageName: node
   linkType: hard
 
@@ -7439,15 +7422,6 @@ __metadata:
     object-assign: "npm:^4.0.1"
     thenify-all: "npm:^1.0.0"
   checksum: 103114e93f87362f0b56ab5b2e7245051ad0276b646e3902c98397d18bb8f4a77f2ea4a2c9d3ad516034ea3a56553b60d3f5f78220001ca4c404bd711bd0af39
-  languageName: node
-  linkType: hard
-
-"nan@npm:^2.14.2":
-  version: 2.18.0
-  resolution: "nan@npm:2.18.0"
-  dependencies:
-    node-gyp: "npm:latest"
-  checksum: 9209d80134fdb98c0afe35c1372d2b930a0a8d3c52706cb5e4257a27e9845c375f7a8daedadadec8d6403ca2eebb3b37d362ff5d1ec03249462abf65fef2a148
   languageName: node
   linkType: hard
 
@@ -7860,7 +7834,6 @@ __metadata:
     daisyui: "npm:^4.6.0"
     dayjs: "npm:^1.11.10"
     leaflet: "npm:^1.9.4"
-    mcp-spi-adc: "npm:^3.2.0"
     nuxt: "npm:^3.9.3"
     nuxt-icon: "npm:^0.6.8"
     nuxt3-leaflet: "npm:^1.0.12"
@@ -9812,17 +9785,6 @@ __metadata:
   version: 3.0.16
   resolution: "spdx-license-ids@npm:3.0.16"
   checksum: 7d88b8f01308948bb3ea69c066448f2776cf3d35a410d19afb836743086ced1566f6824ee8e6d67f8f25aa81fa86d8076a666c60ac4528caecd55e93edb5114e
-  languageName: node
-  linkType: hard
-
-"spi-device@npm:^3.1.1":
-  version: 3.1.2
-  resolution: "spi-device@npm:3.1.2"
-  dependencies:
-    bindings: "npm:^1.5.0"
-    nan: "npm:^2.14.2"
-    node-gyp: "npm:latest"
-  checksum: 8134dffb644c6f29f9c0213865cc4354947b1b6aeafd5a76081a6d9e9bf158ccd6807cfda3e933ae512a5b4431014e8835441adca805c69d61ba8425c9373824
   languageName: node
   linkType: hard
 

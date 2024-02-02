@@ -11,7 +11,7 @@ const isInfoScrollEnabledSt = isInfoScrollEnabled();
 const infoScrollTextSt = infoScrollText();
 
 // センサーのソース
-const sensorSourceState = sensorSource();
+// const sensorSourceState = sensorSource();
 // チャイムの音源
 const chimeSourceState = chimeSource();
 // 予鈴の音源
@@ -28,14 +28,14 @@ const alertFileNameState = useState('alertFileName', () => 'デフォルトの�
 const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
 const preChimeFileNameState = useState('preChimeFileName', () => 'デフォルトの音声');
 
-// センサー情報のソースを変更
+/* センサー情報のソースを変更
 const onSourceChange = async (e: Event) => {
   if (!(e.target instanceof HTMLSelectElement)) return;
   const value = e.target.value;
 
   // ローカルストレージに保存
   localStorage.setItem('sensorSource', value);
-}
+} */
 
 // 音源変更時の処理
 const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis.Ref<string>, storageKey: string, fileNameState: globalThis.Ref<string>) => {
@@ -144,6 +144,7 @@ onMounted(() => {
           </select>
         </label>
 
+        <!--
         <label class="label">
           <span class="label-text">センサー情報</span>
           <select class="select select-bordered w-full max-w-xs" @change="onSourceChange" v-model="sensorSourceState">
@@ -151,7 +152,7 @@ onMounted(() => {
             <option value="serial">Arduino (シリアル接続)</option>
             <option value="rpi">Raspberry Pi</option>
           </select>
-        </label>
+        </label> -->
 
         <label class="label cursor-pointer mt-4">
           <span class="label-text">情報スクロールの有効化</span>

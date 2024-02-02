@@ -26,7 +26,6 @@
     "daisyui": "^4.6.0",
     "dayjs": "^1.11.10",
     "leaflet": "^1.9.4",
-    "mcp-spi-adc": "^3.2.0",
     "nuxt": "^3.9.3",
     "nuxt-icon": "^0.6.8",
     "nuxt3-leaflet": "^1.0.12",

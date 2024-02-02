@@ -27,22 +27,8 @@ export async function refleshStatus() {
 
   // 同時実行されないようにIntervalを一時停止
   sensorIntervalState.value?.pause();
-
-  if (sensorSourceState.value === "rpi") {
-    // サーバーからセンサー情報を取得
-    const { data, error } = await useFetch('/api/sensor');
-    if (error.value || data.value?.tmp == null) {
-      // エラー・データが無いの場合は停止
-      console.error(error.value);
-
-      roomTmpState.value = null;
-      pressureState.value = null;
-      return;
-    }
-
-    roomTmpState.value = data.value?.tmp ?? null;
-    pressureState.value = data.value?.pressure ?? null;
-  } else if (sensorSourceState.value === "serial" && serialPortState.value != null) {
+  
+  if (sensorSourceState.value === "serial" && serialPortState.value != null) {
     // シリアルポートからのデータを読み込み
     const reader = serialPortState.value.readable!.getReader();
 
