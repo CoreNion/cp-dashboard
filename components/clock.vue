@@ -42,9 +42,9 @@ const weatherState = weather();
         </div>
 
         <div v-else-if="isInfoScrollEnabledSt" class="flex flex-row items-center">
-          <span class="shrink max-md:text-[6vw] text-[4vw] mr-3 whitespace-nowrap"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
-          <div class="scrolling-text max-md:text-[11vw] text-[5.3vw] font-bold text-primary border-x-2">
-            <span> {{ infoScrollTextSt }}</span>
+          <span class="shrink max-md:text-[6vw] text-[4vw] mr-3 whitespace-nowrap"> {{ dayjs(timeState).format('MM/DD(ddd)') }} </span>
+          <div class="scrolling-text max-md:text-[11vw] text-[5.3vw] font-bold text-primary border-2">
+            <span :style="{ 'animation-duration': `${ infoScrollTextSt.length <= 10 ? 4 : infoScrollTextSt.length * 0.4}s` }"> {{ infoScrollTextSt }}</span>
           </div>
         </div>
         <span v-else class="text-[7vw] xl:text-[4.5vw] max-w-full">
@@ -62,7 +62,7 @@ const weatherState = weather();
   white-space: nowrap;
   overflow: hidden;
 
-  width: 36vw;
+  width: 40vw;
 }
 
 .scrolling-text span {
