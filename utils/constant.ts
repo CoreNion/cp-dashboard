@@ -94,3 +94,8 @@ export const preChimeTimes = [
  * Arduinoにセンサー情報の取得をリクエストするときの生データ
  */
 export const kRawRequest = new TextEncoder().encode("REQUEST_SENSOR_DATA;");
+
+/**
+ * センサー情報の種類
+ */
+export const kDataKinds = ["気温", "湿度", "気圧","ガス抵抗値"];
