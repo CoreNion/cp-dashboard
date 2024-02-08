@@ -67,14 +67,14 @@ export default defineNuxtPlugin((nuxtApp) => {
             const audio = new Audio(preChimeSource().value);
             audio.volume = 1.0;
             await audio.play();
-          } else {
-            // 予定時間外はフラグをリセット
-            preChimePlayed = false;
           }
-        } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
-          // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
-          preChimeCount = 0;
+        } else {
+          // 予定時間外はフラグをリセット
+          preChimePlayed = false;
         }
+      } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
+        // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
+        preChimeCount = 0;
       }
     }
   });
