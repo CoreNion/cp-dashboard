@@ -18,3 +18,16 @@ export async function removeFile(fileName: string) {
 
   localStorage.removeItem(fileName);
 }
+
+/// OPFSからファイルをダウンロードするためのユーティリティ
+export async function downloadFile(fileName: string) {
+  const opfsRoot = await navigator.storage.getDirectory();
+  const file = await opfsRoot.getFileHandle(fileName);
+
+  const url = URL.createObjectURL(await file.getFile());
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(url);
+}

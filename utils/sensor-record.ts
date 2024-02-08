@@ -1,3 +1,10 @@
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import 'dayjs/locale/ja';
+
+dayjs.extend(duration);
+dayjs.locale("ja");
+
 export async function listCsvFiles() {
   const opfsRoot = await navigator.storage.getDirectory();
   const files = opfsRoot.entries();
@@ -16,12 +23,16 @@ export async function listCsvFiles() {
  * @param params データの種類
  * @returns Map<時刻, データ>
  */
-export async function getSensorRecords(params:string) {
+export async function getSensorRecords(params:string, maxRecords: number) {
   const opfsRoot = await navigator.storage.getDirectory();
   const files = opfsRoot.entries();
 
   const records = [];
+  let i = 0;
   for await (const [key, value] of files) {
+    i += 1;
+    if (i > maxRecords) break;
+
     if (key.endsWith('.csv')) {
       const dayMap = new Map<string, number>();
 
@@ -39,20 +50,10 @@ export async function getSensorRecords(params:string) {
         else if (params === 'ガス抵抗値') dayMap.set(data[0], Number(data[4]));
       }
 
-      records.push({ date: file.name, value: dayMap });
+      const date = dayjs(file.name.split('.')[0].split('_')[1]).format('MM月DD日');
+
+      records.push({ date: date, value: dayMap });
     }
   }
   return records;
-}
-
-export async function downloadFile(fileName: string) {
-  const opfsRoot = await navigator.storage.getDirectory();
-  const file = await opfsRoot.getFileHandle(fileName);
-
-  const url = URL.createObjectURL(await file.getFile());
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  a.click();
-  URL.revokeObjectURL(url);
 }
