@@ -193,6 +193,8 @@ onMounted(() => {
           <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
         </label>
       </p>
+
+      <ChimeSetting></ChimeSetting>
     </div>
   </dialog>
 </template>

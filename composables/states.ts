@@ -26,6 +26,8 @@ export const timerAlertSource = () => useState<string>('timerSource', () => defa
 export const chimeSource = () => useState<string>('chimeSource', () => defaultAlertAudioSource().value);
 // 予鈴の音声ソース
 export const preChimeSource = () => useState<string>('preChimeSource', () => defaultAlertAudioSource().value);
+// チャイム鳴動時刻
+export const userChimeTimes = () => useLocalStorage<number[][]>('chimeTimes', () => chimeTimes);
 
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);
