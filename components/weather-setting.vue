@@ -10,6 +10,10 @@ const selectedLocalRegion = weatherOfficeNumber();
 const selectedRegion = weatherAreaNumber();
 // アメダスの地点 (コード)
 const selectedAmedasCode = weatherAmedasCode();
+// 外気温のみ利用するか
+const useOnlyTemp = isAmedasOnlyTmp();
+// アメダス地点名
+const weatherAmedasNameState = weatherAmedasName();
 
 // 広域地方の選択肢
 const wideRegionOptions = useState<Array<regionCodeName>>(() => []);
@@ -18,8 +22,14 @@ const localRegionOptions = useState<Array<regionCodeName>>(() => []);
 // 地域の選択肢
 const regionOptions = useState<Array<regionCodeName>>(() => []);
 
+// さらなるズームが必要か
+const needMoreZoom = useState<boolean>(() => true);
 // マーカーの位置
 const markerPlaces = useState<Array<amedasInfo>>(() => []);
+// 現在のBounds
+const boundsState = useState<any>(() => []);
+// 現在のズーム状態
+const zoomState = useState<number>(() => 4);
 
 let refleshLocalRegion: (e: Event) => void;
 let refleshRegion: (e: Event) => void;
@@ -27,8 +37,14 @@ let setAreaNumber: (e: Event) => void;
 
 // 天気予報エリア一覧
 let areas = "";
-// アメダスの地点一覧
-let amedasInfos: Array<amedasInfo> = [];
+// アメダス情報
+let origAmedasInfos: any;
+// 使用可能なアメダス情報
+let usingAmedasInfos: Array<amedasInfo> = [];
+
+watch(() => useOnlyTemp.value, async () => {
+  onMapChanged();
+});
 
 onMounted(async () => {
   // エリア情報を取得
@@ -44,7 +60,7 @@ onMounted(async () => {
     return;
   }
   areas = data[0];
-  amedasInfos = convertAmedasInfos(data[1]);
+  origAmedasInfos = data[1];
 
   // 広域地方, 地方, 地域のコードを取得
   const regions = Object(areas)["centers"];
@@ -98,25 +114,32 @@ onMounted(async () => {
   }
 });
 
-function onMapChanged(e: any) {
+watch(boundsState, () => {
+  onMapChanged();
+});
+
+watch(zoomState, () => {
+  onMapChanged();
+});
+
+function onMapChanged() {
   // 既存のマーカーの削除
   markerPlaces.value = [];
 
-  const target = e.target;
-  if (target.getZoom() < 8) return;
+  if (zoomState.value < 8) {
+    needMoreZoom.value = true;
+    return;
+  }
+  needMoreZoom.value = false;
 
-  // マップに表示されている範囲に存在するアメダスの地点を取得
-  const bounds = target.getBounds();
   // マップを更新
-  markerPlaces.value = filterByMapArea(amedasInfos, bounds);
+  usingAmedasInfos = convertAmedasInfos(origAmedasInfos, useOnlyTemp.value);
+  markerPlaces.value = filterByMapArea(usingAmedasInfos, boundsState.value);
 }
 
-function setAmedasLocation(code: string) {
-  // メモリ上
+function setAmedasLocation(code: string, name: string) {
   selectedAmedasCode.value = code;
-
-  // ストレージ
-  localStorage.setItem('weatherAmedasCode', selectedAmedasCode.value);
+  weatherAmedasNameState.value = name;
 
   // 天気を更新
   refleshWeather();
@@ -163,30 +186,42 @@ function setAmedasLocation(code: string) {
             </option>
           </select>
         </label>
+      </p>
 
       <div class="divider"></div>
 
       <h3 class="font-bold text-lg">アメダスの地点設定</h3>
-      <label class="label">
-        <span class="label-text">現在の設定地点</span>
-        <span class="label-text font-bold">{{ amedasInfos.find((amedasInfo) => amedasInfo.code === selectedAmedasCode)?.name }}</span>
-      </label>
 
-      <p class="min-w-full h-[433px] mt-3">
-        <LMap ref="map" :zoom="4" @zoomend="onMapChanged" @moveend="onMapChanged" :center="[32.592850, 137.273600]">
-          <LTileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&amp;copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors"
-            name="OpenStreetMap" />
+        <label class="label">
+          <span class="label-text">現在の設定地点</span>
+          <span class="label-text font-bold">
+            <span>{{ weatherAmedasNameState }}</span>
+            <span v-if="useOnlyTemp"> (外気温のみ)</span>
+          </span>
+        </label>
+        <label class="label">
+          <span class="label-text">外気温情報のみ利用する<br>(気圧表示にはセンサーが必要)</span>
+          <input type="checkbox" :class="['toggle', 'toggle-secondary']" v-model="useOnlyTemp"/>
+        </label>
+
+        <p class="min-w-full h-[433px] mt-3">
+        <h2 class="text-error font-bold h-5"> {{ needMoreZoom ? "地点を表示するには、もう少しズームしてください。" : "" }}</h2>
+        <LMap ref="map" :center="[32.592850, 137.273600]" v-model:bounds="boundsState" v-model:zoom="zoomState">
+          <LTileLayer url="https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"
+            attribution="<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
+            name="地理院タイル" />
           <LMarker v-for="place of markerPlaces" :lat-lng="[place.lat, place.lon]">
             <LPopup>
-              <span>{{ place.name }}</span>
+              <span>
+                <span>{{ place.name }}</span>
+                <span v-if="place.onlyTemp"> (外気温のみ)</span>
+              </span>
               <br />
-              <button class="btn btn-xs" @click="setAmedasLocation(place.code)">設定</button>
+              <button class="btn btn-xs" @click="setAmedasLocation(place.code, place.name)">設定</button>
             </LPopup>
           </LMarker>
         </LMap>
-      </p>
-      </p>
+        </p>
     </div>
   </dialog>
 </template>

@@ -51,8 +51,12 @@ export const weatherWideRegionNumber = () => useLocalStorage<string>('weatherWid
 export const weatherOfficeNumber = () => useLocalStorage<string>('weatherOfficeNumber', () => "130000");
 // 天気の地域番号
 export const weatherAreaNumber = () => useLocalStorage<string>('weatherAreaNumber', () => "130010");
+// 外気温のみ使用するかどうか
+export const isAmedasOnlyTmp = () => useLocalStorage<boolean>('isAmedasOnlyTmp', () => false);
 // 天気のアメダス番号
 export const weatherAmedasCode = () => useLocalStorage<string>('weatherAmedasCode', () => "44132");
+// 天気のアメダス名
+export const weatherAmedasName = () => useLocalStorage<string>('weatherAmedasName', () => "東京");
 
 // センサーのインターバル
 export const sensorInterval = () => useState<Pausable | null>('sensorInterval', () => null);
