@@ -7,10 +7,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   const timeState = time();
   timeState.value = dayjs().toDate();
 
-  // チャイムの有効/無効
-  const isChimeEnabledState = isChimeEnabled();
-  const isPreChimeEnabledState = isPreChimeEnabled();
-
   // workerからの時刻を用いて各種処理を行う
   worker.addEventListener('message', async (event: MessageEvent<Date | Array<number>>) => {
     const data = event.data;
@@ -18,6 +14,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (data instanceof Date) {
       // 現在時刻を更新
       timeState.value = data;
+
+      // チャイムの有効/無効
+      const isChimeEnabledState = isChimeEnabled();
+      const isPreChimeEnabledState = isPreChimeEnabled();
 
       if (isChimeEnabledState.value) {
         // 現在のチャイムの鳴動状況を取得
@@ -45,7 +45,7 @@ export default defineNuxtPlugin((nuxtApp) => {
               new Audio(chimeSource().value).play();
             }
             chimePlayedState.set(time, true);
-          } else if (now.add(1, 'minute').format("HH:mm") === time && !preChimePlayedState.get(time)) {
+          } else if (now.add(1, 'minute').format("HH:mm") === dayjs().hour(parseInt(time.split(":")[0])).minute(parseInt(time.split(":")[1])).format("HH:mm") && !preChimePlayedState.get(time)) {
             // 予鈴を鳴らす
             if (isPreChimeEnabledState.value) {
               new Audio(preChimeSource().value).play();
