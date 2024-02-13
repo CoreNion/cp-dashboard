@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const chimeTimeState = userChimeTimes();
+import { removeChimeTime } from '~/utils/time';
+
+const userChimeTimesState = userChimeTimes();
+
+const changeChimeTimeEl = (oldTime: string, event: any) => {
+  changeChimeTime(oldTime, event.target.value);
+}
 </script>
 
 <template>
@@ -12,6 +18,9 @@ const chimeTimeState = userChimeTimes();
 
       <h3 class="font-bold text-lg">チャイム時刻設定</h3>
       <p class="py-2">
+        <button class="btn w-full" @click="addChimeTime('00:00')">
+          チャイム鳴動時刻を追加
+        </button>
       <table class="table">
         <thead>
           <tr>
@@ -20,20 +29,18 @@ const chimeTimeState = userChimeTimes();
           </tr>
         </thead>
         <tbody>
-          <tr v-for="chimeTime of chimeTimeState">
+          <tr v-for="chimeTime of userChimeTimesState">
             <td>
-              <button class="btn btn-sm btn-circle btn-outline btn-error">
+              <button class="btn btn-sm btn-circle btn-outline btn-error" @click="removeChimeTime(chimeTime)">
                 <IconCSS name="uil:trash-alt" />
               </button>
             </td>
-            <td>{{ chimeTime[0] + ':' + chimeTime[1] }}</td>
+            <td>
+                <input type="time" :value="chimeTime" class="input input-bordered" @change="(e) => changeChimeTimeEl(chimeTime, e)" />
+            </td>
           </tr>
         </tbody>
       </table>
-      <label class="label cursor-pointer mt-4">
-        <span class="label-text">1分前に予鈴を鳴らす</span>
-        <input type="checkbox" class="toggle toggle-secondary"  />
-      </label>
       </p>
     </div>
   </dialog>
