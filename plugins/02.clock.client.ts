@@ -11,70 +11,48 @@ export default defineNuxtPlugin((nuxtApp) => {
   const isChimeEnabledState = isChimeEnabled();
   const isPreChimeEnabledState = isPreChimeEnabled();
 
-  let chimePlayed = false;
-  let preChimePlayed = false;
-
-  // 読み込み時点で予定時刻を過ぎたチャイム数を計算 (全数 - 過ぎてないチャイムの数)
-  let chimeCount = chimeTimes.length - chimeTimes.filter((chimeTime) => {
-    const chime = dayjs(timeState.value).hour(chimeTime[0]).minute(chimeTime[1]).second(0).millisecond(0);
-    return chime.diff(dayjs()) > 0;
-  }).length;
-  // 読み込み時点で予定時刻を過ぎた予鈴数を計算 (全数 - 過ぎてない予鈴の数)
-  let preChimeCount = preChimeTimes.length - preChimeTimes.filter((preChimeTime) => {
-    const preChime = dayjs(timeState.value).hour(preChimeTime[0]).minute(preChimeTime[1]).second(0).millisecond(0);
-    return preChime.diff(dayjs()) > 0;
-  }).length;
-
   // workerからの時刻を用いて各種処理を行う
   worker.addEventListener('message', async (event: MessageEvent<Date | Array<number>>) => {
     const data = event.data;
 
     if (data instanceof Date) {
+      // 現在時刻を更新
       timeState.value = data;
 
-      const now = dayjs(data);
-      // チャイムを鳴らす時間か確認 (最後のチャイムの時間を過ぎたらならさない)
-      if (!(chimeCount === chimeTimes.length)) {
-        const chime = now.hour(chimeTimes[chimeCount][0]).minute(chimeTimes[chimeCount][1]).second(0).millisecond(0);
-        if (chime.diff(now) <= 0 && isChimeEnabledState.value) {
-          if (!chimePlayed) {
-            // カウントを増やし、チャイムを鳴らす
-            chimePlayed = true;
-            chimeCount++;
+      if (isChimeEnabledState.value) {
+        // 現在のチャイムの鳴動状況を取得
+        const userChimeTimesState = userChimeTimes().value;
+        const chimePlayedState = chimePlayed().value;
+        const preChimePlayedState = preChimePlayed().value;
 
-            const audio = new Audio(chimeSource().value);
-            audio.volume = 1.0;
-            await audio.play();
-          }
-        } else {
-          // 予定時間外はフラグをリセット
-          chimePlayed = false;
+        // チャイムを鳴らす時間か確認
+        const now = dayjs(data);
+
+        // 毎日0時にチャイム鳴動状況をリセット
+        if (now.hour() === 0 && now.minute() === 0) {
+          chimePlayedState.clear();
+          preChimePlayedState.clear();
+          userChimeTimesState.forEach((time) => {
+            chimePlayedState.set(time, false);
+            preChimePlayedState.set(time, false);
+          });
         }
-      } else if (now.hour(chimeTimes[0][0]).minute(chimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
-        // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
-        chimeCount = 0;
-      }
 
-      // 予鈴を鳴らす時間か確認
-      if (!(preChimeCount === preChimeTimes.length)) {
-        const preChime = now.hour(preChimeTimes[preChimeCount][0]).minute(preChimeTimes[preChimeCount][1]).second(0).millisecond(0);
-        if (preChime.diff(now) <= 0 && isPreChimeEnabledState.value) {
-          if (!preChimePlayed) {
-            // カウントを増やし、予鈴を鳴らす
-            preChimePlayed = true;
-            preChimeCount++;
-
-            const audio = new Audio(preChimeSource().value);
-            audio.volume = 1.0;
-            await audio.play();
+        userChimeTimesState.forEach((time) => {
+          if (now.format("HH:mm") === time && !chimePlayedState.get(time)) {
+            // チャイムを鳴らす
+            if (isChimeEnabledState.value) {
+              new Audio(chimeSource().value).play();
+            }
+            chimePlayedState.set(time, true);
+          } else if (now.add(1, 'minute').format("HH:mm") === time && !preChimePlayedState.get(time)) {
+            // 予鈴を鳴らす
+            if (isPreChimeEnabledState.value) {
+              new Audio(preChimeSource().value).play();
+            }
+            preChimePlayedState.set(time, true);
           }
-        } else {
-          // 予定時間外はフラグをリセット
-          preChimePlayed = false;
-        }
-      } else if (now.hour(preChimeTimes[0][0]).minute(preChimeTimes[0][1]).second(0).millisecond(0).diff(now) >= 0) {
-        // 日付が変わり、最初のチャイムの時間前になったらカウントをリセット
-        preChimeCount = 0;
+        });
       }
     }
   });
