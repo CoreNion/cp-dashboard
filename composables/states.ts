@@ -27,11 +27,11 @@ export const chimeSource = () => useState<string>('chimeSource', () => defaultAl
 // 予鈴の音声ソース
 export const preChimeSource = () => useState<string>('preChimeSource', () => defaultAlertAudioSource().value);
 // チャイム鳴動時刻
-export const userChimeTimes = () => useLocalStorage<string[]>('chimeTimes', () => kChimeTimes);
+export const userChimeTimes = () => useLocalStorage<ChimeTime[]>('chimeTimes', () => kChimeTimes);
 // 鳴らしたチャイム一覧(Map)
-export const chimePlayed = () => useState<Map<string, boolean>>('chimePlayed', () => kChimeTimes.reduce((acc, cur) => acc.set(cur, false), new Map<string, boolean>()));
+export const chimePlayed = () => useState<Map<string, boolean>>('chimePlayed', () => kChimeTimes.reduce((acc, cur) => acc.set(cur.time, false), new Map<string, boolean>()));
 // 鳴らした予鈴一覧(Map)
-export const preChimePlayed = () => useState<Map<string, boolean>>('preChimePlayed', () => kChimeTimes.reduce((acc, cur) => acc.set(cur, false), new Map<string, boolean>()));
+export const preChimePlayed = () => useState<Map<string, boolean>>('preChimePlayed', () => kChimeTimes.reduce((acc, cur) => acc.set(cur.time, false), new Map<string, boolean>()));
 
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);

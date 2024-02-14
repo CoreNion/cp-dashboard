@@ -32,25 +32,25 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (now.hour() === 0 && now.minute() === 0) {
           chimePlayedState.clear();
           preChimePlayedState.clear();
-          userChimeTimesState.forEach((time) => {
-            chimePlayedState.set(time, false);
-            preChimePlayedState.set(time, false);
+          userChimeTimesState.forEach((cT) => {
+            chimePlayedState.set(cT.time, false);
+            preChimePlayedState.set(cT.time, false);
           });
         }
 
-        userChimeTimesState.forEach((time) => {
-          if (now.format("HH:mm") === time && !chimePlayedState.get(time)) {
+        userChimeTimesState.forEach((cT) => {
+          if (now.format("HH:mm") === cT.time && cT.chime && !chimePlayedState.get(cT.time)) {
             // チャイムを鳴らす
             if (isChimeEnabledState.value) {
               new Audio(chimeSource().value).play();
             }
-            chimePlayedState.set(time, true);
-          } else if (now.add(1, 'minute').format("HH:mm") === dayjs().hour(parseInt(time.split(":")[0])).minute(parseInt(time.split(":")[1])).format("HH:mm") && !preChimePlayedState.get(time)) {
+            chimePlayedState.set(cT.time, true);
+          } else if (now.add(1, 'minute').format("HH:mm") === dayjs().hour(parseInt(cT.time.split(":")[0])).minute(parseInt(cT.time.split(":")[1])).format("HH:mm") && cT.preChime && !preChimePlayedState.get(cT.time)) {
             // 予鈴を鳴らす
             if (isPreChimeEnabledState.value) {
               new Audio(preChimeSource().value).play();
             }
-            preChimePlayedState.set(time, true);
+            preChimePlayedState.set(cT.time, true);
           }
         });
       }
