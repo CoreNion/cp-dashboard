@@ -51,53 +51,43 @@ const deleteFile = async (file: string) => {
   fileList.value = fileList.value.filter((f) => f.key !== file);
 };
 
-// センサー記録用のモーダルを表示するか
-const showSensorRecordModal = useState("showSensorRecordModal", () => false);
 onMounted(async () => {
-  // @ts-ignore
-  air_modal.showModal();
   fileList.value = await listCsvFiles();
 
   selectedDataKind.value = "気温";
 });
 </script>
+
 <template>
-  <dialog id="air_modal" class="modal">
-    <div class="modal-box">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          @click="showSensorRecordModal = false">✕</button>
-      </form>
-
-      <h4 class="pb-2 font-bold">センサーの記録</h4>
-      <div>
-        <select class="flex-1 select select-bordered w-full" v-model="selectedDataKind">
-          <option v-for="kind of kDataKinds" :key="kind">{{ kind }}</option>
-        </select>
-        <Line :data="{
-          labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
-          datasets: chartData,
-        }" :options="{ responsive: true }" />
-      </div>
-
-      <div class="divider"></div>
-
-      <h4 class="pb-2 font-bold">記録をダウンロードする</h4>
-
-      <div class="join w-full">
-        <button :class="['btn', 'btn-error', 'join-item', selectedFile == null ? 'btn-disabled' : 'btn-active']"
-          @click="deleteFile(selectedFile!)">
-          <IconCSS name="uil:trash-alt" size="3vh" />
-        </button>
-        <select class="flex-1 select select-bordered join-item" v-model="selectedFile">
-          <option disabled selected>記録を選択...</option>
-          <option v-for="file of fileList" :key="file.key">{{ file.key }}</option>
-        </select>
-        <button :class="['btn', 'btn-primary', 'join-item', selectedFile == null ? 'btn-disabled' : 'btn-active']"
-          @click="downloadFile(selectedFile!)">
-          <IconCSS name="uil:file-download-alt" size="2vw" />
-        </button>
-      </div>
+  <div>
+    <h4 class="pb-2 font-bold">センサーの記録</h4>
+    <div>
+      <select class="flex-1 select select-bordered w-full" v-model="selectedDataKind">
+        <option v-for="kind of kDataKinds" :key="kind">{{ kind }}</option>
+      </select>
+      <Line :data="{
+        labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+        datasets: chartData,
+      }" :options="{ responsive: true }" />
     </div>
-  </dialog>
+
+    <div class="divider"></div>
+
+    <h4 class="pb-2 font-bold">記録をダウンロードする</h4>
+
+    <div class="join w-full">
+      <button :class="['btn', 'btn-error', 'join-item', selectedFile == null ? 'btn-disabled' : 'btn-active']"
+        @click="deleteFile(selectedFile!)">
+        <IconCSS name="uil:trash-alt" size="3vh" />
+      </button>
+      <select class="flex-1 select select-bordered join-item" v-model="selectedFile">
+        <option disabled selected>記録を選択...</option>
+        <option v-for="file of fileList" :key="file.key">{{ file.key }}</option>
+      </select>
+      <button :class="['btn', 'btn-primary', 'join-item', selectedFile == null ? 'btn-disabled' : 'btn-active']"
+        @click="downloadFile(selectedFile!)">
+        <IconCSS name="uil:file-download-alt" size="2vw" />
+      </button>
+    </div>
+  </div>
 </template>
