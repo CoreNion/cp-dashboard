@@ -22,6 +22,12 @@ export default defineNuxtConfig({
       "Inter": "100..900",
     }
   },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+  ],
   pwa: {
     manifest: {
       name: 'Campus Dashboard',
@@ -54,7 +60,7 @@ export default defineNuxtConfig({
     }
   },
   colorMode: {
-    preference: 'dash', 
+    preference: 'dash',
     dataValue: 'theme', // activate data-theme in <html> tag
     classSuffix: '',
   },
