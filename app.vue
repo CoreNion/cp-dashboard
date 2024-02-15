@@ -128,6 +128,7 @@ onMounted(async () => {
       <div class="basis-[15.0%] flex flex-col items-end m-3 gap-4">
         <report></report>
         <div class="grow m-2 flex flex-col justify-end gap-2">
+          <button class="btn btn-neutral" onclick="window.location.replace(window.location.href)">再読み込み</button>
           <TimerSetting></TimerSetting>
           <span>Copyright © 2024 CoreNion</span>
           <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
@@ -137,6 +138,21 @@ onMounted(async () => {
 
     <!-- 小画面デバイスの表示　-->
     <div v-if="widthState <= 1280" class="min-h-screen min-w-full flex flex-col items-center text-center">
+      <div class="navbar bg-neutral">
+        <div class="navbar-start">
+          <button class="btn" onclick="window.location.replace(window.location.href)">
+            <IconCSS name="uil:redo" size="2.5vh" />
+          </button>
+        </div>
+        <div class="navbar-center">
+          <a class="btn btn-ghost text-xl text-neutral-content">Campus Dashboard</a>
+        </div>
+        <div class="navbar-end">
+          <DynamicModal iconCssName="uil:setting">
+            <Settings />
+          </DynamicModal>
+        </div>
+      </div>
       <clock class="grow"></clock>
       <TimerSetting class="m-2"></TimerSetting>
       <div class="flex flex-row gap-5">

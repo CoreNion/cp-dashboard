@@ -2,6 +2,7 @@
 defineProps({
   linkTypeButton: Boolean,
   btnTitle: String,
+  iconCssName: String,
 });
 
 // モーダル全体の表示状態
@@ -26,7 +27,10 @@ const closeModal = async () => {
 
 <template>
   <a v-if="linkTypeButton" class="link" @click="showModal">{{ btnTitle }}</a>
-  <button v-else class="btn w-full" @click="showModal">{{ btnTitle }}</button>
+  <button v-else class="btn" @click="showModal">
+    <span v-if="btnTitle != undefined">{{ btnTitle }} </span>
+    <IconCSS v-if="iconCssName != undefined" :name="iconCssName" size="2.5vh" />
+  </button>
 
   <dialog :class="['modal', openModal ? 'modal-open' : '']">
     <div class="modal-box">
