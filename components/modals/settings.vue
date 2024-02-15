@@ -10,35 +10,26 @@ const isInfoScrollEnabledSt = isInfoScrollEnabled();
 // 情報スクロールに表示する文字列
 const infoScrollTextSt = infoScrollText();
 
-// センサーのソース
-// const sensorSourceState = sensorSource();
 // チャイムの音源
 const chimeSourceState = chimeSource();
+// チャイムのファイル名
+const chimeFileNameState = chimeFileName();
 // 予鈴の音源
 const preChimeSourceState = preChimeSource();
+// 予鈴のファイル名
+const preChimeFileNameState = preChimeFileName();
 // タイマーのアラート音源
 const timerAlertSourceState = timerAlertSource();
+// タイマーのファイル名
+const alertFileNameState = alertFileName();
 
 // チャイムの鳴動状態
 const isChimeEnabledState = isChimeEnabled();
 // 予鈴の鳴動状態
 const isPreChimeEnabledState = isPreChimeEnabled();
 
-const alertFileNameState = useState('alertFileName', () => 'デフォルトの音声');
-const chimeFileNameState = useState('chimeFileName', () => 'デフォルトの音声');
-const preChimeFileNameState = useState('preChimeFileName', () => 'デフォルトの音声');
-
-/* センサー情報のソースを変更
-const onSourceChange = async (e: Event) => {
-  if (!(e.target instanceof HTMLSelectElement)) return;
-  const value = e.target.value;
-
-  // ローカルストレージに保存
-  localStorage.setItem('sensorSource', value);
-} */
-
 // 音源変更時の処理
-const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis.Ref<string>, storageKey: string, fileNameState: globalThis.Ref<string>) => {
+const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis.Ref<string>, fileNameState: globalThis.Ref<string>) => {
   // ファイルを読み込む
   if (!(e.target instanceof HTMLInputElement)) return;
   const file = e.target.files?.[0];
@@ -50,45 +41,40 @@ const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis
   sourceState.value = URL.createObjectURL(file);
   // ファイル名を更新
   fileNameState.value = file.name;
-
-  // ローカルストレージに元のファイル名を保存
-  localStorage.setItem(storageKey, file.name);
 }
 
 // 音源削除時の処理
-const removeAudio = (fileName: string, sourceState: globalThis.Ref<string>, storageKey: string, fileNameState: globalThis.Ref<string>) => {
-  // ローカルストレージからメタデータ(元ファイル名)を削除
-  localStorage.removeItem(storageKey);
+const removeAudio = (sourceState: globalThis.Ref<string>, fileNameState: globalThis.Ref<string>) => {
   // OPFSからファイルを削除
-  removeFile(fileName);
+  removeFile(fileNameState.value);
 
-  // メモリ上の音源/名前を元に戻す
+  // 音源/名前を元に戻す
   fileNameState.value = 'デフォルトの音声';
   sourceState.value = defaultAlertAudioSource().value;
 }
 
 const onAlertAudioChange = async (e: Event) => {
-  onAudioChange(e, 'alert.mp3', timerAlertSourceState, 'alertFileName', alertFileNameState);
+  onAudioChange(e, 'alert.mp3', timerAlertSourceState, alertFileNameState);
 }
 
 const removeAlertAudio = () => {
-  removeAudio('alert.mp3', timerAlertSourceState, 'alertFileName', alertFileNameState);
+  removeAudio(timerAlertSourceState, alertFileNameState);
 }
 
 const onChimeAudioChange = async (e: Event) => {
-  onAudioChange(e, 'chime.mp3', chimeSourceState, 'chimeFileName', chimeFileNameState);
+  onAudioChange(e, 'chime.mp3', chimeSourceState, chimeFileNameState);
 }
 
 const removeChimeAudio = () => {
-  removeAudio('chime.mp3', chimeSourceState, 'chimeFileName', chimeFileNameState);
+  removeAudio(chimeSourceState, chimeFileNameState);
 }
 
 const onPreChimeAudioChange = async (e: Event) => {
-  onAudioChange(e, 'pre-chime.mp3', preChimeSourceState, 'preChimeFileName', preChimeFileNameState);
+  onAudioChange(e, 'pre-chime.mp3', preChimeSourceState, preChimeFileNameState);
 }
 
 const removePreChimeAudio = () => {
-  removeAudio('pre-chime.mp3', preChimeSourceState, 'preChimeFileName', preChimeFileNameState);
+  removeAudio(preChimeSourceState, preChimeFileNameState);
 }
 
 // 音源を再生
@@ -98,6 +84,7 @@ const playAudio = (link: string) => {
   audio.play();
 }
 
+// 雪の設定
 const onSnowModeChange = async (e: Event) => {
   if (!(e.target instanceof HTMLInputElement)) return;
   const value = e.target.checked;
@@ -107,24 +94,6 @@ const onSnowModeChange = async (e: Event) => {
     showSnow(value);
   });
 }
-
-onMounted(() => {
-  // ローカルストレージから元ファイル名を取得
-  const alertFileName = localStorage.getItem('alert.mp3');
-  if (alertFileName != null) {
-    alertFileNameState.value = alertFileName;
-  }
-
-  const chimeFileName = localStorage.getItem('chime.mp3');
-  if (chimeFileName != null) {
-    chimeFileNameState.value = chimeFileName;
-  }
-
-  const preChimeFileName = localStorage.getItem('pre-chime.mp3');
-  if (preChimeFileName != null) {
-    preChimeFileNameState.value = preChimeFileName;
-  }
-});
 </script>
 
 <template>
@@ -138,16 +107,6 @@ onMounted(() => {
           <option v-for="theme of themes" :key="theme">{{ theme }}</option>
         </select>
       </label>
-
-      <!--
-        <label class="label">
-          <span class="label-text">センサー情報</span>
-          <select class="select select-bordered w-full max-w-xs" @change="onSourceChange" v-model="sensorSourceState">
-            <option disabled selected>ソースを選択...</option>
-            <option value="serial">Arduino (シリアル接続)</option>
-            <option value="rpi">Raspberry Pi</option>
-          </select>
-        </label> -->
 
       <label class="label cursor-pointer mt-4">
         <span class="label-text">情報スクロールの有効化</span>

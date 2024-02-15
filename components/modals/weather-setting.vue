@@ -109,11 +109,6 @@ onMounted(async () => {
     weatherOfficeNumber().value = selectedLocalRegion.value!;
     weatherAreaNumber().value = e.target.value;
 
-    // ストレージ
-    localStorage.setItem('weatherWideRegion', weatherWideRegionNumber().value);
-    localStorage.setItem('weatherOfficeNumber', weatherOfficeNumber().value);
-    localStorage.setItem('weatherAreaNumber', weatherAreaNumber().value);
-
     // 天気を更新
     await refleshWeather();
   }

@@ -18,14 +18,21 @@ export const isSnowEnabled = () => useLocalStorage<boolean>('isSnowEnabled', () 
 // 現在のセンサー情報のソース
 export const sensorSource = () => useLocalStorage<string>('sensorSource', () => "serial");
 
-// alert.mp3のソース
+// alert.mp3のデフォルトソース
 export const defaultAlertAudioSource = () => useState<string>('defaultAlertAudioSource', () => '/alert.mp3');
 // タイマーの音声のソース
 export const timerAlertSource = () => useState<string>('timerSource', () => defaultAlertAudioSource().value);
+// alert.mp3の元ファイル名
+export const alertFileName = () => useLocalStorage<string>('alert.mp3', () => 'デフォルトの音声');
 // チャイムの音声ソース
 export const chimeSource = () => useState<string>('chimeSource', () => defaultAlertAudioSource().value);
+// チャイムの元ファイル名
+export const chimeFileName = () => useLocalStorage<string>('chime.mp3', () => 'デフォルトの音声');
 // 予鈴の音声ソース
 export const preChimeSource = () => useState<string>('preChimeSource', () => defaultAlertAudioSource().value);
+// 予鈴の元ファイル名
+export const preChimeFileName = () => useLocalStorage<string>('pre-chime.mp3', () => 'デフォルトの音声');
+
 // チャイム鳴動時刻
 export const userChimeTimes = () => useLocalStorage<ChimeTime[]>('chimeTimes', () => kChimeTimes);
 // 鳴らしたチャイム一覧(Map)
