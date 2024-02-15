@@ -78,6 +78,8 @@ export const isSerialReady = () => useState('isSerialReady', () => false);
 // シリアルポート
 export const serialPort = () => useState<SerialPort | null>('serialPort', () => null);
 
+// センサー情報の表示の切り替え
+export const isSensorInfoVisible = () => useLocalStorage<boolean>('isSensorInfoVisible', () => false);
 // 現在の室温
 export const roomTmp = () => useState<Number | null>('roomTemp', () => null);
 // 現在の湿度

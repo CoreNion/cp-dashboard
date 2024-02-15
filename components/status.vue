@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// センサー情報を表示するかどうか
+const sensorVisible = isSensorInfoVisible();
+
 // センサーのソース
 const sensorSourceState = sensorSource();
 // シリアル通信の準備ができているか
@@ -17,19 +20,23 @@ const outTmpState = outTmp();
 
 <template>
   <div class="min-w-full stats stats-vertical shadow">
-    <div class="stat px-0">
+    <!-- 室温 -->
+    <div v-if="sensorVisible" class="stat px-0">
       <div class="stat-title text-[3vw]">室温</div>
       <div v-if="sensorSourceState === 'serial' && !isSerialReadyState">
         <span class="font-bold text-xl">接続設定が必要です</span>
         <br>
-        <button class="btn btn-primary btn-sm mt-1" @click="connectSerialDevice()">設定する</button>
+        <button class="btn btn-primary btn-sm mt-1" @click="connectSerialDevice()">接続する</button>
+        <button class="btn btn-error btn-sm mt-1 ml-1" @click="sensorVisible = false">非表示にする</button>
       </div>
 
       <div v-else class="stat-value font-semibold text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
         <IconCSS name="uil:celsius" size="4vw" />
       </div>
     </div>
-    <div class="stat py-1">
+
+    <!-- 室内湿度 -->
+    <div v-if="sensorVisible" class="stat py-1">
       <div class="stat-title text-[3vw]">室内湿度</div>
       <div v-if="sensorSourceState === 'serial' && !isSerialReadyState">
         <span class="font-bold text-xl">接続設定が必要</span>
@@ -40,6 +47,8 @@ const outTmpState = outTmp();
         <IconCSS name="uil:percentage" size="4vw" />
       </div>
     </div>
+
+    <!-- 気圧 -->
     <div class="stat px-0 py-1">
       <div class="stat-title text-[3vw]">
         気圧{{ sensorSourceState === 'serial' && !isSerialReadyState ? '*' : '' }}
@@ -49,6 +58,8 @@ const outTmpState = outTmp();
         <span class="text-[3vw]">hPa</span>
       </div>
     </div>
+
+    <!-- 外気温 -->
     <div class="stat py-1">
       <div class="stat-title text-[3vw]">外気温*</div>
       <div class="stat-value font-semibold text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
@@ -56,10 +67,15 @@ const outTmpState = outTmp();
       </div>
     </div>
 
+
+    <div v-if="!sensorVisible" class="stat px-5">
+      <GeneralSetting></GeneralSetting>
+    </div>
+
     <div class="stat m-auto gap-2">
       <span>*出典: 気象庁ホームページ</span>
       
-      <DynamicModal linkTypeButton btnTitle="センサーの記録">
+      <DynamicModal v-if="sensorVisible" linkTypeButton btnTitle="センサーの記録">
         <SensorRecord></SensorRecord>
       </DynamicModal>
 
