@@ -38,19 +38,23 @@ const onVerticalBannerUpload = async (e: Event) => {
   </label>
   <label v-if="bannerVisible" class="form-control w-full">
     <div class="label">
-      <span class="label-text"> 17:3(850x150)サイズの画像を推奨</span>
+      <span class="label-text"> 17:3(1700x300)サイズの画像を推奨</span>
     </div>
     <input type="file" accept="image/*" class="file-input file-input-bordered file-input-sm w-full"
       @change="onBannerUpload" />
   </label>
 
   <label class="label cursor-pointer mt-3">
-    <span class="label-text">縦型バナー宣伝画像の有効化</span>
+    <span class="label-text">
+      縦型バナー宣伝画像の有効化
+      <br>
+      (イベントカウントダウンの部分に表示されます)
+    </span>
     <input type="checkbox" class="toggle toggle-secondary" v-model="verticalBannerVisible" />
   </label>
   <label v-if="verticalBannerVisible" class="form-control w-full">
     <div class="label">
-      <span class="label-text"> 1:2(300x600)サイズの画像を推奨</span>
+      <span class="label-text"> 23:40(920x1600)サイズの画像を推奨</span>
     </div>
     <input type="file" accept="image/*" class="file-input file-input-bordered file-input-sm w-full"
       @change="onVerticalBannerUpload" />

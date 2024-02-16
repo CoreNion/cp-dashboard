@@ -105,6 +105,17 @@ onMounted(async () => {
     }
   }
 
+  // 縦バナー画像を読み込む
+  if (isVerticalBanner().value) {
+    try {
+      const verticalBannerHandle = await opfsRoot.getFileHandle('vertical-banner.png', { create: false });
+      const verticalBannerBuffer = await verticalBannerHandle.getFile();
+      verticalBannerSource().value = URL.createObjectURL(verticalBannerBuffer);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
   // @ts-ignore
   await import("pure-snow.js").then(({ createSnow, showSnow }) => {
     createSnow();
