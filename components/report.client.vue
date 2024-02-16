@@ -82,6 +82,6 @@ const verticalBanner = verticalBannerSource();
     </div>
   </div>
   <div v-else class="m-2">
-    <img v-if="verticalBanner != null" class="max-h-[45vh]" :src="verticalBanner" />
+    <img v-if="verticalBanner != null" class="max-h-[45vh] border" :src="verticalBanner" />
   </div>
 </template>

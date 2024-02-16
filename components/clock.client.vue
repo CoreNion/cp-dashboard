@@ -61,7 +61,10 @@ const banner = bannerSource();
 
     <!-- 上部の宣伝画像エリア -->
     <div v-if="bannerVisible && widthScreenSize().value >= 1280" class="fixed top-0 m-3 z-10">
-      <img v-if="banner != null" :src="banner!" class="h-[16vh] rounded-xl border">
+      <div class="bg-neutral flex flex-row items-center rounded-xl join">
+        <span class="p-2 text-neutral-content join-item text-2xl [writing-mode:vertical-rl]">宣伝</span>
+        <img v-if="banner != null" :src="banner!" class="h-[16vh] join-item">
+      </div>
     </div>
   </div>
 </template>
