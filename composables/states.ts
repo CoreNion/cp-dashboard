@@ -93,3 +93,8 @@ export const gas = () => useState<number | null>('gas', () => null);
 export const outTmp= () => useState<Number | null>('outTemp', () => null);
 // 天気
 export const weather = () => useState<string | null>('weather', () => null);
+
+// バナー宣伝画像の表示の切り替え
+export const isBannerVisible = () => useLocalStorage<boolean>('isBannerVisible', () => false);
+// バナーのソース
+export const bannerSource = () => useState<string | null>('bannerSource', () => null);

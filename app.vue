@@ -94,6 +94,17 @@ onMounted(async () => {
     console.warn(e);
   }
 
+  // バナー画像を読み込む
+  if (isBannerVisible().value) {
+    try {
+      const bannerHandle = await opfsRoot.getFileHandle('banner.png', { create: false });
+      const bannerBuffer = await bannerHandle.getFile();
+      bannerSource().value = URL.createObjectURL(bannerBuffer);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
   // @ts-ignore
   await import("pure-snow.js").then(({ createSnow, showSnow }) => {
     createSnow();
@@ -106,14 +117,16 @@ onMounted(async () => {
   <div id="snow"></div>
   <NuxtPwaManifest />
   <NuxtLayout>
-    <div v-if="!firstClick" class="toast toast-top toast-center">
-      <div class="alert alert-warning">
-        <span>
-          <IconCSS class="icon" name="uil:exclamation-triangle" size="2vw" />
-          アラームを動作させるために、画面を一回以上クリックしてください！
-        </span>
+    <ClientOnly>
+      <div v-if="!firstClick" class="toast toast-top toast-center z-50">
+        <div class="alert alert-warning">
+          <span>
+            <IconCSS class="icon" name="uil:exclamation-triangle" size="2vw" />
+            アラームを動作させるために、画面を一回以上クリックしてください！
+          </span>
+        </div>
       </div>
-    </div>
+    </ClientOnly>
 
     <!-- 大画面デバイスの表示 -->
     <div v-if="widthState >= 1280" class="min-h-screen flex flex-row text-center gap-2">
