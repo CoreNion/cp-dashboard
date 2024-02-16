@@ -98,3 +98,7 @@ export const weather = () => useState<string | null>('weather', () => null);
 export const isBannerVisible = () => useLocalStorage<boolean>('isBannerVisible', () => false);
 // バナーのソース
 export const bannerSource = () => useState<string | null>('bannerSource', () => null);
+// 縦型バナーの表示の切り替え
+export const isVerticalBanner = () => useLocalStorage<boolean>('isVerticalBanner', () => false);
+// 縦バナーのソース
+export const verticalBannerSource = () => useState<string | null>('verticalBannerSource', () => null);

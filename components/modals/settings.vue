@@ -85,7 +85,6 @@ const playAudio = (link: string) => {
     <div class="divider"></div>
 
     <h4 class="font-bold">音声設定</h4>
-
     <p class="py-3">
       <AudioSetting labelText="タイマー終了時" :fileName="alertFileNameState" :source="timerAlertSourceState"
         :onAudioChange="onAlertAudioChange" :removeAudio="removeAlertAudio" :playAudio="playAudio" />
@@ -105,7 +104,11 @@ const playAudio = (link: string) => {
         <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
       </label>
     </p>
-
     <ChimeSetting></ChimeSetting>
+
+    <div class="divider"></div>
+
+    <h4 class="font-bold">宣伝機能設定</h4>
+    <AdSetting></AdSetting>
   </div>
 </template>
