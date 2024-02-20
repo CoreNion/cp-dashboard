@@ -31,7 +31,7 @@ const outTmpState = outTmp();
       </div>
 
       <div v-else class="stat-value font-semibold text-[4.6vw]">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-        <IconCSS name="uil:celsius" size="4vw" />
+        <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
 
@@ -44,7 +44,7 @@ const outTmpState = outTmp();
 
       <div v-else class="stat-value font-semibold text-[4.6vw]">{{ humidityState != null ? humidityState.toFixed(1) : "-"
       }}
-        <IconCSS name="uil:percentage" size="4vw" />
+        <Icon name="uil:percentage" size="4vw" />
       </div>
     </div>
 
@@ -63,7 +63,7 @@ const outTmpState = outTmp();
     <div class="stat py-1">
       <div class="stat-title text-[3vw]">外気温*</div>
       <div class="stat-value font-semibold text-[4.6vw]">{{ outTmpState != null ? outTmpState : "-" }}
-        <IconCSS name="uil:celsius" size="4vw" />
+        <Icon name="uil:celsius" size="4vw" />
       </div>
     </div>
 

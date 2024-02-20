@@ -78,7 +78,7 @@ onMounted(async () => {
     <div class="join w-full">
       <button :class="['btn', 'btn-error', 'join-item', selectedFile == null ? 'btn-disabled' : 'btn-active']"
         @click="deleteFile(selectedFile!)">
-        <IconCSS name="uil:trash-alt" size="3vh" />
+        <Icon name="uil:trash-alt" size="3vh" />
       </button>
       <select class="flex-1 select select-bordered join-item" v-model="selectedFile">
         <option disabled selected>記録を選択...</option>
@@ -86,7 +86,7 @@ onMounted(async () => {
       </select>
       <button :class="['btn', 'btn-primary', 'join-item', selectedFile == null ? 'btn-disabled' : 'btn-active']"
         @click="downloadFile(selectedFile!)">
-        <IconCSS name="uil:file-download-alt" size="2vw" />
+        <Icon name="uil:file-download-alt" size="2vw" />
       </button>
     </div>
   </div>

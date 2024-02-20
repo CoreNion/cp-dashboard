@@ -20,7 +20,7 @@ export default {
       <div class="flex flex-row items-center gap-2">
         <button v-if="fileName != 'デフォルトの音声'" class="btn btn-sm btn-circle btn-outline btn-error"
           @click="removeAudio">
-          <IconCSS name="uil:trash-alt" />
+          <Icon name="uil:trash-alt" />
         </button>
         <button class="grow link" @click="playAudio(source)">{{ fileName }}</button>
       </div>

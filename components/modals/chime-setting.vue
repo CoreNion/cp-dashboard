@@ -40,7 +40,7 @@ const changePreChimeEnabled = (time: ChimeTime, event: any) => {
           <tr v-for="chimeTime of userChimeTimesState">
             <td>
               <button class="btn btn-sm btn-circle btn-outline btn-error" @click="removeChimeTime(chimeTime.time)">
-                <IconCSS name="uil:trash-alt" />
+                <Icon name="uil:trash-alt" />
               </button>
             </td>
             <td>
