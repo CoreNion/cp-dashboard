@@ -40,6 +40,9 @@ export const chimePlayed = () => useState<Map<string, boolean>>('chimePlayed', (
 // 鳴らした予鈴一覧(Map)
 export const preChimePlayed = () => useState<Map<string, boolean>>('preChimePlayed', () => kChimeTimes.reduce((acc, cur) => acc.set(cur.time, false), new Map<string, boolean>()));
 
+// カウントダウンに表示する日付の一覧
+export const countdownDates = () => useLocalStorage<CountdownData[]>('countdownDates', () => kCountdownDates);
+
 // タイマーのインターバル
 export const interval = () => useState<Pausable | null>('interval', () => null);
 // タイマーが動いているかどうか

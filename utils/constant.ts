@@ -69,6 +69,23 @@ export const kChimeTimes: ChimeTime[] = [
   { time: "17:30", chime: true, preChime: false },
 ];
 
+/**
+ * カウントダウンに表示する日付
+ */
+export const kCountdownDates: CountdownData[] = [
+  { date: "2024-02-14", label: "バレンタイン", color: "pink", everyYear: true},
+  { date: "2024-03-31", label: "今年度終了", color: "gray", everyYear: true},
+  { date: "2024-06-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-07-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-08-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-09-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-10-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-11-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-12-15", label: "レポート期限", color: "blue", everyYear: true},
+  { date: "2024-12-25", label: "クリスマス", color: "red", everyYear: true },
+  { date: "2024-12-31", label: "大晦日", color: "gray", everyYear: true },
+];
+
 /** 
  * Arduinoにセンサー情報の取得をリクエストするときの生データ
  */

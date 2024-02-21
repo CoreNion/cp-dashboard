@@ -41,3 +41,12 @@ export interface ChimeTime {
   chime: boolean;
   preChime: boolean;
 }
+
+export interface CountdownData {
+  date: string;
+  label: string;
+  color: string;
+  everyYear?: boolean;
+  everyMonth?: boolean;
+  everyDay?: boolean;
+}
