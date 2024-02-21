@@ -109,6 +109,7 @@ const playAudio = (link: string) => {
     <div class="divider"></div>
 
     <h4 class="font-bold">宣伝機能設定</h4>
+    <CountdownSetting></CountdownSetting>
     <AdSetting></AdSetting>
   </div>
 </template>

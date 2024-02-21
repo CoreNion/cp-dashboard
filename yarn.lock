@@ -1357,7 +1357,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.8.4":
   version: 7.23.9
   resolution: "@babel/runtime@npm:7.23.9"
   dependencies:
@@ -2703,6 +2703,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.11.8":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: 4681e682abc006d25eb380d0cf3efc7557043f53b6aea7a5057d0d1e7df849a00e281cd8ea79c902a35a414d7919621fc2ba293ecec05f413598e0b23d5a1e63
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-alias@npm:^5.1.0":
   version: 5.1.0
   resolution: "@rollup/plugin-alias@npm:5.1.0"
@@ -3143,12 +3150,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.14.165":
+  version: 4.14.202
+  resolution: "@types/lodash@npm:4.14.202"
+  checksum: 6064d43c8f454170841bd67c8266cc9069d9e570a72ca63f06bceb484cb4a3ee60c9c1f305c1b9e3a87826049fd41124b8ef265c4dd08b00f6766609c7fe9973
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:^20.11.19":
   version: 20.11.19
   resolution: "@types/node@npm:20.11.19"
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: f451ef0a1d78f29c57bad7b77e49ebec945f2a6d0d7a89851d7e185ee9fe7ad94d651c0dfbcb7858c9fa791310c8b40a881e2260f56bd3c1b7e7ae92723373ae
+  languageName: node
+  linkType: hard
+
+"@types/resize-observer-browser@npm:^0.1.7":
+  version: 0.1.11
+  resolution: "@types/resize-observer-browser@npm:0.1.11"
+  checksum: 7bb6347b89464da9ba35e89add6764addc8cf31e90abb4b40970bc8332d418215af65da39acf88277c55631b6c5b0f480b2e4c84adb6d5c0b5c81886db20fc9b
   languageName: node
   linkType: hard
 
@@ -4828,6 +4849,24 @@ __metadata:
     picocolors: "npm:^1"
     postcss-js: "npm:^4"
   checksum: 6aa0c206049943b0558a95a0d828f2179714fd92e3d01ccc9d3386c1d816bbec10efea010fb7876a4c1387354a69c1627193304f3c49ca8d6e9102d0eda25727
+  languageName: node
+  linkType: hard
+
+"date-fns-tz@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "date-fns-tz@npm:2.0.0"
+  peerDependencies:
+    date-fns: ">=2.0.0"
+  checksum: 31cacb83c675ef8c2cf31d21c298ab6d74c5e975412dd804664d031ac0f2f03ed5bfb2a950fa15a321bbbcb90b833c300823fbceba0133680065a71894cc1170
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.16.1":
+  version: 2.30.0
+  resolution: "date-fns@npm:2.30.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.21.0"
+  checksum: e4b521fbf22bc8c3db332bbfb7b094fd3e7627de0259a9d17c7551e2d2702608a7307a449206065916538e384f37b181565447ce2637ae09828427aed9cb5581
   languageName: node
   linkType: hard
 
@@ -8110,6 +8149,7 @@ __metadata:
     "@nuxtjs/color-mode": "npm:^3.3.2"
     "@nuxtjs/google-fonts": "npm:^3.1.3"
     "@nuxtjs/tailwindcss": "npm:^6.11.4"
+    "@popperjs/core": "npm:^2.11.8"
     "@types/leaflet": "npm:^1.9.8"
     "@types/node": "npm:^20.11.19"
     "@types/w3c-web-serial": "npm:^1.0.6"
@@ -8130,6 +8170,7 @@ __metadata:
     postcss: "npm:^8.4.35"
     pure-snow.js: "npm:^2.1.0"
     typescript: "npm:^5.3.3"
+    v-calendar: "npm:^3.1.2"
     vue: "npm:^3.4.19"
     vue-chartjs: "npm:^5.3.0"
     vue-router: "npm:^4.2.5"
@@ -11134,6 +11175,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"v-calendar@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "v-calendar@npm:3.1.2"
+  dependencies:
+    "@types/lodash": "npm:^4.14.165"
+    "@types/resize-observer-browser": "npm:^0.1.7"
+    date-fns: "npm:^2.16.1"
+    date-fns-tz: "npm:^2.0.0"
+    lodash: "npm:^4.17.20"
+    vue-screen-utils: "npm:^1.0.0-beta.13"
+  peerDependencies:
+    "@popperjs/core": ^2.0.0
+    vue: ^3.2.0
+  checksum: e80a76df78f6dba696e654a891d8744bead48992687f9dd72e784a8870869180e34eb1b36c73edd8f1ffe907f93f5fdfe77af24070abba3bd0ccba5606f33f24
+  languageName: node
+  linkType: hard
+
 "validate-npm-package-license@npm:^3.0.4":
   version: 3.0.4
   resolution: "validate-npm-package-license@npm:3.0.4"
@@ -11477,6 +11535,15 @@ __metadata:
   peerDependencies:
     vue: ^3.2.0
   checksum: 63e51f437a1f10a97fce97c04cde3f87958049c5e20f8b238b66b9a9080c99db0124e680ed0e9921af1f6d81c00bf181e280e36e2370cafea581539334d895ef
+  languageName: node
+  linkType: hard
+
+"vue-screen-utils@npm:^1.0.0-beta.13":
+  version: 1.0.0-beta.13
+  resolution: "vue-screen-utils@npm:1.0.0-beta.13"
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: 9279813c191df4c58d1084a45e62919bf274fa44b2cd46125605659360a6cf0e5144c6c3752d1f683ebafb4ad7e2c18ce6dcbad33311db201fe5fb7738c0724d
   languageName: node
   linkType: hard
 
