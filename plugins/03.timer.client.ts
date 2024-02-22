@@ -1,5 +1,5 @@
 export default defineNuxtPlugin((nuxtApp) => {
-  const worker = new Worker(new URL('../worker.ts', import.meta.url), { type: 'module' });
+  const worker = new Worker(new URL('../workers/timer.ts', import.meta.url), { type: 'module' });
 
   const timerState = timer();
 
@@ -22,4 +22,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
     }
   });
+
+  return {
+    provide: {
+      timerWorker: worker
+    }
+  }
 });

@@ -2,8 +2,6 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import 'dayjs/locale/ja';
 
-const worker = new Worker(new URL('../workers/clock.ts', import.meta.url), { type: 'module' });
-
 // タイマーの開始
 export function startTimer() {
   // タイマーの残り時間を設定
@@ -12,20 +10,20 @@ export function startTimer() {
   }
 
   // useNuxtApp().$workerにタイマー開始をリクエスト
-  worker.postMessage("TIMER_START:" + timer().value!.join(","));
+  useNuxtApp().$timerWorker.postMessage("TIMER_START:" + timer().value!.join(","));
 
   isTimerActive().value = true;
 }
 
 // タイマーの一時停止
 export function pauseTimer() {
-  worker.postMessage("TIMER_PAUSE");
+  useNuxtApp().$timerWorker.postMessage("TIMER_PAUSE");
   isTimerActive().value = false;
 }
 
 // タイマーのリセット
 export function resetTimer() {
-  worker.postMessage("TIMER_STOP");
+  useNuxtApp().$timerWorker.postMessage("TIMER_STOP");
 
   timer().value = null;
   timerSetting().value = [0, 0, 0];
