@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const worker = useNuxtApp().$worker;
+  const worker = new Worker(new URL('../workers/clock.ts', import.meta.url), { type: 'module' });
 
   // 現在時刻State
   const timeState = time();
