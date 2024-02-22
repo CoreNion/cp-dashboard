@@ -79,7 +79,9 @@ const playAudio = (link: string) => {
     <h3 class="font-bold text-lg">設定</h3>
     <p class="py-2">
       <GeneralSetting></GeneralSetting>
-      <WeatherSetting></WeatherSetting>
+      <DynamicModal btnTitle="天気設定" :btn-wfull="true">
+        <WeatherSetting></WeatherSetting>
+      </DynamicModal>
     </p>
 
     <div class="divider"></div>
@@ -104,12 +106,16 @@ const playAudio = (link: string) => {
         <input type="checkbox" class="toggle toggle-secondary" v-model="isPreChimeEnabledState" />
       </label>
     </p>
-    <ChimeSetting></ChimeSetting>
+    <DynamicModal btnTitle="チャイム設定" :btn-wfull="true">
+      <ChimeSetting></ChimeSetting>
+    </DynamicModal>
 
     <div class="divider"></div>
 
     <h4 class="font-bold">宣伝機能設定</h4>
-    <CountdownSetting></CountdownSetting>
+    <DynamicModal :btn-wfull="true" btnTitle="カウントダウン設定">
+      <CountdownSetting></CountdownSetting>
+    </DynamicModal>
     <AdSetting></AdSetting>
   </div>
 </template>

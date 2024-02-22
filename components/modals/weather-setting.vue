@@ -18,7 +18,7 @@ const useOnlyTemp = isAmedasOnlyTmp();
 const weatherAmedasNameState = weatherAmedasName();
 
 const selectedOnlyTemp = () => {
- return  getAmedasInfo(origAmedasInfos, selectedAmedasCode.value).onlyTemp;
+  return getAmedasInfo(origAmedasInfos, selectedAmedasCode.value).onlyTemp;
 };
 // 広域地方の選択肢
 const wideRegionOptions = useState<Array<regionCodeName>>(() => []);
@@ -149,92 +149,78 @@ function setAmedasLocation(code: string, name: string) {
 </script>
 
 <template>
-  <ClientOnly>
-    <button class="btn btn-neutral min-w-full mt-3" onclick="weatherSettingsModal.showModal()">天気設定</button>
-    <dialog id="weatherSettingsModal" class="modal">
-      <div class="modal-box">
-        <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
+  <h3 class="font-bold text-lg">天気設定</h3>
 
-        <h3 class="font-bold text-lg">天気設定</h3>
+  <div class="divider"></div>
 
-        <div class="divider"></div>
+  <h3 class="font-bold text-lg">予報の地域設定</h3>
+  <p class="my-3">
+    <label class="label">
+      <span class="label-text">広域地方</span>
+      <select class="select select-bordered w-full max-w-xs" v-model="selectedWideRegion" @change="refleshLocalRegion">
+        <option disabled selected>地方... (表示されない場合は読み込み中かオフラインです)</option>
+        <option v-for="region of wideRegionOptions" :value="region.code">{{ region.name }}</option>
+      </select>
+    </label>
 
-        <h3 class="font-bold text-lg">予報の地域設定</h3>
-        <p class="my-3">
-          <label class="label">
-            <span class="label-text">広域地方</span>
-            <select class="select select-bordered w-full max-w-xs" v-model="selectedWideRegion"
-              @change="refleshLocalRegion">
-              <option disabled selected>地方... (表示されない場合は読み込み中かオフラインです)</option>
-              <option v-for="region of wideRegionOptions" :value="region.code">{{ region.name }}</option>
-            </select>
-          </label>
+    <label class="label">
+      <span class="label-text">都道府県/地方</span>
+      <select class="select select-bordered w-full max-w-xs" v-model="selectedLocalRegion" @change="refleshRegion">
+        <option disabled selected>都道府県/地方を選択... (表示されない場合は読み込み中かオフラインです)</option>
+        <option v-for="region of localRegionOptions" :value="region.code">{{ region.name }}
+        </option>
+      </select>
+    </label>
 
-          <label class="label">
-            <span class="label-text">都道府県/地方</span>
-            <select class="select select-bordered w-full max-w-xs" v-model="selectedLocalRegion"
-              @change="refleshRegion">
-              <option disabled selected>都道府県/地方を選択... (表示されない場合は読み込み中かオフラインです)</option>
-              <option v-for="region of localRegionOptions" :value="region.code">{{ region.name }}
-              </option>
-            </select>
-          </label>
+    <label class="label">
+      <span class="label-text">地域</span>
+      <select class="select select-bordered w-full max-w-xs" v-model="selectedRegion" @change="setAreaNumber">
+        <option disabled selected>地域を選択... (表示されない場合は読み込み中かオフラインです)</option>
+        <option v-for="region of regionOptions" :value="region.code">{{ region.name }}
+        </option>
+      </select>
+    </label>
+  </p>
 
-          <label class="label">
-            <span class="label-text">地域</span>
-            <select class="select select-bordered w-full max-w-xs" v-model="selectedRegion"
-              @change="setAreaNumber">
-              <option disabled selected>地域を選択... (表示されない場合は読み込み中かオフラインです)</option>
-              <option v-for="region of regionOptions" :value="region.code">{{ region.name }}
-              </option>
-            </select>
-          </label>
-        </p>
+  <div class="divider"></div>
 
-        <div class="divider"></div>
-
-        <h3 class="font-bold text-lg">アメダスの地点設定</h3>
-        <p class="my-3" v-if="loaded">
-          <label class="label">
-            <span class="label-text">現在の設定地点</span>
-            <span class="label-text font-bold">
-              <span>{{ weatherAmedasNameState }}</span>
-            </span>
-          </label>
-          <label class="label">
-            <span class="label-text">外気温情報のみ利用する<br>(気圧表示にはセンサーが必要)</span>
-            <div class="tooltip tooltip-left" :data-tip="selectedOnlyTemp() ? 'アメダスの気圧を使用するには、気圧情報を取得できる地点に変更してください。' : '有効にすると、気温のみ取得可能な地点も表示されます。'">
-              <input type="checkbox" :class="['toggle', 'toggle-secondary']"
-                :disabled="selectedOnlyTemp()" v-model="useOnlyTemp" />
-            </div>
-          </label>
-
-        <p class="min-w-full h-[433px] mt-3">
-        <h2 class="text-error font-bold h-5"> {{ needMoreZoom ? "地点を表示するには、もう少しズームしてください。" : '' }}</h2>
-
-        <LMap ref="map" :center="[32.592850, 137.273600]" v-model:bounds="boundsState" v-model:zoom="zoomState">
-          <LTileLayer url="https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"
-            attribution="<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
-            name="地理院タイル" />
-          <LMarker v-for="place of markerPlaces" :lat-lng="[place.lat, place.lon]">
-            <LPopup>
-              <p>
-                <span>{{ place.name }}</span>
-                <br>
-                <span v-if="place.onlyTemp"> (外気温のみ)</span>
-                <span v-else> (気温/気圧)</span>
-              </p>
-              <button class="btn btn-xs"
-                @click="setAmedasLocation(place.code, `${place.name} ${place.onlyTemp ? '(外気温のみ)' : ''}`)">設定</button>
-            </LPopup>
-          </LMarker>
-        </LMap>
-        </p>
-        </p>
-        <p v-else class="skeleton w-full h-96"></p>
+  <h3 class="font-bold text-lg">アメダスの地点設定</h3>
+  <p class="my-3" v-if="loaded">
+    <label class="label">
+      <span class="label-text">現在の設定地点</span>
+      <span class="label-text font-bold">
+        <span>{{ weatherAmedasNameState }}</span>
+      </span>
+    </label>
+    <label class="label">
+      <span class="label-text">外気温情報のみ利用する<br>(気圧表示にはセンサーが必要)</span>
+      <div class="tooltip tooltip-left"
+        :data-tip="selectedOnlyTemp() ? 'アメダスの気圧を使用するには、気圧情報を取得できる地点に変更してください。' : '有効にすると、気温のみ取得可能な地点も表示されます。'">
+        <input type="checkbox" :class="['toggle', 'toggle-secondary']" :disabled="selectedOnlyTemp()"
+          v-model="useOnlyTemp" />
       </div>
-    </dialog>
-  </ClientOnly>
+    </label>
+
+  <p class="min-w-full h-[433px] mt-3">
+  <h2 class="text-error font-bold h-5"> {{ needMoreZoom ? "地点を表示するには、もう少しズームしてください。" : '' }}</h2>
+
+  <LMap ref="map" :center="[32.592850, 137.273600]" v-model:bounds="boundsState" v-model:zoom="zoomState">
+    <LTileLayer url="https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"
+      attribution="<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>" name="地理院タイル" />
+    <LMarker v-for="place of markerPlaces" :lat-lng="[place.lat, place.lon]">
+      <LPopup>
+        <p>
+          <span>{{ place.name }}</span>
+          <br>
+          <span v-if="place.onlyTemp"> (外気温のみ)</span>
+          <span v-else> (気温/気圧)</span>
+        </p>
+        <button class="btn btn-xs"
+          @click="setAmedasLocation(place.code, `${place.name} ${place.onlyTemp ? '(外気温のみ)' : ''}`)">設定</button>
+      </LPopup>
+    </LMarker>
+  </LMap>
+  </p>
+  </p>
+  <p v-else class="skeleton w-full h-96"></p>
 </template>

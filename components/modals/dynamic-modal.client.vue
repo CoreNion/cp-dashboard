@@ -2,23 +2,26 @@
 defineProps({
   linkTypeButton: Boolean,
   btnTitle: String,
+  btnWfull: Boolean,
   IconName: String,
 });
 
-// モーダル全体の表示状態
-const openModal = ref(false);
+// IDを生成
+const thisID = "modal-" + Math.random().toString(32);
+
 // モーダルの中身の表示状態
 const loadContents = ref(false);
 
 // モーダルを表示
 const showModal = () => {
-  openModal.value = true;
   loadContents.value = true;
+
+  // @ts-ignore
+  document.getElementById(thisID)?.showModal();
 };
 // モーダルを閉じる
 const closeModal = async () => {
   // いきなり閉じるとアニメーションが見えないので、0.5秒待ってから閉じる
-  openModal.value = false;
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   loadContents.value = false;
@@ -27,12 +30,12 @@ const closeModal = async () => {
 
 <template>
   <a v-if="linkTypeButton" class="link" @click="showModal">{{ btnTitle }}</a>
-  <button v-else class="btn" @click="showModal">
+  <button v-else :class="['btn', btnWfull? 'w-full' : '']" @click="showModal">
     <span v-if="btnTitle != undefined">{{ btnTitle }} </span>
     <Icon v-if="IconName != undefined" :name="IconName" size="2.5vh" />
   </button>
 
-  <dialog :class="['modal', openModal ? 'modal-open' : '']">
+  <dialog :id="thisID" class="modal">
     <div class="modal-box">
       <form method="dialog">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="closeModal">✕</button>
