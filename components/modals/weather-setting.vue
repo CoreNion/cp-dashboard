@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { amedasInfo, regionCodeName } from '#imports';
-import { refleshWeather } from '~/plugins/04.weather.client';
 
 const loaded = ref<boolean>(false);
 
@@ -110,7 +109,7 @@ onMounted(async () => {
     weatherAreaNumber().value = e.target.value;
 
     // 天気を更新
-    await refleshWeather();
+    useNuxtApp().$weatherWorker.postMessage("REFLESH_WEATHER");
   }
 
   loaded.value = true;
@@ -144,7 +143,7 @@ function setAmedasLocation(code: string, name: string) {
   weatherAmedasNameState.value = name;
 
   // 天気を更新
-  refleshWeather();
+  useNuxtApp().$weatherWorker.postMessage("REFLESH_WEATHER");
 }
 </script>
 

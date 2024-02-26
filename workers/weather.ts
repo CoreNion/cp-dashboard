@@ -1,5 +1,95 @@
-/// 天気コードから天気を表す文字列を返す
-export default function (weatherCode: String) {
+import dayjs from 'dayjs';
+import 'dayjs/locale/ja';
+
+dayjs.locale("ja");
+
+self.onmessage = onMessage;
+
+(async () => {
+  // 10分ごとに天気を更新
+  await refleshWeather();
+  while (true) {
+    await new Promise(resolve => setTimeout(resolve, 600000));
+    await refleshWeather();
+  }
+})();
+
+async function onMessage(event: MessageEvent<any>) {
+  console.log(event);
+  const data = event.data;
+  if (typeof data === "string") {
+    if (data === "REFLESH_WEATHER") {
+      await refleshWeather();
+    }
+  }
+}
+
+async function refleshWeather() {
+  // メインスレッドから設定を取得
+  type weatherStorageType = { amedasCode: string, weatherOfficeNumber: string, weatherAreaNumber: string, isAmedasOnlyTmp: boolean };
+  self.postMessage("GET_STORAGE_KEY");
+  const storageData: weatherStorageType = await new Promise((resolve) => {
+    self.onmessage = (event: MessageEvent<weatherStorageType>) => {
+      const data = event.data;
+      resolve(data);
+    }
+  });
+  self.onmessage = onMessage;
+  
+  // 最新の気象データの時刻を取得
+  const latestTimeFetch = await fetch(`https://www.jma.go.jp/bosai/amedas/data/latest_time.txt`);
+  const latestTime = dayjs(await latestTimeFetch.text());
+  // 最新のJSONファイル名 (3時間ごとに別ファイル)
+  const latestJsonName = `${latestTime.format("YYYYMMDD")}_${(Math.floor(latestTime.hour() / 3) * 3).toString().padStart(2, "0")}.json`;
+
+  // アメダス/天気予報のデータを取得
+  const data = await Promise.all([
+    // アメダスのデータ
+    (await fetch(`https://www.jma.go.jp/bosai/amedas/data/point/${storageData.amedasCode}/${latestJsonName}`)).text(),
+    // 天気予報のデータ
+    (await fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${storageData.weatherOfficeNumber}.json`)).text(),
+  ]).catch((e) => {
+    console.error(e);
+    return;
+  });
+
+  if (data == null) {
+    console.error('data is null');
+    return;
+  }
+
+  /* アメダスのデータの処理 */
+  const amedasData = JSON.parse(data[0]);
+
+  // 最後にある最新の気象データを取得
+  const latestWeather = Object(Object.values(amedasData).pop());
+  // 気温を取得
+  const outTmp = latestWeather.temp[0];
+
+  // 気圧を取得
+  let pressure = "";
+  if (!storageData.isAmedasOnlyTmp)
+    pressure = latestWeather.pressure[0];
+
+  /* 天気予報のデータの処理 */
+  const forecastData = JSON.parse(data[1]);
+
+  // 今日の天気を取得
+  const todayForecast = forecastData[0].timeSeries[0].areas as Array<any>;
+  // 設定されている地域のインデックスを取得
+  const areaIndex = todayForecast.findIndex((value) => value.area.code == storageData.weatherAreaNumber);
+  const todayWeatherCode = todayForecast[areaIndex].weatherCodes[0];
+
+  const weather = w2s(todayWeatherCode);
+
+  self.postMessage({
+    outTmp: outTmp,
+    pressure: pressure,
+    weather: weather,
+  }); 
+}
+
+function w2s(weatherCode: String) {
   switch (weatherCode) {
     /* 晴れ */
     case "100":
