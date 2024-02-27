@@ -29,17 +29,21 @@ export default defineNuxtConfig({
     },
   ],
   pwa: {
+    workbox: {
+      navigateFallback: null,
+    },
     manifest: {
       name: 'Campus Dashboard',
       short_name: 'CP-Dashboard',
       lang: 'ja',
       display: 'standalone',
+      theme_color: '#42b3f5',
       icons: [
         {
           "src": "pwa/maskable-icon-512x512.png",
           "sizes": "512x512",
           "type": "image/png",
-          "purpose": "any maskable"
+          "purpose": "maskable"
         },
         {
           "src": "pwa/pwa-512x512.png",
@@ -65,6 +69,6 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
   experimental: {
-    payloadExtraction: false,
+    payloadExtraction: true,
   }
 })
