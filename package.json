@@ -1,6 +1,5 @@
 {
-  "name": "nuxt-app",
-  "private": true,
+  "name": "cp-dashboard",
   "type": "module",
   "scripts": {
     "build": "nuxt build",
@@ -16,12 +15,12 @@
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@popperjs/core": "^2.11.8",
     "@types/leaflet": "^1.9.8",
-    "@types/node": "^20.11.19",
+    "@types/node": "^20.11.20",
     "@types/w3c-web-serial": "^1.0.6",
     "@types/wicg-file-system-access": "^2023.10.4",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vite-pwa/nuxt": "^0.5.0",
-    "@vueuse/core": "^10.7.2",
+    "@vueuse/core": "^10.8.0",
     "autoprefixer": "^10.4.17",
     "chart.js": "^4.4.1",
     "chartjs-adapter-moment": "^1.0.1",
@@ -29,17 +28,17 @@
     "dayjs": "^1.11.10",
     "leaflet": "^1.9.4",
     "moment": "^2.30.1",
-    "nuxt": "^3.10.2",
+    "nuxt": "^3.10.3",
     "nuxt-icon": "^0.6.8",
     "nuxt3-leaflet": "^1.0.12",
     "postcss": "^8.4.35",
     "pure-snow.js": "^2.1.0",
     "typescript": "^5.3.3",
     "v-calendar": "^3.1.2",
-    "vue": "^3.4.19",
+    "vue": "^3.4.20",
     "vue-chartjs": "^5.3.0",
-    "vue-router": "^4.2.5",
+    "vue-router": "^4.3.0",
     "vue-tsc": "^1.8.27"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.1.0"
 }
