@@ -43,7 +43,7 @@ export const themes = [
  */
 export const kChimeTimes: ChimeTime[] = [
   // 朝礼
-  { time: "09:30", chime: true, preChime: false },
+  { time: "09:30", chime: true, preChime: true },
   // 1限
   { time: "09:45", chime: true, preChime: true },
   { time: "10:35", chime: true, preChime: false },
@@ -66,7 +66,7 @@ export const kChimeTimes: ChimeTime[] = [
   { time: "16:15", chime: true, preChime: false },
   // 完全下校
   { time: "17:25", chime: false, preChime: true },
-  { time: "17:30", chime: true, preChime: false },
+  { time: "17:30", chime: true, preChime: true },
 ];
 
 /**
