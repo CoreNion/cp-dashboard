@@ -6,6 +6,7 @@ const countdownDatesState = countdownDates();
 const selectedEventColor = ref<string>("gray");
 const eventLabel = ref<string>("");
 const selectedDate: Ref<Date | null> = ref(new Date());
+const everyYear = ref<boolean>(false);
 
 const attr = ref<any[]>([]);
 
@@ -16,6 +17,7 @@ const onDateSettings = () => {
       date: dayjs(selectedDate.value!).format("YYYY-MM-DD"),
       label: eventLabel.value,
       color: selectedEventColor.value,
+      everyYear: everyYear.value,
     },
   ];
   
@@ -42,6 +44,7 @@ watch(selectedDate, () => {
     if (dayjs(selectedDate.value!).format("YYYY-MM-DD") === date.date) {
       eventLabel.value = date.label;
       selectedEventColor.value = date.color;
+      everyYear.value = date.everyYear ?? false;
       break;
     }
   }
@@ -79,6 +82,7 @@ onMounted(() => {
       <template #footer>
         <span class="block p-2 border-t w-full">{{ selectedDate === null ? "未選択" :
           dayjs(selectedDate).format("YYYY年MM月DD日") }}</span>
+        <span class="block p-2 text-red-500 font-bold" v-if="eventLabel != ''">イベントが設定されています</span>
       </template>
     </VDatePicker>
   </p>
@@ -96,5 +100,9 @@ onMounted(() => {
     <button :class="['join-item', 'btn', 'btn-primary', selectedDate === null ? 'btn-disabled' : '']"
       @click="onDateSettings">設定</button>
   </div>
+  <label class="label cursor-pointer mt-2">
+    <span class="label-text">毎年繰り返す</span>
+    <input type="checkbox" class="toggle toggle-secondary" v-model="everyYear" />
+  </label>
   </p>
 </template>
