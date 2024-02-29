@@ -18,6 +18,11 @@ const onDateSettings = () => {
       color: selectedEventColor.value,
     },
   ];
+  
+  // 日付順にソート
+  countdownDatesState.value = countdownDatesState.value.sort((a, b) => {
+    return a.date < b.date ? -1 : 1;
+  });
 };
 
 const removeDate = (date: string) => {

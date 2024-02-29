@@ -26,26 +26,22 @@ const countdownRatio = useState('countdownRatio', () => 0);
 
 /// イベントカウントダウンのステータスを更新
 function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
-  // レポートの残り時間
-  if ((timeState.value.getMonth() == 11 && timeState.value.getDate() < 16)
-    || (timeState.value.getMonth() >= 3 && timeState.value.getMonth() <= 10)) {
-    // 次のレポートの期限を計算
-    const nextReportDeadline = calcNextReportDeadline(djs);
+  // 一番近いイベントの日付と前回の日付を取得
+  const dates = countdownDates().value;
+  const nearEvent = dates.find((d) => djs.isBefore(d.date));
+  const lastEvent = dates.find((d) => djs.isAfter(d.date));
+  if (nearEvent == null) return;
 
-    // レポートの残り時間
-    countdownLimit.value = calcLimit(nextReportDeadline, djs);
-    countdownLimitDays.value = calcLimitDays(nextReportDeadline, djs);
-    needCountdownAlert.value = needAlert(nextReportDeadline, djs);
-    countdownRatio.value = calcRatio(nextReportDeadline, djs);
-  } else {
-    countdownName.value = '最終登校まで';
-    const eventDay = dayjs("2024-03-15");
+  const nearEventDate = dayjs(nearEvent.date);
+  // 前回のイベントがない場合は1月1日とする
+  const lastEventDate = dayjs(lastEvent ? lastEvent.date : `${djs.year()}-01-01`);
 
-    countdownLimit.value = calcLimit(eventDay, djs);
-    countdownLimitDays.value = calcLimitDays(eventDay, djs);
-    needCountdownAlert.value = needAlert(eventDay, djs);
-    countdownRatio.value = calcRatio(eventDay, djs, dayjs("2024-01-01"));
-  }
+  // カウントダウンのステータスを更新
+  countdownName.value = nearEvent.label + "まで";
+  countdownLimit.value = calcLimit(nearEventDate, djs);
+  countdownLimitDays.value = calcLimitDays(nearEventDate, djs);
+  needCountdownAlert.value = needAlert(nearEventDate, djs);
+  countdownRatio.value = calcRatio(nearEventDate, djs, lastEventDate);
 }
 
 // 10分ごとにイベント期限の割合を更新
@@ -53,7 +49,7 @@ onMounted(() => {
   refleshReportStatus(dayjs(timeState.value));
   setInterval(() => {
     refleshReportStatus(dayjs(timeState.value));
-  }, 1000);
+  }, 600000);
 });
 
 // 縦型バナー宣伝画像の表示の切り替え
