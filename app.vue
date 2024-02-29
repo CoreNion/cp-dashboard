@@ -4,7 +4,7 @@ useSeoMeta({
   ogTitle: 'CP Dashboard',
   description: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
   ogDescription: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
-  ogImage: 'https://coreinion.github.io/cp-dashboard/ogp.png',
+  ogImage: 'https://cpd.cnion.dev/ogp.png',
   twitterCard: 'summary_large_image',
 });
 
@@ -155,6 +155,7 @@ onMounted(async () => {
           <button class="btn btn-neutral" onclick="window.location.replace(window.location.href)">再読み込み</button>
           <TimerSetting></TimerSetting>
           <span>Copyright © 2024 CoreNion</span>
+          <a href="https://github.com/CoreNion/cp-dashboard/wiki/" class="link">Document</a>
           <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
         </div>
       </div>
