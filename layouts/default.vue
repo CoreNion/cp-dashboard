@@ -20,7 +20,7 @@ body {
 }
 
 [data-theme="dash"] body {
-  font-family: 'Inter', 'BIZ UDPGothic', sans-serif;
+  font-family: 'Inter', 'Murecho', sans-serif;
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator{
