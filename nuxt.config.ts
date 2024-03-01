@@ -9,19 +9,13 @@ export default defineNuxtConfig({
   },
   build: {},
   modules: [
-    '@nuxtjs/google-fonts',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'nuxt3-leaflet',
     'nuxt-icon',
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    "@nuxt/fonts"
   ],
-  googleFonts: {
-    families: {
-      "BIZ+UDPGothic": [400, 700],
-      "Inter": "100..900",
-    }
-  },
   components: [
     {
       path: '~/components',
