@@ -46,7 +46,7 @@ export interface CountdownData {
   date: string;
   label: string;
   color: string;
-  everyYear?: boolean;
-  everyMonth?: boolean;
-  everyDay?: boolean;
+  type: CountdownDateType;
 }
+
+export type CountdownDateType = "yearly" | "once";

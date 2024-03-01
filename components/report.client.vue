@@ -26,10 +26,24 @@ const countdownRatio = useState('countdownRatio', () => 0);
 
 /// イベントカウントダウンのステータスを更新
 function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
+  // 一回限りのイベントと年間定期のイベントを取得
+  const onceDates = countdownDates().value;
+  const yearlyDates = yearlyCountdownDates().value.map<CountdownData>((d) => {
+    return {
+      date: `${djs.year()}-${d.date}`,
+      label: d.label,
+      color : d.color,
+      type: "yearly",
+    };
+  });
+  // 一回限りのイベントと年間定期のイベントを結合
+  const allDates = <CountdownData[]>[...onceDates, ...yearlyDates].sort((a, b) => {
+    return a.date < b.date ? -1 : 1;
+  });
+
   // 一番近いイベントの日付と前回の日付を取得
-  const dates = countdownDates().value;
-  const nearEvent = dates.find((d) => djs.isBefore(d.date));
-  const lastEvent = dates.find((d) => djs.isAfter(d.date));
+  const nearEvent = allDates.find((d) => djs.isBefore(d.date));
+  const lastEvent = allDates.find((d) => djs.isAfter(d.date));
   if (nearEvent == null) return;
 
   const nearEventDate = dayjs(nearEvent.date);
