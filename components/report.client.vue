@@ -58,12 +58,12 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
   countdownRatio.value = calcRatio(nearEventDate, djs, lastEventDate);
 }
 
-// 10分ごとにイベント期限の割合を更新
+// イベント期限の割合を更新
 onMounted(() => {
   refleshReportStatus(dayjs(timeState.value));
   setInterval(() => {
     refleshReportStatus(dayjs(timeState.value));
-  }, 600000);
+  }, 1000);
 });
 
 // 縦型バナー宣伝画像の表示の切り替え

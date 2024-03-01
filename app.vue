@@ -1,7 +1,7 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'CP Dashboard',
-  ogTitle: 'CP Dashboard',
+  title: 'Campus Dashboard',
+  ogTitle: 'Campus Dashboard',
   description: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
   ogDescription: '必要な情報を一目で確認できる、タイマー付きのダッシュボードサイト。',
   ogImage: 'https://cpd.cnion.dev/ogp.png',
