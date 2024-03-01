@@ -156,6 +156,13 @@ const refleshCountDownDate = () => {
 onMounted(() => {
   refleshCountDownDate();
 });
+
+const onResetButton = () => {
+  if (window.confirm("カレンダーにある予定を全て削除し、デフォルトの状態に戻しますか？")) {
+    countdownDatesState.value = [];
+    yearlyCountdownDatesState.value = kYearlyCountdownDates;
+  }
+};
 </script>
 
 <template>
@@ -191,5 +198,6 @@ onMounted(() => {
     <span class="label-text">毎年繰り返す</span>
     <input type="checkbox" class="toggle toggle-secondary" v-model="everyYear" />
   </label>
+  <button class="btn btn-error w-full" @click="onResetButton">カレンダーのリセット</button>
   </p>
 </template>

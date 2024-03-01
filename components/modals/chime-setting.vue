@@ -12,6 +12,12 @@ const changeChimeEnabled = (time: ChimeTime, event: any) => {
 const changePreChimeEnabled = (time: ChimeTime, event: any) => {
   changeChimeTime(time, { time: time.time, chime: time.chime, preChime: event.target.checked });
 }
+
+const onResetButton = () => {
+  if (window.confirm("チャイムの設定時刻を全て削除し、デフォルトの状態に戻しますか？")) {
+    userChimeTimesState.value = kChimeTimes;
+  }
+};
 </script>
 
 <template>
@@ -51,5 +57,6 @@ const changePreChimeEnabled = (time: ChimeTime, event: any) => {
       </tr>
     </tbody>
   </table>
+  <button class="btn btn-error w-full" @click="onResetButton">時刻のリセット</button>
   </p>
 </template>
