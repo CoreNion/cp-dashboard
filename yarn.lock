@@ -4734,7 +4734,6 @@ __metadata:
     nuxt-icon: "npm:^0.6.8"
     nuxt3-leaflet: "npm:^1.0.12"
     postcss: "npm:^8.4.35"
-    pure-snow.js: "npm:^2.1.0"
     typescript: "npm:^5.3.3"
     v-calendar: "npm:^3.1.2"
     vue: "npm:^3.4.20"
@@ -9293,13 +9292,6 @@ __metadata:
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
   checksum: 10c0/14f76a8206bc3464f794fb2e3d3cc665ae416c01893ad7a02b23766eb07159144ee612ad67af5e84fa4479ccfe67678c4feb126b0485651b302babf66f04f9e9
-  languageName: node
-  linkType: hard
-
-"pure-snow.js@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "pure-snow.js@npm:2.1.0"
-  checksum: 10c0/26ec1705dd633a1182c628d36f5d17cd919c50334c59ab7b008052b69e988f278874dc490f93d50bb3fea63bc0b64172322e08a3b1ba0fe70564c0f7747caa37
   languageName: node
   linkType: hard
 

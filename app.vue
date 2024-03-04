@@ -115,12 +115,6 @@ onMounted(async () => {
       console.warn(e);
     }
   }
-
-  // @ts-ignore
-  await import("pure-snow.js").then(({ createSnow, showSnow }) => {
-    createSnow();
-    showSnow(isSnowEnabled().value);
-  });
 });
 </script>
 

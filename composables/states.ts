@@ -12,8 +12,8 @@ export const widthScreenSize = () => useState<number>('widthScreenSize', () => 1
 // 現在時刻
 export const time = () => useState<Date>('time', () => dayjs().toDate());
 
-// 降雪モード
-export const isSnowEnabled = () => useLocalStorage<boolean>('isSnowEnabled', () => false);
+// 選択されている効果
+export const screenEffect = () => useLocalStorage<string>('screenEffect', () => "none");
 
 // 現在のセンサー情報のソース
 export const sensorSource = () => useLocalStorage<string>('sensorSource', () => "serial");

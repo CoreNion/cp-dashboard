@@ -32,7 +32,6 @@
     "nuxt-icon": "^0.6.8",
     "nuxt3-leaflet": "^1.0.12",
     "postcss": "^8.4.35",
-    "pure-snow.js": "^2.1.0",
     "typescript": "^5.3.3",
     "v-calendar": "^3.1.2",
     "vue": "^3.4.20",

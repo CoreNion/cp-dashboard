@@ -3,7 +3,7 @@
 const colorMode = useColorMode();
 
 // センサーのソース
-const isSnowEnabledState = isSnowEnabled();
+const selectedEffect = screenEffect();
 
 // センサー情報を表示するかどうか
 const sensorVisible = isSensorInfoVisible();
@@ -12,17 +12,6 @@ const sensorVisible = isSensorInfoVisible();
 const isInfoScrollEnabledSt = isInfoScrollEnabled();
 // 情報スクロールのテキスト
 const infoScrollTextSt = infoScrollText();
-
-// 雪の切り替え設定
-const onSnowModeChange = async (e: Event) => {
-  if (!(e.target instanceof HTMLInputElement)) return;
-  const value = e.target.checked;
-
-  // @ts-ignore
-  await import("pure-snow.js").then(({ createSnow, showSnow }) => {
-    showSnow(value);
-  });
-}
 </script>
 
 <template>
@@ -33,9 +22,12 @@ const onSnowModeChange = async (e: Event) => {
       <option v-for="theme of themes" :key="theme">{{ theme }}</option>
     </select>
   </label>
-  <label class="label cursor-pointer">
-    <span class="label-text">Snow❄︎</span>
-    <input type="checkbox" class="toggle toggle-secondary" @change="onSnowModeChange" v-model="isSnowEnabledState" />
+  <label class="label">
+    <span class="label-text">画面エフェクト</span>
+    <select class="select select-bordered max-w-xs" v-model="selectedEffect">
+      <option disabled selected>効果を選択...</option>
+      <option v-for="effect of kEffects" :key="effect">{{ effect }}</option>
+    </select>
   </label>
 
   <label class="label cursor-pointer">
