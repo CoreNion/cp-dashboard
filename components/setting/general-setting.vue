@@ -39,6 +39,6 @@ const infoScrollTextSt = infoScrollText();
     <span class="label-text">情報スクロールの有効化</span>
     <input type="checkbox" class="toggle toggle-secondary" v-model="isInfoScrollEnabledSt" />
   </label>
-  <input v-if="isInfoScrollEnabledSt" type="text" placeholder="スクロールに表示される文章を入力..." class="input input-bordered w-full"
+  <input v-if="isInfoScrollEnabledSt" type="text" placeholder="スクロールに表示される文章を入力..." class="input input-bordered w-full my-2"
     v-model="infoScrollTextSt" />
 </template>

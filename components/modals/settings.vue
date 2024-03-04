@@ -113,9 +113,9 @@ const playAudio = (link: string) => {
     <div class="divider"></div>
 
     <h4 class="font-bold">宣伝機能設定</h4>
+    <AdSetting></AdSetting>
     <DynamicModal :btn-wfull="true" btnTitle="カウントダウン設定">
       <CountdownSetting></CountdownSetting>
     </DynamicModal>
-    <AdSetting></AdSetting>
   </div>
 </template>
