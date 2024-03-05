@@ -2,14 +2,18 @@
   <div class="min-h-screen">
     <slot></slot>
   </div>
+  <div id="effect">
+  </div>
 </template>
 
 <script setup lang="ts">
-const selectedEffect = screenEffect();
+import { useIntervalFn, type Pausable } from '@vueuse/core'
 
-function createSnowflake() {
+const selectedEffect = screenEffect();
+let interval: Pausable | null = null;
+
+function createEffect() {
   const val = selectedEffect.value;
-  if (val === "none") return;
 
   const snowflake = document.createElement('div');
   snowflake.classList.add(val);
@@ -17,7 +21,7 @@ function createSnowflake() {
   snowflake.style.opacity = Math.random().toString();
   snowflake.style.fontSize = Math.random() * 20 + 10 + 'px';
 
-  document.body.appendChild(snowflake);
+  document.getElementById("effect")!.appendChild(snowflake);
 
   setTimeout(() => {
     snowflake.remove();
@@ -25,7 +29,16 @@ function createSnowflake() {
 }
 
 onMounted(() => {
-  setInterval(createSnowflake, 150);
+  interval = useIntervalFn(createEffect, 150);
+});
+
+watch(selectedEffect, (newVal) => {
+  if (newVal === 'none') {
+    interval?.pause();
+    document.getElementById("effect")!.innerHTML = '';
+  } else {
+    interval?.resume();
+  }
 });
 </script>
 
