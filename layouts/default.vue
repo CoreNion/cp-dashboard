@@ -85,7 +85,7 @@ body {
   }
 }
 
-[data-theme="dash"] body {
+body {
   font-family: 'Inter', 'Murecho', sans-serif;
 }
 

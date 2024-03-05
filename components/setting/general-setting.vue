@@ -30,6 +30,10 @@ const infoScrollTextSt = infoScrollText();
     </select>
   </label>
 
+  <DynamicModal :btn-wfull="true" btnTitle="フォント設定">
+    <FontSetting></FontSetting>
+  </DynamicModal>
+
   <label class="label cursor-pointer">
     <span class="label-text">センサーからの情報を表示</span>
     <input type="checkbox" class="toggle toggle-secondary" v-model="sensorVisible" />

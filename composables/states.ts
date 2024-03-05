@@ -14,6 +14,8 @@ export const time = () => useState<Date>('time', () => dayjs().toDate());
 
 // 選択されている効果
 export const screenEffect = () => useLocalStorage<string>('screenEffect', () => "none");
+// 選択されているフォント
+export const font = () => useLocalStorage<string>('font', () => "CP-Dashboard");
 
 // 現在のセンサー情報のソース
 export const sensorSource = () => useLocalStorage<string>('sensorSource', () => "serial");
