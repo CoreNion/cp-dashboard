@@ -18,8 +18,8 @@ const timerSettingState = timerSetting();
 </script>
 
 <template>
-  <div class="min-w-full flex flex-row flex-wrap justify-center items-center gap-2 ">
-    <div class="xl:min-w-full flex flex-col gap-1">
+  <div class="min-w-full flex flex-row flex-wrap justify-center items-center gap-2">
+    <div class="2xl:min-w-full flex flex-col gap-1">
       <label class="label cursor-pointer gap-4">
         <span class="label-text">チャイム</span>
         <input type="checkbox" class="toggle toggle-secondary" v-model="isChimeEnabledState" />
@@ -33,7 +33,7 @@ const timerSettingState = timerSetting();
     <div>
       <h3 class="text-xl font-bold">タイマー設定</h3>
 
-      <div class="flex flex-row items-center m-3">
+      <div class="flex flex-row items-center">
         <input type="" class="grow w-14 outline-none input input-ghost" placeholder="時間" min="0" max="60"
           :value="timerSettingState[0]" />
         <span class="font-bold mx-2">:</span>

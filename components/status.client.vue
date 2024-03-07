@@ -25,8 +25,8 @@ const pressureState = pressure();
 const outTmpState = outTmp();
 
 watch(fontSizeOffset, (newVal) => {
-  valueNameSize.value = `${6 * newVal}vh`;
-  valueSize.value = `${8.5 * newVal}vh`;
+  valueNameSize.value = `${7 * newVal}vh`;
+  valueSize.value = `${9.5 * newVal}vh`;
 });
 </script>
 
@@ -42,8 +42,8 @@ watch(fontSizeOffset, (newVal) => {
         <button class="btn btn-error btn-sm mt-1 ml-1" @click="sensorVisible = false">非表示にする</button>
       </div>
 
-      <div v-else class="stat-value font-semibold value-name">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
-        <Icon name="uil:celsius" :size="valueSize" />
+      <div v-else class="stat-value font-semibold value">{{ roomTmpState != null ? roomTmpState.toFixed(1) : "-" }}
+        <Icon name="uil:celsius" :size="valueNameSize" />
       </div>
     </div>
 
@@ -54,9 +54,9 @@ watch(fontSizeOffset, (newVal) => {
         <span class="font-bold text-xl">接続設定が必要</span>
       </div>
 
-      <div v-else class="stat-value font-semibold value-name">{{ humidityState != null ? humidityState.toFixed(1) : "-"
+      <div v-else class="stat-value font-semibold value">{{ humidityState != null ? humidityState.toFixed(1) : "-"
       }}
-        <Icon name="uil:percentage" :size="valueSize" />
+        <Icon name="uil:percentage" :size="valueNameSize" />
       </div>
     </div>
 
@@ -66,7 +66,7 @@ watch(fontSizeOffset, (newVal) => {
         気圧{{ sensorSourceState === 'serial' && !isSerialReadyState ? '*' : '' }}
       </div>
       <div class="stat-value font-semibold leading-none flex flex-col">
-        <span class="value">{{ pressureState != null ? pressureState.toFixed(1) : "-" }}</span>
+        <span class="value">{{ pressureState != null ? pressureState.toFixed() : "-" }}</span>
         <span class="value-name">hPa</span>
       </div>
     </div>
@@ -74,14 +74,17 @@ watch(fontSizeOffset, (newVal) => {
     <!-- 外気温 -->
     <div class="stat py-1">
       <div class="stat-title value-name">外気温*</div>
-      <div class="stat-value font-semibold value">{{ outTmpState != null ? outTmpState : "-" }}
+      <div class="stat-value font-semibold value">
+        <span>{{ outTmpState != null ? outTmpState : "-" }}</span>
         <Icon name="uil:celsius" :size="valueSize" />
       </div>
     </div>
 
 
     <div v-if="!sensorVisible" class="stat px-5">
-      <GeneralSetting></GeneralSetting>
+      <div class="max-2xl:hidden">
+        <GeneralSetting></GeneralSetting>
+      </div>
     </div>
 
     <div class="stat m-auto gap-2">
