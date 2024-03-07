@@ -3,17 +3,21 @@ const fontState = font();
 const fontSizeOffset = fontSize();
 
 const loaded = ref<boolean>(false);
-const availableFonts = ref<any[]>(["CP-Dashboard"]);
+const availableFonts = ref<any[]>(["CP-Dashboard", "system-ui", "sans-serif"]);
 
 onMounted(async () => {
-  // @ts-ignore
-  const queryFonts: any[] = await window.queryLocalFonts();
-  queryFonts.forEach((font) => {
-    // 重複を避ける
-    if (availableFonts.value.includes(font.family)) return;
+  try {
+    // @ts-ignore
+    const queryFonts: any[] = await window.queryLocalFonts();
+    queryFonts.forEach((font) => {
+      // 重複を避ける
+      if (availableFonts.value.includes(font.family)) return;
 
-    availableFonts.value.push(font.family);
-  });
+      availableFonts.value.push(font.family);
+    });
+  } catch (e) {
+    console.warn(e);
+  }
 
   loaded.value = true;
 });
