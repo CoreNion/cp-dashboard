@@ -117,5 +117,13 @@ const playAudio = (link: string) => {
     <DynamicModal :btn-wfull="true" btnTitle="カウントダウン設定">
       <CountdownSetting></CountdownSetting>
     </DynamicModal>
+
+    <div class="divider"></div>
+
+    <span class="font-light">Designed by CoreNion in Shibuya (FY2023)</span>
+    <div class="flex flex-row justify-around mt-3">
+      <a href="https://github.com/CoreNion/cp-dashboard/wiki/" class="link">ドキュメント</a>
+      <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code</a>
+    </div>
   </div>
 </template>

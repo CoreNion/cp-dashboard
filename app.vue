@@ -165,8 +165,6 @@ onMounted(async () => {
           <button class="btn btn-neutral" onclick="window.location.replace(window.location.href)">再読み込み</button>
           <TimerSetting></TimerSetting>
           <span>Copyright © 2024 CoreNion</span>
-          <a href="https://github.com/CoreNion/cp-dashboard/wiki/" class="link">Document</a>
-          <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
         </div>
       </div>
     </div>
