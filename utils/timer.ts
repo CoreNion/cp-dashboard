@@ -28,6 +28,9 @@ export function resetTimer() {
   timer().value = null;
   timerSetting().value = [0, 0, 0];
   isTimerActive().value = false;
+
+  audioElement().value?.pause();
+  audioElement().value = null;
 }
 
 // タイマーの設定時間を増やす関数

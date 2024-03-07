@@ -34,6 +34,8 @@ export const chimeFileName = () => useLocalStorage<string>('chime.mp3', () => '�
 export const preChimeSource = () => useState<string>('preChimeSource', () => defaultAlertAudioSource().value);
 // 予鈴の元ファイル名
 export const preChimeFileName = () => useLocalStorage<string>('pre-chime.mp3', () => 'デフォルトの音声');
+// audio element
+export const audioElement = () => useState<HTMLAudioElement | null>('audioElement', () => null);
 
 // チャイム鳴動時刻
 export const userChimeTimes = () => useLocalStorage<ChimeTime[]>('chimeTimes', () => kChimeTimes);

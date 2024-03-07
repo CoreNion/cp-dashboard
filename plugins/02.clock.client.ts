@@ -10,6 +10,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   // workerからの時刻を用いて各種処理を行う
   worker.addEventListener('message', async (event: MessageEvent<Date | Array<number>>) => {
     const data = event.data;
+    const audio = audioElement();
 
     if (data instanceof Date) {
       // 現在時刻を更新
@@ -42,13 +43,15 @@ export default defineNuxtPlugin((nuxtApp) => {
           if (now.format("HH:mm") === cT.time && cT.chime && !chimePlayedState.get(cT.time)) {
             // チャイムを鳴らす
             if (isChimeEnabledState.value) {
-              new Audio(chimeSource().value).play();
+              audio.value = new Audio(chimeSource().value)
+              audio.value.play();
             }
             chimePlayedState.set(cT.time, true);
           } else if (now.add(1, 'minute').format("HH:mm") === dayjs().hour(parseInt(cT.time.split(":")[0])).minute(parseInt(cT.time.split(":")[1])).format("HH:mm") && cT.preChime && !preChimePlayedState.get(cT.time)) {
             // 予鈴を鳴らす
             if (isPreChimeEnabledState.value) {
-              new Audio(preChimeSource().value).play();
+              audio.value =  new Audio(preChimeSource().value);
+              audio.value.play();
             }
             preChimePlayedState.set(cT.time, true);
           }
