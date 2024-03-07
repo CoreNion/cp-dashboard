@@ -6,10 +6,20 @@ import 'dayjs/locale/ja';
 dayjs.extend(duration);
 dayjs.locale("ja");
 
+// 横幅の画面サイズ
+const wScreen = widthScreenSize();
+
 // 現在時刻
 const timeState = time();
 // タイマーの残り時間
 const timerState = timer();
+
+// 設定されているフォントサイズオフセット
+const fontSizeOffset = fontSize();
+// 時計の文字サイズ
+const mainClockSize = ref(`${13 * fontSizeOffset.value}vw`);
+// 日付のフォントサイズ
+const subClockSize = ref(`${4 * fontSizeOffset.value}vw`);
 
 // 情報スクロールの有効化
 const isInfoScrollEnabledSt = isInfoScrollEnabled();
@@ -23,12 +33,33 @@ const weatherState = weather();
 const bannerVisible = isBannerVisible();
 // バナーのソース
 const banner = bannerSource();
+
+watch(fontSizeOffset, (newVal) => {
+  if (wScreen.value >= 1280) {
+    mainClockSize.value = `${13 * newVal}vw`;
+    subClockSize.value = `${5 * newVal}vw`;
+  } else {
+    mainClockSize.value = `${19 * newVal}vw`;
+    subClockSize.value = `${9 * newVal}vw`;
+  }
+});
+
+watch(wScreen, () => {
+  const o = fontSizeOffset.value;
+  if (wScreen.value >= 1280) {
+    mainClockSize.value = `${13 * o}vw`;
+    subClockSize.value = `${5 * o}vw`;
+  } else {
+    mainClockSize.value = `${19 * o}vw`;
+    subClockSize.value = `${9 * o}vw`;
+  }
+});
 </script>
 
 <template>
   <div class="flex flex-col xl:min-h-screen items-center justify-center gap-3">
     <!-- メイン表示 -->
-    <h1 class="countdown text-[18vw] xl:text-[12.2vw] 2xl:text-[13vw] font-bold">
+    <h1 class="countdown main-clock font-bold">
       <span :style="{ '--value': timerState != null ? timerState[0] : dayjs(timeState).hour() }"></span>:
       <span :style="{ '--value': timerState != null ? timerState[1] : dayjs(timeState).minute() }"></span>:
       <span :style="{ '--value': timerState != null ? timerState[2] : dayjs(timeState).second() }"></span>
@@ -37,25 +68,25 @@ const banner = bannerSource();
     <!-- サブ表示 -->
     <h2>
       <div v-if="timerState != null" class="flex flex-row items-center">
-        <span class="max-md:text-[6vw] text-[3.5vw] mr-3"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
-        <div class="max-md:text-[12vw] text-[6vw] font-mono">
+        <span class="sub-clock mr-3"> {{ dayjs(timeState).format('MM/DD (ddd)') }} </span>
+        <div class="sub-clock font-mono">
           <span> {{ dayjs(timeState).format("HH:mm:ss") }}</span>
         </div>
       </div>
 
       <div v-else-if="isInfoScrollEnabledSt" class="flex flex-row items-center">
-        <span class="shrink max-md:text-[6vw] text-[4vw] mr-3 whitespace-nowrap"> {{ dayjs(timeState).format('MM/DD(ddd)')
-        }} </span>
-        <div class="scrolling-text max-md:text-[11vw] text-[5.3vw] font-bold text-primary border-2">
+        <span class="shrink sub-clock mr-3 whitespace-nowrap"> {{ dayjs(timeState).format('MM/DD(ddd)')
+          }} </span>
+        <div class="scrolling-text sub-clock font-bold text-primary border-2">
           <span
             :style="{ 'animation-duration': `${infoScrollTextSt.length <= 10 ? 4 : infoScrollTextSt.length * 0.4}s` }">
             {{ infoScrollTextSt }}</span>
         </div>
       </div>
-      <span v-else class="text-[7vw] xl:text-[4.5vw] max-w-full">
-        {{ dayjs(timeState).format('YYYY年MM月DD日(ddd)') }}
+      <span v-else class="sub-clock max-w-full">
+        {{ dayjs(timeState).format(wScreen >= 1280 ? 'YYYY年MM月DD日(ddd)' : 'MM/DD (ddd)') }}
         <Icon :name="weatherState != null ? weatherState : 'system-uicons:cloud-disconnect'"
-          class="stat-value m-auto leading-none" size="6vw" />*
+          class="stat-value m-auto leading-none" :size="subClockSize" />*
       </span>
     </h2>
 
@@ -70,11 +101,19 @@ const banner = bannerSource();
 </template>
 
 <style scoped>
+.main-clock {
+  font-size: v-bind(mainClockSize);
+}
+
+.sub-clock {
+  font-size: v-bind(subClockSize);
+}
+
 .scrolling-text {
   white-space: nowrap;
   overflow: hidden;
 
-  width: 40vw;
+  width: 35vw;
 }
 
 .scrolling-text span {

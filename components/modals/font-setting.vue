@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const fontState = font();
+const fontSizeOffset = fontSize();
+
 const loaded = ref<boolean>(false);
 const availableFonts = ref<any[]>(["CP-Dashboard"]);
 
@@ -28,7 +30,16 @@ onMounted(async () => {
         <option v-for="font of availableFonts" :key="font">{{ font }}</option>
       </select>
     </label>
-    <div class="text-sm">
+
+    <label class="w-full grid">
+      <div class="flex flex-row justify-center">
+        <span>文字サイズの倍率: </span>
+        <span>{{ fontSizeOffset }}</span>
+      </div>
+      <input type="range" min="0.5" max="1.5" step="0.05" v-model="fontSizeOffset" class="range range-primary" />
+    </label>
+
+    <div class="text-sm mt-3">
       <span>PCにインストールされているフォントを設定することができます。</span>
       <br>
       <span>＊一部のブラウザーでは使用できない場合があります。</span>

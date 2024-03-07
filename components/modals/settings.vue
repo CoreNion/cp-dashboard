@@ -77,11 +77,17 @@ const playAudio = (link: string) => {
 <template>
   <div>
     <h3 class="font-bold text-lg">設定</h3>
-    <p class="py-2">
+    <p class="pt-2">
       <GeneralSetting></GeneralSetting>
       <DynamicModal btnTitle="天気設定" :btn-wfull="true">
         <WeatherSetting></WeatherSetting>
       </DynamicModal>
+
+      <div class="mt-3">
+        <DynamicModal linkTypeButton btnTitle="センサーの記録" class="mt-3">
+          <SensorRecord></SensorRecord>
+        </DynamicModal>
+      </div>
     </p>
 
     <div class="divider"></div>
