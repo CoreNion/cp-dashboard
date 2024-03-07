@@ -10,7 +10,7 @@ dayjs.locale("ja");
 // タイマーの状態
 let timerEnabled: boolean = false;
 // タイマーの残り時間 (h:m:s)
-let lastTime: number[] = [0, 0, 0];
+let lastTime: number[] | null = null;
 
 // タイマーの管理用のworker
 self.addEventListener('message', async (event) => {
@@ -27,22 +27,30 @@ self.addEventListener('message', async (event) => {
       // 1秒待つ
       await new Promise(resolve => setTimeout(resolve, 1000));
 
+      // タイマーがリセットされてたら終了
+      if (lastTime === null) {
+        timerEnabled = false;
+        break;
+      }
+
       // 残り時間を更新
-      let duration = dayjs.duration({
-        hours: lastTime![0],
-        minutes: lastTime![1],
-        seconds: lastTime![2]
+      let duration : duration.Duration = dayjs.duration({
+        hours: lastTime[0],
+        minutes: lastTime[1],
+        seconds: lastTime[2]
       }).subtract(1, 'seconds');
       lastTime = duration.format('HH:mm:ss').split(':').map(v => parseInt(v));
+
+      // timerStateを更新
+      self.postMessage(lastTime);
+
 
       if (duration.asSeconds() <= 0) {
         // タイマー用のIntervalを停止
         timerEnabled = false;
-        lastTime = [0, 0, 0];
+        lastTime = null;
+        break;
       }
-
-      // timerStateを更新
-      self.postMessage(lastTime);
     }
   } else if (d.startsWith("TIMER_PAUSE")) {
     // タイマー用のIntervalを停止
@@ -50,6 +58,6 @@ self.addEventListener('message', async (event) => {
   } else if (d.startsWith("TIMER_STOP")) {
     // タイマー用のIntervalを停止
     timerEnabled = false;
-    lastTime = [0, 0, 0];
+    lastTime = null;
   }
 });
