@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen" :style="{ 'font-family': fontFamily}">
     <slot></slot>
   </div>
   <div id="effect">
@@ -10,6 +10,9 @@
 import { useIntervalFn, type Pausable } from '@vueuse/core'
 
 const selectedEffect = screenEffect();
+const fontState = font();
+const fontFamily = ref<string>("'Inter', 'Murecho', 'sans-serif'");
+
 let interval: Pausable | null = null;
 
 function createEffect() {
@@ -29,6 +32,12 @@ function createEffect() {
 }
 
 onMounted(() => {
+  // フォントを設定
+  if (fontState.value === 'CP-Dashboard')
+    fontFamily.value = "'Inter', 'Murecho', 'sans-serif'";
+  else
+    fontFamily.value = `'${fontState.value}'`;
+
   interval = useIntervalFn(createEffect, 150);
 });
 
@@ -39,6 +48,14 @@ watch(selectedEffect, (newVal) => {
   } else {
     interval?.resume();
   }
+});
+
+// フォントの変更検知
+watch(fontState, (newFont) => {
+  if (newFont === 'CP-Dashboard')
+    fontFamily.value = "'Inter', 'Murecho', 'sans-serif'";
+  else
+    fontFamily.value = `'${fontState.value}'`;
 });
 </script>
 
@@ -98,11 +115,12 @@ body {
   }
 }
 
-body {
-  font-family: 'Inter', 'Murecho', sans-serif;
-}
-
 input[type="time"]::-webkit-calendar-picker-indicator {
   background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
     linear-gradient(135deg, currentColor 50%, transparent 50%)
-}</style>
+}
+
+.dummy {
+  font-family: 'Inter', 'Murecho', sans-serif;
+}
+</style>

@@ -32,14 +32,6 @@ useHead({
   ],
 });
 
-// フォントの変更検知
-watch(fontState, (newFont) => {
-  if (newFont === 'CP-Dashboard')
-    document.body.style.fontFamily = "'Inter', 'Murecho', sans-serif";
-  else
-    document.body.style.fontFamily = newFont;
-});
-
 const widthState = widthScreenSize();
 
 // 一回でも画面がクリックされたかどうか
@@ -48,12 +40,6 @@ const firstClick = useState(() => false);
 defaultAlertAudioSource().value = `${useRuntimeConfig().app.baseURL}alert.mp3`;
 
 onMounted(async () => {
-  // フォントを設定
-  if (fontState.value === 'CP-Dashboard')
-    document.body.style.fontFamily = "'Inter', 'Murecho', sans-serif";
-  else
-    document.body.style.fontFamily = fontState.value;
-
   // 画面がクリックされたらfirstClickをtrueにする
   document.body.onclick = () => {
     firstClick.value = true;
