@@ -19,15 +19,30 @@ export async function removeFile(fileName: string) {
   localStorage.removeItem(fileName);
 }
 
-/// OPFSからファイルをダウンロードするためのユーティリティ
-export async function downloadFile(fileName: string) {
+/// ファイルからURLを生成するためのユーティリティ
+export async function createFileURL(fileName: string) {
   const opfsRoot = await navigator.storage.getDirectory();
   const file = await opfsRoot.getFileHandle(fileName);
+  return URL.createObjectURL(await file.getFile());
+}
 
-  const url = URL.createObjectURL(await file.getFile());
+/// OPFSからファイルをダウンロードするためのユーティリティ
+export async function downloadFile(fileName: string) {
+  const url = await createFileURL(fileName);
   const a = document.createElement('a');
   a.href = url;
   a.download = fileName;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/// OPFSにファイルが存在するかどうかを確認するためのユーティリティ
+export async function isFileExist(fileName: string) {
+  const opfsRoot = await navigator.storage.getDirectory();
+  try {
+    await opfsRoot.getFileHandle(fileName);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

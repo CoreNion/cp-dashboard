@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen" :style="{ 'font-family': fontFamily}">
+  <div class="min-h-screen" :style="{ 'font-family': fontFamily }">
     <slot></slot>
   </div>
   <div id="effect">
@@ -33,10 +33,7 @@ function createEffect() {
 
 onMounted(() => {
   // フォントを設定
-  if (fontState.value === 'CP-Dashboard')
-    fontFamily.value = "'Inter', 'Murecho', 'sans-serif'";
-  else
-    fontFamily.value = `'${fontState.value}'`;
+  setFont(fontState.value);
 
   interval = useIntervalFn(createEffect, 150);
 });
@@ -51,12 +48,22 @@ watch(selectedEffect, (newVal) => {
 });
 
 // フォントの変更検知
-watch(fontState, (newFont) => {
-  if (newFont === 'CP-Dashboard')
+watch(fontState, async (newFont) => setFont(newFont));
+
+const setFont = async (font: string) => {
+  if (font === 'CP-Dashboard') {
     fontFamily.value = "'Inter', 'Murecho', 'sans-serif'";
-  else
+  } else if (await isFileExist(font)) {
+    // HTMLにフォントを追加
+    const fontData = new FontFace(font, `url(${await createFileURL(font)})`);
+    await fontData.load();
+    document.fonts.add(fontData);
+
+    fontFamily.value = `'${fontData.family}'`;
+  } else {
     fontFamily.value = `'${fontState.value}'`;
-});
+  }
+};
 </script>
 
 <style>

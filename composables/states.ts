@@ -16,6 +16,8 @@ export const time = () => useState<Date>('time', () => dayjs().toDate());
 export const screenEffect = () => useLocalStorage<string>('screenEffect', () => "none");
 // 選択されているフォント
 export const font = () => useLocalStorage<string>('font', () => "CP-Dashboard");
+// カスタムフォント
+export const customFonts = () => useLocalStorage<string[]>('customFonts', () => []);
 // フォントサイズ (+-オフセット)
 export const fontSize = () => useLocalStorage<number>('fontSize', () => 1.0);
 
