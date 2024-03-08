@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const fontState = font();
-
 useSeoMeta({
   title: 'Campus Dashboard',
   ogTitle: 'Campus Dashboard',
@@ -45,7 +43,7 @@ onMounted(async () => {
     firstClick.value = true;
   };
 
-  // ウィンドウサイズを取得
+  // ウィンドウサイズを取得し適用
   widthState.value = window.innerWidth;
 
   // 画面サイズ更新時にstateを更新するようにする
@@ -53,6 +51,7 @@ onMounted(async () => {
     widthState.value = window.innerWidth;
   });
 
+  // バックグラウンド対策
   try {
     // スリープを無効化
     await navigator.wakeLock.request('screen');
@@ -66,57 +65,22 @@ onMounted(async () => {
     console.warn(e);
   }
 
-  // OPFSからチャイム音源とアラート音源を読み込む
-  const opfsRoot = await navigator.storage.getDirectory();
-
   // チャイム音源を読み込む
-  try {
-    const chimeHandle = await opfsRoot.getFileHandle('chime.mp3', { create: false });
-    const chimeBuffer = await chimeHandle.getFile();
-    chimeSource().value = URL.createObjectURL(chimeBuffer);
-  } catch (e) {
-    console.warn(e);
-  }
+  appendFileToState('chime.mp3', chimeSource);
 
   // 予鈴音源を読み込む
-  try {
-    const preChimeHandle = await opfsRoot.getFileHandle('pre-chime.mp3', { create: false });
-    const preChimeBuffer = await preChimeHandle.getFile();
-    preChimeSource().value = URL.createObjectURL(preChimeBuffer);
-  } catch (e) {
-    console.warn(e);
-  }
+  appendFileToState('pre-chime.mp3', preChimeSource);
 
   // アラート音源を読み込む
-  try {
-    const alertHandle = await opfsRoot.getFileHandle('alert.mp3', { create: false });
-    const alertBuffer = await alertHandle.getFile();
-    timerAlertSource().value = URL.createObjectURL(alertBuffer);
-  } catch (e) {
-    console.warn(e);
-  }
+  appendFileToState('alert.mp3', timerAlertSource);
 
   // バナー画像を読み込む
-  if (isBannerVisible().value) {
-    try {
-      const bannerHandle = await opfsRoot.getFileHandle('banner.png', { create: false });
-      const bannerBuffer = await bannerHandle.getFile();
-      bannerSource().value = URL.createObjectURL(bannerBuffer);
-    } catch (e) {
-      console.warn(e);
-    }
-  }
+  if (isBannerVisible().value) 
+    appendFileToState('banner.png', bannerSource);
 
   // 縦バナー画像を読み込む
-  if (isVerticalBanner().value) {
-    try {
-      const verticalBannerHandle = await opfsRoot.getFileHandle('vertical-banner.png', { create: false });
-      const verticalBannerBuffer = await verticalBannerHandle.getFile();
-      verticalBannerSource().value = URL.createObjectURL(verticalBannerBuffer);
-    } catch (e) {
-      console.warn(e);
-    }
-  }
+  if (isVerticalBanner().value)
+    appendFileToState('vertical-banner.png', verticalBannerSource);
 });
 </script>
 

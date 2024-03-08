@@ -46,3 +46,15 @@ export async function isFileExist(fileName: string) {
     return false;
   }
 }
+
+/// ファイルをURLを通してメモリに保存する
+export async function appendFileToState(fileName: string, toState: () => globalThis.Ref) {
+  const opfsRoot = await navigator.storage.getDirectory();
+  try {
+    const verticalBannerHandle = await opfsRoot.getFileHandle(fileName, { create: false });
+    const verticalBannerBuffer = await verticalBannerHandle.getFile();
+    toState().value = URL.createObjectURL(verticalBannerBuffer);
+  } catch (e) {
+    console.warn(e);
+  }
+}
