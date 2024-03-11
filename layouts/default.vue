@@ -11,7 +11,7 @@ import { useIntervalFn, type Pausable } from '@vueuse/core'
 
 const selectedEffect = screenEffect();
 const fontState = font();
-const fontFamily = ref<string>("'Inter', 'Murecho', 'sans-serif'");
+const fontFamily = ref<string>("'Inter', 'M PLUS Rounded 1c', 'sans-serif'");
 
 let interval: Pausable | null = null;
 
@@ -52,7 +52,7 @@ watch(fontState, async (newFont) => setFont(newFont));
 
 const setFont = async (font: string) => {
   if (font === 'CP-Dashboard') {
-    fontFamily.value = "'Inter', 'Murecho', 'sans-serif'";
+    fontFamily.value = "'Inter', 'M PLUS Rounded 1c', 'sans-serif'";
   } else if (await isFileExist(font)) {
     // HTMLにフォントを追加
     const fontData = new FontFace(font, `url(${await createFileURL(font)})`);
@@ -127,7 +127,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     linear-gradient(135deg, currentColor 50%, transparent 50%)
 }
 
-.dummy {
-  font-family: 'Inter', 'Murecho', sans-serif;
+
+.dummy1 {
+  font-family: 'Inter';
+  font-family: 'M PLUS Rounded 1c';
 }
 </style>
