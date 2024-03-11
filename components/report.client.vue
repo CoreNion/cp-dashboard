@@ -42,13 +42,13 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
   });
 
   // 一番近いイベントの日付と前回の日付を取得
-  const nearEvent = allDates.find((d) => djs.isBefore(d.date));
-  const lastEvent = allDates.find((d) => djs.isAfter(d.date));
+  const nearEvent = allDates.find((d) => djs.isBefore(dayjs(d.date).hour(23).minute(59).second(59)));
+  const lastEvent = allDates.find((d) => djs.isAfter(dayjs(d.date).hour(23).minute(59).second(59)));
   if (nearEvent == null) return;
 
-  const nearEventDate = dayjs(nearEvent.date);
+  const nearEventDate = dayjs(nearEvent.date).hour(23).minute(59).second(59);
   // 前回のイベントがない場合は1月1日とする
-  const lastEventDate = dayjs(lastEvent ? lastEvent.date : `${djs.year()}-01-01`);
+  const lastEventDate = dayjs(lastEvent ? lastEvent.date : `${djs.year()}-01-01`).hour(23).minute(59).second(59);
 
   // カウントダウンのステータスを更新
   countdownName.value = nearEvent.label + "まで";
@@ -81,7 +81,7 @@ const verticalBanner = verticalBannerSource();
         :style="{ '--value': countdownRatio, '--size': wSize >= 1536 ? '15vw' : '220px', '--thickness': wSize >= 1536 ? '2vw' : '30px' }">
         {{ Math.floor(countdownLimitDays) }}日
       </div>
-      <div v-if="needCountdownAlert" class="mt-3 flex flex-col items-center">
+      <div v-if="needCountdownAlert && dayjs.duration(countdownLimit).asHours() >= 24" class="mt-3 flex flex-col items-center">
         <span class="text-[1.6vw]">残り時間</span>
         <div class="countdown text-[2.5vw] font-bold text-red-600">
           <span :style="{ '--value': Math.floor(dayjs.duration(countdownLimit).asHours()) }"></span>:
