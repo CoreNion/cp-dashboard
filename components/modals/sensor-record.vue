@@ -37,7 +37,8 @@ watch(selectedDataKind, async () => {
   });
 });
 
-const chartData = ref<ChartDataset<"line", (number | Point | null)[]>[]>([]);
+// ChartDataset、なぜか型エラーが出るのでanyで回避
+const chartData = ref<any[]>([]);
 
 const selectedFile = ref<string | null>(null);
 const fileList = ref<{
