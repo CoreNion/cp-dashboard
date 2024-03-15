@@ -4,7 +4,7 @@
 <img width="1675" alt="Campus Dashboardのスクリーンショット" src="https://github.com/CoreNion/cp-dashboard/assets/70258493/5c969971-5bf5-4c59-87da-fc8b9bbdb6dc">
 
 # 特徴
-大型のスクリーンに映したいあの情報や、あったらあったらいいなと思う機能を、一つの画面にまとめたウェブアプリです！
+大型スクリーンに映したいあの情報や、ああったらいいなと思う機能を、一つの画面にまとめたWeb Appです！
 
 ## 主な機能
 - 大きな時計
@@ -12,7 +12,7 @@
 - 設定時間に応じた、チャイム/予鈴鳴動
 - 行事カウントダウン
 - 情報表示機能
-  - センサーからの情報 (専用のハードウェアが必要 [技術情報](https://github.com/CoreNion/cp-dashboard/wiki/%E6%B8%AC%E5%AE%9A%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC%E3%81%AE%E6%8A%80%E8%A1%93%E7%9A%84%E6%83%85%E5%A0%B1)が必要)
+  - センサーからの情報 (専用のハードウェアが必要 [技術情報](https://github.com/CoreNion/cp-dashboard/wiki/%E6%B8%AC%E5%AE%9A%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC%E3%81%AE%E6%8A%80%E8%A1%93%E7%9A%84%E6%83%85%E5%A0%B1))
     - 室温 
     - 湿度
     - 気圧
