@@ -5,6 +5,8 @@ import { Chart as ChartJS, Title, Tooltip, Legend, PointElement, LineElement, Ca
 
 ChartJS.register(Colors, Title, Tooltip, Legend, PointElement, LineElement, CategoryScale, LinearScale, TimeScale);
 
+const isSensorRecord = isSensorRecording();
+
 const selectedDataKind = ref<string>("");
 watch(selectedDataKind, async () => {
   const allRecords = await getSensorRecords(selectedDataKind.value, 5);
@@ -62,6 +64,10 @@ onMounted(async () => {
 <template>
   <div>
     <h4 class="pb-2 font-bold">センサーの記録</h4>
+    <label class="label cursor-pointer my-2">
+      <span class="label-text">記録を随時ストレージに保存するか</span>
+      <input type="checkbox" class="toggle toggle-secondary" v-model="isSensorRecord" />
+    </label>
     <div>
       <select class="flex-1 select select-bordered w-full" v-model="selectedDataKind">
         <option v-for="kind of kDataKinds" :key="kind">{{ kind }}</option>

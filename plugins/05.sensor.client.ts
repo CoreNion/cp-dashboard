@@ -9,6 +9,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
 // センサー情報を更新
 export async function refleshStatus() {
+  if (isSensorRecording().value === false) return;
+
   // センサーのインターバル
   const sensorIntervalState = sensorInterval();
   // センサーのソース
