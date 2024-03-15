@@ -6,6 +6,9 @@ import 'dayjs/locale/ja';
 export function startTimer() {
   // タイマーの残り時間を設定
   if (timer().value === null) {
+    if (timerSetting().value[0] === 0 && timerSetting().value[1] === 0 && timerSetting().value[2] === 0)
+      return;
+
     timer().value = timerSetting().value;
   }
 
