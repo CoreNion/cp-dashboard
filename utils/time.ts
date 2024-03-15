@@ -1,7 +1,7 @@
 export function addChimeTime(time: string) {
   // チャイムの鳴動時刻を追加
   const userChimeTimesState = userChimeTimes();
-  userChimeTimesState.value = [...userChimeTimesState.value, { time: time, chime: true, preChime: false }];
+  userChimeTimesState.value = sortChimeTimes([...userChimeTimesState.value, { time: time, chime: true, preChime: false }]);
 
   // チャイム鳴動状況を更新
   const chimePlayedState = chimePlayed()
@@ -13,7 +13,7 @@ export function addChimeTime(time: string) {
 export function removeChimeTime(time: string) {
   // チャイムの鳴動時刻を削除
   const userChimeTimesState = userChimeTimes();
-  userChimeTimesState.value = userChimeTimesState.value.filter((t) => t.time !== time);
+  userChimeTimesState.value = sortChimeTimes(userChimeTimesState.value.filter((t) => t.time !== time));
 
   // チャイム鳴動状況を更新
   const chimePlayedState = chimePlayed()
@@ -25,7 +25,7 @@ export function removeChimeTime(time: string) {
 export function changeChimeTime(oldTime: ChimeTime, newTime: ChimeTime) {
   // チャイムの鳴動時刻を変更
   const userChimeTimesState = userChimeTimes();
-  userChimeTimesState.value = userChimeTimesState.value.map((t) => t.time === oldTime.time ? newTime : t);
+  userChimeTimesState.value = sortChimeTimes(userChimeTimesState.value.map((t) => t.time === oldTime.time ? newTime : t));
 
   // チャイム鳴動状況を更新
   const chimePlayedState = chimePlayed();
@@ -34,6 +34,19 @@ export function changeChimeTime(oldTime: ChimeTime, newTime: ChimeTime) {
   const preChimePlayedState = preChimePlayed()
   preChimePlayedState.value.set(newTime.time, preChimePlayedState.value.get(oldTime.time)!);
   preChimePlayedState.value.delete(oldTime.time);
+}
+
+/// チャイムの鳴動時刻を昇順でソート
+function sortChimeTimes(times: ChimeTime[]) {
+  return times.sort((a, b) => {
+    if (a.time < b.time) {
+      return -1;
+    } else if (a.time > b.time) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 }
 
 export interface ChimeTime {
