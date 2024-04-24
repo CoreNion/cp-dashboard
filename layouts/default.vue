@@ -130,6 +130,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .dummy1 {
   font-family: 'Inter';
+}
+.dummy2 {
   font-family: 'M PLUS Rounded 1c';
 }
 </style>
