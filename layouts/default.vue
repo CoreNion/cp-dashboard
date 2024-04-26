@@ -9,12 +9,16 @@
 <script setup lang="ts">
 import { useIntervalFn, type Pausable } from '@vueuse/core'
 
+// 選択されているエフェクト
 const selectedEffect = screenEffect();
+
+// 設定されているフォント
 const fontState = font();
+// 設定されているフォントファミリー
 const fontFamily = ref<string>("'Inter', 'M PLUS Rounded 1c', 'sans-serif'");
 
+// エフェクト生成のインターバルや処理
 let interval: Pausable | null = null;
-
 function createEffect() {
   const val = selectedEffect.value;
 
@@ -35,9 +39,14 @@ onMounted(() => {
   // フォントを設定
   setFont(fontState.value);
 
+  // エフェクト生成のインターバルを設定
   interval = useIntervalFn(createEffect, 150);
+  if (selectedEffect.value === 'none') {
+    interval.pause();
+  }
 });
 
+// エフェクトの切り替え
 watch(selectedEffect, (newVal) => {
   if (newVal === 'none') {
     interval?.pause();
@@ -49,7 +58,6 @@ watch(selectedEffect, (newVal) => {
 
 // フォントの変更検知
 watch(fontState, async (newFont) => setFont(newFont));
-
 const setFont = async (font: string) => {
   if (font === 'CP-Dashboard') {
     fontFamily.value = "'Inter', 'M PLUS Rounded 1c', 'sans-serif'";
