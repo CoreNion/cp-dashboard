@@ -14,8 +14,15 @@ export default defineNuxtConfig({
     'nuxt3-leaflet',
     'nuxt-icon',
     '@vite-pwa/nuxt',
-    "@nuxt/fonts"
+    '@nuxtjs/google-fonts',
   ],
+  googleFonts: {
+    families: {
+      "M PLUS Rounded 1c": [400, 700],
+      "Inter": "100..900",
+    },
+    download: false
+  },
   components: [
     {
       path: '~/components',

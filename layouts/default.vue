@@ -134,12 +134,4 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
     linear-gradient(135deg, currentColor 50%, transparent 50%)
 }
-
-
-.dummy1 {
-  font-family: 'Inter';
-}
-.dummy2 {
-  font-family: 'M PLUS Rounded 1c';
-}
 </style>
