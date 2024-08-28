@@ -32,7 +32,7 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
     return {
       date: `${djs.year()}-${d.date}`,
       label: d.label,
-      color : d.color,
+      color: d.color,
       type: "yearly",
     };
   });
@@ -41,9 +41,31 @@ function refleshReportStatus(djs: dayjs.Dayjs = dayjs()) {
     return a.date < b.date ? -1 : 1;
   });
 
-  // 一番近いイベントの日付と前回の日付を取得
-  const nearEvent = allDates.find((d) => djs.isBefore(dayjs(d.date).hour(23).minute(59).second(59)));
-  const lastEvent = allDates.find((d) => djs.isAfter(dayjs(d.date).hour(23).minute(59).second(59)));
+  // 全イベントの差分時間を取得しながら、一番近い今後のイベントと最後に行われたイベントを見つける
+  let nearEvent = null;
+  let lastEvent = null;
+  let minFutureDiffTime = Infinity;
+  let maxPastDiffTime = -Infinity;
+
+  for (const d of allDates) {
+    // 現在時刻との差分を取得
+    const eventDate = dayjs(d.date).hour(23).minute(59).second(59);
+    const diffTime = eventDate.diff(djs);
+
+    if (diffTime >= 0) {
+      // 差分時刻の記録が小さい場合、一番近い今後のイベントを更新
+      if (diffTime < minFutureDiffTime) {
+        minFutureDiffTime = diffTime;
+        nearEvent = d;
+      }
+    } else {
+      // 差分時刻の記録が大きい場合(差の値はマイナスになるため逆)、最後に行われたイベントを更新
+      if (diffTime > maxPastDiffTime) {
+        maxPastDiffTime = diffTime;
+        lastEvent = d;
+      }
+    }
+  }
   if (nearEvent == null) return;
 
   const nearEventDate = dayjs(nearEvent.date).hour(23).minute(59).second(59);
