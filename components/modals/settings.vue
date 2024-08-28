@@ -33,13 +33,13 @@ const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis
 }
 
 // 音源削除時の処理
-const removeAudio = (sourceState: globalThis.Ref<string>, fileNameState: globalThis.Ref<string>) => {
+const removeAudio = (sourceState: globalThis.Ref<string>, fileNameState: globalThis.Ref<string>, origFileName: String) => {
   // OPFSからファイルを削除
   removeFile(fileNameState.value);
 
   // 音源/名前を元に戻す
   fileNameState.value = 'デフォルトの音声';
-  sourceState.value = defaultAlertAudioSource().value;
+  sourceState.value = `${useRuntimeConfig().app.baseURL}/${origFileName}`;
 }
 
 const onAlertAudioChange = async (e: Event) => {
@@ -47,7 +47,7 @@ const onAlertAudioChange = async (e: Event) => {
 }
 
 const removeAlertAudio = () => {
-  removeAudio(timerAlertSourceState, alertFileNameState);
+  removeAudio(timerAlertSourceState, alertFileNameState, "alert.mp3");
 }
 
 const onChimeAudioChange = async (e: Event) => {
@@ -55,7 +55,7 @@ const onChimeAudioChange = async (e: Event) => {
 }
 
 const removeChimeAudio = () => {
-  removeAudio(chimeSourceState, chimeFileNameState);
+  removeAudio(chimeSourceState, chimeFileNameState, "chime.mp3");
 }
 
 const onPreChimeAudioChange = async (e: Event) => {
@@ -63,7 +63,7 @@ const onPreChimeAudioChange = async (e: Event) => {
 }
 
 const removePreChimeAudio = () => {
-  removeAudio(preChimeSourceState, preChimeFileNameState);
+  removeAudio(preChimeSourceState, preChimeFileNameState, "pre-chime.mp3");
 }
 
 // 音源を再生

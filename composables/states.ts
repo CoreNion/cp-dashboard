@@ -24,18 +24,16 @@ export const fontSize = () => useLocalStorage<number>('fontSize', () => 1.0);
 // 現在のセンサー情報のソース
 export const sensorSource = () => useLocalStorage<string>('sensorSource', () => "serial");
 
-// alert.mp3のデフォルトソース
-export const defaultAlertAudioSource = () => useState<string>('defaultAlertAudioSource', () => '/alert.mp3');
 // タイマーの音声のソース
-export const timerAlertSource = () => useState<string>('timerSource', () => defaultAlertAudioSource().value);
+export const timerAlertSource = () => useState<string>('timerSource', () => `${useRuntimeConfig().app.baseURL}alert.mp3`);
 // alert.mp3の元ファイル名
 export const alertFileName = () => useLocalStorage<string>('alert.mp3', () => 'デフォルトの音声');
 // チャイムの音声ソース
-export const chimeSource = () => useState<string>('chimeSource', () => defaultAlertAudioSource().value);
+export const chimeSource = () => useState<string>('chimeSource', () => `${useRuntimeConfig().app.baseURL}chime.mp3`);
 // チャイムの元ファイル名
 export const chimeFileName = () => useLocalStorage<string>('chime.mp3', () => 'デフォルトの音声');
 // 予鈴の音声ソース
-export const preChimeSource = () => useState<string>('preChimeSource', () => defaultAlertAudioSource().value);
+export const preChimeSource = () => useState<string>('preChimeSource', () => `${useRuntimeConfig().app.baseURL}pre-chime.mp3`);
 // 予鈴の元ファイル名
 export const preChimeFileName = () => useLocalStorage<string>('pre-chime.mp3', () => 'デフォルトの音声');
 // audio element

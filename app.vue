@@ -35,8 +35,6 @@ const widthState = widthScreenSize();
 // 一回でも画面がクリックされたかどうか
 const firstClick = useState(() => false);
 
-defaultAlertAudioSource().value = `${useRuntimeConfig().app.baseURL}alert.mp3`;
-
 onMounted(async () => {
   // 画面がクリックされたらfirstClickをtrueにする
   document.body.onclick = () => {
