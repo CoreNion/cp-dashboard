@@ -1,21 +1,26 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   typescript: {
     typeCheck: true
   },
+
   app: {
     "baseURL": process.env.BASE_URL || "/",
   },
+
   build: {},
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'nuxt3-leaflet',
-    'nuxt-icon',
     '@vite-pwa/nuxt',
     '@nuxtjs/google-fonts',
+    "@nuxt/icon"
   ],
+
   googleFonts: {
     families: {
       "M PLUS Rounded 1c": [400, 700],
@@ -23,12 +28,18 @@ export default defineNuxtConfig({
     },
     download: false
   },
+
+  icon: {
+    serverBundle: 'remote',
+  },
+
   components: [
     {
       path: '~/components',
       pathPrefix: false,
     },
   ],
+
   pwa: {
     workbox: {
       navigateFallback: null,
@@ -64,12 +75,16 @@ export default defineNuxtConfig({
       ]
     }
   },
+
   colorMode: {
     preference: 'dash',
     dataValue: 'theme', // activate data-theme in <html> tag
     classSuffix: '',
   },
+
   experimental: {
     payloadExtraction: true,
-  }
+  },
+
+  compatibilityDate: "2024-08-28"
 })
