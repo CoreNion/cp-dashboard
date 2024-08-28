@@ -203,7 +203,7 @@ function setAmedasLocation(code: string, name: string) {
   <p class="min-w-full h-[433px] mt-3">
   <h2 class="text-error font-bold h-5"> {{ needMoreZoom ? "地点を表示するには、もう少しズームしてください。" : '' }}</h2>
 
-  <LMap ref="map" :center="[32.592850, 137.273600]" v-model:bounds="boundsState" v-model:zoom="zoomState">
+  <LMap ref="map" :center="[32.592850, 137.273600]" v-model:bounds="boundsState" v-model:zoom="zoomState" :use-global-leaflet="false">
     <LTileLayer url="https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"
       attribution="<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>" name="地理院タイル" />
     <LMarker v-for="place of markerPlaces" :lat-lng="[place.lat, place.lon]">

@@ -15,10 +15,10 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    'nuxt3-leaflet',
     '@vite-pwa/nuxt',
     '@nuxtjs/google-fonts',
-    "@nuxt/icon"
+    "@nuxt/icon",
+    "@nuxtjs/leaflet"
   ],
 
   googleFonts: {

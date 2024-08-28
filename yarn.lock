@@ -2644,6 +2644,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nuxtjs/leaflet@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@nuxtjs/leaflet@npm:1.2.2"
+  dependencies:
+    "@types/leaflet": "npm:^1.9.12"
+    "@vue-leaflet/vue-leaflet": "npm:^0.10.1"
+    leaflet: "npm:^1.9.4"
+  checksum: 10c0/9345797e24039d1beb710200818e7a4bff7550251f10c470bef48872a3a1d44e80d3ca7b74dc5a91645c1041f78815480d0ecf0817f0a64427d4f229b7728013
+  languageName: node
+  linkType: hard
+
 "@nuxtjs/tailwindcss@npm:^6.12.1":
   version: 6.12.1
   resolution: "@nuxtjs/tailwindcss@npm:6.12.1"
@@ -3179,7 +3190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet@npm:^1.9.12, @types/leaflet@npm:^1.9.3":
+"@types/leaflet@npm:^1.9.12":
   version: 1.9.12
   resolution: "@types/leaflet@npm:1.9.12"
   dependencies:
@@ -4779,9 +4790,9 @@ __metadata:
     "@nuxt/icon": "npm:^1.5.0"
     "@nuxtjs/color-mode": "npm:^3.4.4"
     "@nuxtjs/google-fonts": "npm:^3.2.0"
+    "@nuxtjs/leaflet": "npm:^1.2.2"
     "@nuxtjs/tailwindcss": "npm:^6.12.1"
     "@popperjs/core": "npm:^2.11.8"
-    "@types/leaflet": "npm:^1.9.12"
     "@types/node": "npm:^20.16.2"
     "@types/w3c-web-serial": "npm:^1.0.6"
     "@types/wicg-file-system-access": "npm:^2023.10.5"
@@ -4793,10 +4804,8 @@ __metadata:
     chartjs-adapter-moment: "npm:^1.0.1"
     daisyui: "npm:^4.12.10"
     dayjs: "npm:^1.11.13"
-    leaflet: "npm:^1.9.4"
     moment: "npm:^2.30.1"
     nuxt: "npm:^3.13.0"
-    nuxt3-leaflet: "npm:^1.0.13"
     postcss: "npm:^8.4.41"
     typescript: "npm:^5.5.4"
     v-calendar: "npm:^3.1.2"
@@ -8359,17 +8368,6 @@ __metadata:
     nuxt: bin/nuxi.mjs
     nuxt-cli: bin/nuxi.mjs
   checksum: 10c0/0bbfec5b9aac66b77f9c26588652a7e36a2fa8f65e7c37647621f5541c7a28584e7c9d9304734a2452a0da756ade45bbfb2a54e681fdce667057fc78598a9d8b
-  languageName: node
-  linkType: hard
-
-"nuxt3-leaflet@npm:^1.0.13":
-  version: 1.0.13
-  resolution: "nuxt3-leaflet@npm:1.0.13"
-  dependencies:
-    "@types/leaflet": "npm:^1.9.3"
-    "@vue-leaflet/vue-leaflet": "npm:^0.10.1"
-    leaflet: "npm:^1.9.4"
-  checksum: 10c0/27b25fdc71e837ded80b873246f856c64950850834f57032f7d05c710182a93ffe628f21d606384798dee6a9f2c14ebd3e4db8872ae57166c1a7e6fa9cf9c358
   languageName: node
   linkType: hard
 
