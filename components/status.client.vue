@@ -74,7 +74,7 @@ watch(fontSizeOffset, (newVal) => {
     <!-- 外気温 -->
     <div class="stat py-1">
       <div class="stat-title value-name">外気温*</div>
-      <div class="stat-value font-semibold value">
+      <div class="stat-value font-semibold value flex flex-row items-center justify-center">
         <span>{{ outTmpState != null ? outTmpState : "-" }}</span>
         <Icon name="uil:celsius" :size="valueSize" />
       </div>

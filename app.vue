@@ -91,8 +91,8 @@ onMounted(async () => {
     <ClientOnly>
       <div v-if="!firstClick" class="toast toast-top toast-center z-50">
         <div class="alert alert-warning">
+          <Icon class="icon" name="uil:exclamation-triangle" size="2vw" />
           <span>
-            <Icon class="icon" name="uil:exclamation-triangle" size="2vw" />
             アラームを動作させるために、画面を一回以上クリックしてください！
           </span>
         </div>
