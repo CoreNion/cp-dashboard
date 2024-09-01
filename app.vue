@@ -36,9 +36,16 @@ const widthState = widthScreenSize();
 const firstClick = useState(() => false);
 
 onMounted(async () => {
-  // 画面がクリックされたらfirstClickをtrueにする
+  // 起動時にバックグラウンドでの動作対策
   document.body.onclick = () => {
-    firstClick.value = true;
+    // ユーザーの操作により、画面をクリックした履歴を残す
+    if (!firstClick.value) {
+      // フォアグラウンドで音を鳴らした履歴を残す (いきなりバックグラウンドでは音が鳴らない？)
+      new Audio("./beep.mp3").play();
+
+      firstClick.value = true;
+      document.body.onclick = null;
+    }
   };
 
   // ウィンドウサイズを取得し適用
@@ -73,7 +80,7 @@ onMounted(async () => {
   appendFileToState('alert.mp3', timerAlertSource);
 
   // バナー画像を読み込む
-  if (isBannerVisible().value) 
+  if (isBannerVisible().value)
     appendFileToState('banner.png', bannerSource);
 
   // 縦バナー画像を読み込む
