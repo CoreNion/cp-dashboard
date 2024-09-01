@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     "baseURL": process.env.BASE_URL || "/",
   },
 
+  ssr: false,
+
   build: {},
 
   modules: [
