@@ -2,6 +2,9 @@
 // テーマ設定
 const colorMode = useColorMode();
 
+// 時刻表示設定
+const simpleTimeState = clockEffect();
+
 // センサーのソース
 const selectedEffect = screenEffect();
 
@@ -12,6 +15,7 @@ const sensorVisible = isSensorInfoVisible();
 const isInfoScrollEnabledSt = isInfoScrollEnabled();
 // 情報スクロールのテキスト
 const infoScrollTextSt = infoScrollText();
+
 </script>
 
 <template>
@@ -20,6 +24,15 @@ const infoScrollTextSt = infoScrollText();
     <select class="select select-bordered max-w-xs" v-model="colorMode.preference">
       <option disabled selected>テーマを選択...</option>
       <option v-for="theme of themes" :key="theme">{{ theme }}</option>
+    </select>
+  </label>
+  <label class="label">
+    <span class="label-text">
+      時刻表示の効果
+    </span>
+    <select class="select select-bordered max-w-xs" v-model="simpleTimeState">
+      <option disabled selected>効果を選択...</option>
+      <option v-for="clockEffect of kClockEffects" :key="clockEffect">{{ clockEffect }}</option>
     </select>
   </label>
   <label class="label">

@@ -1,3 +1,7 @@
+// 時刻表示の効果
+export const kClockEffects = ['自動 (端末に最適化)', 'シンプル', 'アニメーション'] as const;
+export type ClockEffectType = typeof kClockEffects[number];
+
 export function addChimeTime(time: string) {
   // チャイムの鳴動時刻を追加
   const userChimeTimesState = userChimeTimes();

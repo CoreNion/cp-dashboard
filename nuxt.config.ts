@@ -20,7 +20,8 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/google-fonts',
     "@nuxt/icon",
-    "@nuxtjs/leaflet"
+    "@nuxtjs/leaflet",
+    "@nuxtjs/device"
   ],
 
   googleFonts: {

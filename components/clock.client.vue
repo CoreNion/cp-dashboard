@@ -11,6 +11,8 @@ const wScreen = widthScreenSize();
 
 // 現在時刻
 const timeState = time();
+// シンプルな時刻表示
+const clockEffectState = clockEffect();
 // タイマーの残り時間
 const timerState = timer();
 
@@ -59,7 +61,14 @@ watch(wScreen, () => {
 <template>
   <div class="flex flex-col items-center justify-center gap-3">
     <!-- メイン表示 -->
-    <h1 class="countdown main-clock font-bold">
+    <h1
+      v-if="clockEffectState == 'シンプル' || clockEffectState == '自動 (端末に最適化)' && ($device.isSafari || $device.isFirefox)"
+      class="main-clock font-bold leading-none tabular-nums">
+      {{ timerState != null ? 
+        `${timerState[0].toString().padStart(2, "0")}:${timerState[1].toString().padStart(2,"0")}:${timerState[2].toString().padStart(2, "0")}`
+        : dayjs(timeState).format('HH:mm:ss') }}
+    </h1>
+    <h1 v-else class="countdown main-clock font-bold">
       <span :style="{ '--value': timerState != null ? timerState[0] : dayjs(timeState).hour() }"></span>:
       <span :style="{ '--value': timerState != null ? timerState[1] : dayjs(timeState).minute() }"></span>:
       <span :style="{ '--value': timerState != null ? timerState[2] : dayjs(timeState).second() }"></span>

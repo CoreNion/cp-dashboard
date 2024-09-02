@@ -11,6 +11,8 @@ export const widthScreenSize = () => useState<number>('widthScreenSize', () => 1
 
 // 現在時刻
 export const time = () => useState<Date>('time', () => dayjs().toDate());
+// 時刻表示の効果
+export const clockEffect = () => useLocalStorage<ClockEffectType>('clockEffect', () => "自動 (端末に最適化)");
 
 // 選択されている効果
 export const screenEffect = () => useLocalStorage<string>('screenEffect', () => "none");
