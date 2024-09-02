@@ -57,7 +57,7 @@ watch(wScreen, () => {
 </script>
 
 <template>
-  <div class="flex flex-col xl:min-h-screen items-center justify-center gap-3">
+  <div class="flex flex-col items-center justify-center gap-3">
     <!-- メイン表示 -->
     <h1 class="countdown main-clock font-bold">
       <span :style="{ '--value': timerState != null ? timerState[0] : dayjs(timeState).hour() }"></span>:

@@ -105,12 +105,12 @@ onMounted(async () => {
     </ClientOnly>
 
     <!-- 大画面デバイスの表示 -->
-    <div v-if="widthState >= 1280" class="min-h-screen flex flex-row text-center gap-2">
+    <div v-if="widthState >= 1280" class="min-h-[100dvh] flex flex-row text-center gap-2">
       <div class="basis-[20.0%] flex flex-row justify-between">
         <status></status>
       </div>
 
-      <div class="grow">
+      <div class="grow m-auto">
         <clock></clock>
       </div>
 
@@ -125,7 +125,7 @@ onMounted(async () => {
     </div>
 
     <!-- 小画面デバイスの表示　-->
-    <div v-if="widthState <= 1280" class="min-h-screen min-w-full flex flex-col items-center text-center">
+    <div v-if="widthState <= 1280" class="min-h-[100dvh] min-w-full flex flex-col text-center mb-2">
       <div class="navbar bg-neutral">
         <div class="navbar-start">
           <button class="btn" onclick="window.location.replace(window.location.href)">
@@ -141,9 +141,9 @@ onMounted(async () => {
           </DynamicModal>
         </div>
       </div>
-      <clock class="grow"></clock>
+      <clock class="grow m-auto"></clock>
       <TimerSetting class="m-2"></TimerSetting>
-      <div class="flex flex-row gap-5">
+      <div class="flex flex-row gap-5 mb-3">
         <span>Copyright © 2024 CoreNion</span>
         <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
       </div>

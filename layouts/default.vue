@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen" :style="{ 'font-family': fontFamily }">
+  <div class="min-h-[100dvh]" :style="{ 'font-family': fontFamily }">
     <slot></slot>
   </div>
   <div id="effect">
