@@ -94,12 +94,14 @@ onMounted(async () => {
   <NuxtPwaManifest />
   <NuxtLayout>
     <ClientOnly>
-      <div v-if="!firstClick" class="toast toast-top toast-center z-50">
+      <div v-if="!firstClick" class="toast toast-top toast-center whitespace-normal z-50 w-full">
         <div class="alert alert-warning">
-          <Icon class="icon" name="uil:exclamation-triangle" size="2vw" />
-          <span>
-            アラームを動作させるために、画面を一回以上クリックしてください！
-          </span>
+          <Icon class="icon" name="uil:exclamation-triangle" size="30px" />
+          <p>
+            <span>チャイムやタイマーを正常に動作させるため、1回は画面をクリックしてください。</span>
+            <br>
+            <span>画面をクリックした後、バックグラウンドで正常に動作させるために、短い効果音が1回再生されます。</span>
+          </p>
         </div>
       </div>
     </ClientOnly>
