@@ -144,8 +144,8 @@ onMounted(async () => {
         </div>
       </div>
       <clock class="grow m-auto"></clock>
-      <TimerSetting class="m-2"></TimerSetting>
-      <div class="flex flex-row gap-5 mb-3">
+      <TimerSetting></TimerSetting>
+      <div class="flex flex-row justify-center gap-5 my-3">
         <span>Copyright © 2024 CoreNion</span>
         <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code / Licence</a>
       </div>
