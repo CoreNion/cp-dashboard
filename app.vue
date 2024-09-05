@@ -36,14 +36,29 @@ const widthState = widthScreenSize();
 const firstClick = useState(() => false);
 
 onMounted(async () => {
-  // 起動時にバックグラウンドでの動作対策
-  document.body.onclick = async () =>  {
-    // ユーザーの操作により、画面をクリックした履歴を残す
+  // 画面クリック後に行う、バックグラウンドで正常に動作するための対策
+  // iOS / Safariでは、画面クリック後に各種権限を取得する必要がある模様
+  document.body.onclick = async () => {
     if (!firstClick.value) {
-      // フォアグラウンドで音を鳴らした履歴を残す (いきなりバックグラウンドでは音が鳴らない？)
+      // バックグラウンドでの根本的な動作対策
+      try {
+        // スリープを無効化
+        await navigator.wakeLock.request('screen');
+        // タブ切り替え後でも持続するようにする
+        document.addEventListener('visibilitychange', async () => {
+          if (document.visibilityState === 'visible') {
+            await navigator.wakeLock.request('screen');
+          }
+        });
+      } catch (e) {
+        console.warn(e);
+      }
+
+      // フォアグラウンドで音を鳴らした履歴を残す (いきなりバックグラウンドでは音が鳴らない模様)
+      // iOSではこれだけでは不十分
       new Audio("./beep.mp3").play();
 
-      // チャイム音源を読み込む
+      // チャイム音源を読み込む (iOS対策でHTMLAudioをこの時点で読み込む)
       if (chimeFileName().value !== 'デフォルトの音声') {
         await appendFileToAudioState('chime.mp3', chimeSource);
       } else {
@@ -76,20 +91,6 @@ onMounted(async () => {
   window.addEventListener('resize', () => {
     widthState.value = window.innerWidth;
   });
-
-  // バックグラウンド対策
-  try {
-    // スリープを無効化
-    await navigator.wakeLock.request('screen');
-    // タブ切り替え後でも持続するようにする
-    document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible') {
-        await navigator.wakeLock.request('screen');
-      }
-    });
-  } catch (e) {
-    console.warn(e);
-  }
 
   // バナー画像を読み込む
   if (isBannerVisible().value)
