@@ -12,8 +12,8 @@ export default {
 </script>
 
 <template>
-  <label class="label">
-    <span class="label-text whitespace-nowrap">{{ labelText }}</span>
+  <label class="label flex-wrap gap-2">
+    <span class="label-text whitespace-nowrap font-bold">{{ labelText }}</span>
     <div class="flex flex-col items-end gap-1 w-full">
       <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="audio/*"
         @change="onAudioChange" />

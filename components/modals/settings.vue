@@ -119,7 +119,7 @@ const playAudio = (audio: HTMLAudioElement) => {
 
     <div class="divider"></div>
 
-    <h4 class="font-bold">宣伝機能設定</h4>
+    <h4 class="font-bold">宣伝機能設定 (大画面のみ)</h4>
     <AdSetting></AdSetting>
     <DynamicModal :btn-wfull="true" btnTitle="カウントダウン設定">
       <CountdownSetting></CountdownSetting>
@@ -127,7 +127,9 @@ const playAudio = (audio: HTMLAudioElement) => {
 
     <div class="divider"></div>
 
-    <span class="font-light">Designed by CoreNion in Shibuya (FY2023)</span>
+    <span class="font-light">First Built by CoreNion (N6)</span>
+    <br>
+    <span class="font-light">Special Thanks to Shibuya CP🫶</span>
     <div class="flex flex-row justify-around mt-3">
       <a href="https://github.com/CoreNion/cp-dashboard/wiki/" class="link">ドキュメント</a>
       <a href="https://github.com/CoreNion/cp-dashboard/" class="link">Source Code</a>

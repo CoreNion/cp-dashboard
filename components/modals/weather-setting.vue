@@ -155,16 +155,16 @@ function setAmedasLocation(code: string, name: string) {
   <h3 class="font-bold text-lg">予報の地域設定</h3>
   <p class="my-3">
     <label class="label">
-      <span class="label-text">広域地方</span>
-      <select class="select select-bordered w-full max-w-xs" v-model="selectedWideRegion" @change="refleshLocalRegion">
+      <span class="label-text mx-auto">広域地方</span>
+      <select class="select select-bordered max-w-52 md:max-w-xs" v-model="selectedWideRegion" @change="refleshLocalRegion">
         <option disabled selected>地方... (表示されない場合は読み込み中かオフラインです)</option>
         <option v-for="region of wideRegionOptions" :value="region.code">{{ region.name }}</option>
       </select>
     </label>
 
     <label class="label">
-      <span class="label-text">都道府県/地方</span>
-      <select class="select select-bordered w-full max-w-xs" v-model="selectedLocalRegion" @change="refleshRegion">
+      <span class="label-text mx-auto">都道府県<br>地方</span>
+      <select class="select select-bordered max-w-52 md:max-w-xs" v-model="selectedLocalRegion" @change="refleshRegion">
         <option disabled selected>都道府県/地方を選択... (表示されない場合は読み込み中かオフラインです)</option>
         <option v-for="region of localRegionOptions" :value="region.code">{{ region.name }}
         </option>
@@ -172,8 +172,8 @@ function setAmedasLocation(code: string, name: string) {
     </label>
 
     <label class="label">
-      <span class="label-text">地域</span>
-      <select class="select select-bordered w-full max-w-xs" v-model="selectedRegion" @change="setAreaNumber">
+      <span class="label-text mx-auto">地域</span>
+      <select class="select select-bordered max-w-52 md:max-w-xs" v-model="selectedRegion" @change="setAreaNumber">
         <option disabled selected>地域を選択... (表示されない場合は読み込み中かオフラインです)</option>
         <option v-for="region of regionOptions" :value="region.code">{{ region.name }}
         </option>
@@ -200,8 +200,8 @@ function setAmedasLocation(code: string, name: string) {
       </div>
     </label>
 
-  <p class="min-w-full h-[433px] mt-3">
-  <h2 class="text-error font-bold h-5"> {{ needMoreZoom ? "地点を表示するには、もう少しズームしてください。" : '' }}</h2>
+  <p class="min-w-full h-[433px]">
+  <h2 class="block text-error font-bold"> {{ needMoreZoom ? "地点を表示するには、もう少しズームしてください。" : '' }}</h2>
 
   <LMap ref="map" :center="[32.592850, 137.273600]" v-model:bounds="boundsState" v-model:zoom="zoomState" :use-global-leaflet="false">
     <LTileLayer url="https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"

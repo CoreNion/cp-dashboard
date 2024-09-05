@@ -59,7 +59,7 @@ const onFontRemove = (font: string) => {
   <div v-if="loaded">
     <label class="label">
       <span class="label-text">フォント</span>
-      <select class="select select-bordered max-w-xs" v-model="fontState">
+      <select class="select select-bordered max-w-56 md:max-w-xs " v-model="fontState">
         <option disabled selected>フォントを選択...</option>
         <option v-for="font of availableFonts" :key="font">{{ font }}</option>
       </select>
@@ -70,12 +70,9 @@ const onFontRemove = (font: string) => {
       <div class="collapse-title text-left font-bold">
         フォントをアプリ内に追加
       </div>
-      <div class="collapse-content text-base-content">
-        <label class="label">
-          <span class="label-text">フォントファイル</span>
-          <input type="file" class="file-input file-input-bordered w-72 file-input-sm" accept="font/*"
-            @change="onFontUpload" />
-        </label>
+      <div class="collapse-content text-base-content overflow-auto">
+        <input type="file" class="file-input file-input-bordered w-full" accept="font/*"
+          @change="onFontUpload" />
 
         <div class="divider"></div>
 
@@ -97,6 +94,8 @@ const onFontRemove = (font: string) => {
         </div>
       </div>
     </div>
+
+    <div class="divider"></div>
 
     <label class="w-full grid">
       <div class="flex flex-row justify-center mb-1 font-semibold">

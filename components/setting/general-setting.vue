@@ -21,7 +21,7 @@ const infoScrollTextSt = infoScrollText();
 <template>
   <label class="label">
     <span class="label-text">テーマ</span>
-    <select class="select select-bordered max-w-xs" v-model="colorMode.preference">
+    <select class="select select-bordered w-44" v-model="colorMode.preference">
       <option disabled selected>テーマを選択...</option>
       <option v-for="theme of themes" :key="theme">{{ theme }}</option>
     </select>
@@ -30,14 +30,14 @@ const infoScrollTextSt = infoScrollText();
     <span class="label-text">
       時刻表示の効果
     </span>
-    <select class="select select-bordered max-w-xs" v-model="simpleTimeState">
+    <select class="select select-bordered w-44" v-model="simpleTimeState">
       <option disabled selected>効果を選択...</option>
       <option v-for="clockEffect of kClockEffects" :key="clockEffect">{{ clockEffect }}</option>
     </select>
   </label>
   <label class="label">
     <span class="label-text">画面エフェクト</span>
-    <select class="select select-bordered max-w-xs" v-model="selectedEffect">
+    <select class="select select-bordered w-44" v-model="selectedEffect">
       <option disabled selected>効果を選択...</option>
       <option v-for="effect of kEffects" :key="effect">{{ effect }}</option>
     </select>
