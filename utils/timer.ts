@@ -32,8 +32,8 @@ export function resetTimer() {
   timerSetting().value = [0, 0, 0];
   isTimerActive().value = false;
 
-  audioElement().value?.pause();
-  audioElement().value = null;
+  timerAlertSource().value?.pause();
+  timerAlertSource().value.currentTime = 0;
 }
 
 // タイマーの設定時間を増やす関数

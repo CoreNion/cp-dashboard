@@ -37,11 +37,32 @@ const firstClick = useState(() => false);
 
 onMounted(async () => {
   // 起動時にバックグラウンドでの動作対策
-  document.body.onclick = () => {
+  document.body.onclick = async () =>  {
     // ユーザーの操作により、画面をクリックした履歴を残す
     if (!firstClick.value) {
       // フォアグラウンドで音を鳴らした履歴を残す (いきなりバックグラウンドでは音が鳴らない？)
       new Audio("./beep.mp3").play();
+
+      // チャイム音源を読み込む
+      if (chimeFileName().value !== 'デフォルトの音声') {
+        await appendFileToAudioState('chime.mp3', chimeSource);
+      } else {
+        chimeSource().value.load();
+      }
+
+      // 予鈴音源を読み込む
+      if (preChimeFileName().value !== 'デフォルトの音声') {
+        await appendFileToAudioState('pre-chime.mp3', preChimeSource);
+      } else {
+        preChimeSource().value.load();
+      }
+
+      // アラート音源を読み込む
+      if (alertFileName().value !== 'デフォルトの音声') {
+        await appendFileToAudioState('alert.mp3', timerAlertSource);
+      } else {
+        timerAlertSource().value.load();
+      }
 
       firstClick.value = true;
       document.body.onclick = null;
@@ -69,15 +90,6 @@ onMounted(async () => {
   } catch (e) {
     console.warn(e);
   }
-
-  // チャイム音源を読み込む
-  appendFileToState('chime.mp3', chimeSource);
-
-  // 予鈴音源を読み込む
-  appendFileToState('pre-chime.mp3', preChimeSource);
-
-  // アラート音源を読み込む
-  appendFileToState('alert.mp3', timerAlertSource);
 
   // バナー画像を読み込む
   if (isBannerVisible().value)

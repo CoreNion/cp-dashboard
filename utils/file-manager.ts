@@ -58,3 +58,16 @@ export async function appendFileToState(fileName: string, toState: () => globalT
     console.warn(e);
   }
 }
+
+/// 音声ファイルをURLを通してメモリ上のAudioに保存し、ロードする
+export async function appendFileToAudioState(fileName: string, toState: () => globalThis.Ref<HTMLAudioElement>) {
+  const opfsRoot = await navigator.storage.getDirectory();
+  try {
+    const verticalBannerHandle = await opfsRoot.getFileHandle(fileName, { create: false });
+    const verticalBannerBuffer = await verticalBannerHandle.getFile();
+    toState().value = new Audio(URL.createObjectURL(verticalBannerBuffer));
+    toState().value.load();
+  } catch (e) {
+    console.warn(e);
+  }
+}

@@ -11,12 +11,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       timerState.value = data;
 
       if (timerState.value[0] === 0 && timerState.value[1] === 0 && timerState.value[2] === 0) {
-        const audio = audioElement();
-
         // タイマーが0になったらチャイムを鳴らす
-        audio.value = new Audio(timerAlertSource().value);
-        audio.value.volume = 1.0;
-        await audio.value.play();
+        timerAlertSource().value.volume = 1.0;
+        await timerAlertSource().value.play();
 
         // タイマーを停止
         isTimerActive().value = false;

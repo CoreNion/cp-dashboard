@@ -18,7 +18,7 @@ const isChimeEnabledState = isChimeEnabled();
 const isPreChimeEnabledState = isPreChimeEnabled();
 
 // 音源変更時の処理
-const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis.Ref<string>, fileNameState: globalThis.Ref<string>) => {
+const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis.Ref<HTMLAudioElement>, fileNameState: globalThis.Ref<string>) => {
   // ファイルを読み込む
   if (!(e.target instanceof HTMLInputElement)) return;
   const file = e.target.files?.[0];
@@ -27,19 +27,21 @@ const onAudioChange = async (e: Event, fileName: string, sourceState: globalThis
   // OPFSにファイルを保存
   saveFile(file, fileName);
   // メモリ上の音源を更新
-  sourceState.value = URL.createObjectURL(file);
+  sourceState.value = new Audio(URL.createObjectURL(file));
+  sourceState.value.load();
   // ファイル名を更新
   fileNameState.value = file.name;
 }
 
 // 音源削除時の処理
-const removeAudio = (sourceState: globalThis.Ref<string>, fileNameState: globalThis.Ref<string>, origFileName: String) => {
+const removeAudio = (sourceState: globalThis.Ref<HTMLAudioElement>, fileNameState: globalThis.Ref<string>, origFileName: String) => {
   // OPFSからファイルを削除
   removeFile(fileNameState.value);
 
   // 音源/名前を元に戻す
   fileNameState.value = 'デフォルトの音声';
-  sourceState.value = `${useRuntimeConfig().app.baseURL}/${origFileName}`;
+  sourceState.value = new Audio(`${useRuntimeConfig().app.baseURL}/${origFileName}`);
+  sourceState.value.load();
 }
 
 const onAlertAudioChange = async (e: Event) => {
@@ -67,8 +69,7 @@ const removePreChimeAudio = () => {
 }
 
 // 音源を再生
-const playAudio = (link: string) => {
-  const audio = new Audio(link);
+const playAudio = (audio: HTMLAudioElement) => {
   audio.volume = 1.0;
   audio.play();
 }
