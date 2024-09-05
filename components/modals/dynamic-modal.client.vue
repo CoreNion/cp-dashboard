@@ -30,21 +30,28 @@ const closeModal = async () => {
 
 <template>
   <a v-if="linkTypeButton" class="link" @click="showModal">{{ btnTitle }}</a>
-  <button v-else :class="['btn', btnWfull? 'w-full' : '']" @click="showModal">
+  <button v-else :class="['btn', btnWfull ? 'w-full' : '']" @click="showModal">
     <span v-if="btnTitle != undefined">{{ btnTitle }} </span>
     <Icon v-if="IconName != undefined" :name="IconName" size="2.5vh" />
   </button>
 
   <dialog :id="thisID" class="modal">
-    <div class="modal-box">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="closeModal">✕</button>
-      </form>
+      <div class="modal-box modal-h-fix">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="closeModal">✕</button>
+        </form>
 
-      <div v-if="loadContents">
-        <slot></slot>
+        <div v-if="loadContents">
+          <slot></slot>
+        </div>
+        <div v-else class="skeleton w-32 h-32"></div>
       </div>
-      <div v-else class="skeleton w-32 h-32"></div>
-    </div>
   </dialog>
 </template>
+
+<style scoped>
+.modal-h-fix {
+  /* iPhoneのSafariなどでアドレスバーなどを考慮する */
+  max-height: calc(100dvh - 5em);
+}
+</style>
