@@ -25,7 +25,7 @@ useHead({
     },
     {
       rel: 'apple-touch-icon',
-      href: 'pwa/apple-touch-icon-180x180.png',
+      href: 'pwa/apple-touch-icon@192px.png',
     },
   ],
 });
