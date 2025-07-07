@@ -1,103 +1,104 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useWindowSize } from '../hooks/useWindowSize';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-(family-name:--font-geist-sans)">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-(family-name:--font-geist-mono)">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/5 dark:bg-white/6 px-1 py-0.5 rounded font-(family-name:--font-geist-mono) font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { width } = useWindowSize();
+  const [firstClick, setFirstClick] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/8 dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const handleClick = async () => {
+      if (!firstClick) {
+        try {
+          const wakeLock = await navigator.wakeLock.request('screen');
+          document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState === 'visible') {
+              await navigator.wakeLock.request('screen');
+            }
+          });
+        } catch (e) {
+          console.warn(e);
+        }
+
+        new Audio("/beep.mp3").play().catch(e => console.warn(e));
+
+        setFirstClick(true);
+      }
+    };
+
+    document.body.addEventListener('click', handleClick);
+
+    return () => {
+      document.body.removeEventListener('click', handleClick);
+    };
+  }, [firstClick]);
+
+  return (
+    <>
+      {!firstClick && (
+        <div className="toast toast-top toast-center whitespace-normal z-50 w-full">
+          <div className="alert alert-warning">
+            <p>
+              <span>チャイムやタイマーを正常に動作させるため、1回は画面をクリックしてください。</span>
+              <br />
+              <span>画面をクリックした後、バックグラウンドで正常に動作させるために、短い効果音が1回再生されます。</span>
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      )}
+
+      {width >= 1280 ? (
+        <div className="min-h-[100dvh] flex flex-row text-center gap-2">
+          <div className="basis-[20.0%] flex flex-row justify-between">
+            {/* Status Component */}
+            <div className="w-full h-full bg-gray-200">Status</div>
+          </div>
+
+          <div className="grow m-auto">
+            {/* Clock Component */}
+            <div className="w-full h-full bg-gray-300">Clock</div>
+          </div>
+
+          <div className="basis-[15.0%] flex flex-col items-end m-3 gap-4">
+            {/* Report Component */}
+            <div className="w-full h-48 bg-gray-200">Report</div>
+            <div className="grow m-2 flex flex-col justify-end gap-2">
+              <button className="btn btn-neutral" onClick={() => window.location.reload()}>再読み込み</button>
+              {/* TimerSetting Component */}
+              <div className="w-full h-12 bg-gray-200">TimerSetting</div>
+              <span>Copyright © 2024 CoreNion</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="min-h-[100dvh] min-w-full flex flex-col text-center mb-2">
+          <div className="navbar bg-neutral">
+            <div className="navbar-start">
+              <button className="btn" onClick={() => window.location.reload()}>
+                {/* Redo Icon */}
+              </button>
+            </div>
+            <div className="navbar-center">
+              <a className="btn btn-ghost text-xl text-neutral-content">Campus Dashboard</a>
+            </div>
+            <div className="navbar-end">
+              {/* Settings Component */}
+              <div className="w-12 h-12 bg-gray-200">Settings</div>
+            </div>
+          </div>
+          <div className="grow m-auto">
+            {/* Clock Component */}
+            <div className="w-full h-full bg-gray-300">Clock</div>
+          </div>
+          {/* TimerSetting Component */}
+          <div className="w-full h-12 bg-gray-200">TimerSetting</div>
+          <div className="flex flex-row justify-center gap-5 my-3">
+            <span>Copyright © 2024 CoreNion</span>
+            <a href="https://github.com/CoreNion/cp-dashboard/" className="link">Source Code / Licence</a>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
