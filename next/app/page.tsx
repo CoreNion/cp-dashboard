@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useWindowSize } from '../hooks/useWindowSize';
 import Clock from '@/components/Clock';
+import Report from '@/components/Report';
 import Status from '@/components/Status';
 
 export default function Home() {
@@ -62,8 +63,7 @@ export default function Home() {
           </div>
 
           <div className="basis-[15.0%] flex flex-col items-end m-3 gap-4">
-            {/* Report Component */}
-            <div className="w-full h-48 bg-gray-200">Report</div>
+            <Report></Report>
             <div className="grow m-2 flex flex-col justify-end gap-2">
               <button className="btn btn-neutral" onClick={() => window.location.reload()}>再読み込み</button>
               {/* TimerSetting Component */}
