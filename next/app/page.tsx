@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useWindowSize } from '../hooks/useWindowSize';
-import Clock from '@/components/Clock';
 import Report from '@/components/Report';
 import Status from '@/components/Status';
+import TimerSetting from '@/components/TimerSetting';
 
 export default function Home() {
   const { width } = useWindowSize();
@@ -66,8 +66,7 @@ export default function Home() {
             <Report></Report>
             <div className="grow m-2 flex flex-col justify-end gap-2">
               <button className="btn btn-neutral" onClick={() => window.location.reload()}>再読み込み</button>
-              {/* TimerSetting Component */}
-              <div className="w-full h-12 bg-gray-200">TimerSetting</div>
+              <TimerSetting></TimerSetting>
               <span>Copyright © 2024 CoreNion</span>
             </div>
           </div>
@@ -92,8 +91,7 @@ export default function Home() {
             {/* Clock Component */}
             <div className="w-full h-full bg-gray-300">Clock</div>
           </div>
-          {/* TimerSetting Component */}
-          <div className="w-full h-12 bg-gray-200">TimerSetting</div>
+          <TimerSetting></TimerSetting>
           <div className="flex flex-row justify-center gap-5 my-3">
             <span>Copyright © 2024 CoreNion</span>
             <a href="https://github.com/CoreNion/cp-dashboard/" className="link">Source Code / Licence</a>
