@@ -5,6 +5,7 @@ import { useWindowSize } from '../hooks/useWindowSize';
 import Report from '@/components/Report';
 import Status from '@/components/Status';
 import TimerSetting from '@/components/TimerSetting';
+import Settings, { DynamicModal } from '@/components/modals/Settings';
 
 export default function Home() {
   const { width } = useWindowSize();
@@ -83,8 +84,9 @@ export default function Home() {
               <a className="btn btn-ghost text-xl text-neutral-content">Campus Dashboard</a>
             </div>
             <div className="navbar-end">
-              {/* Settings Component */}
-              <div className="w-12 h-12 bg-gray-200">Settings</div>
+              <DynamicModal IconName="uil:setting">
+                <Settings></Settings>
+              </DynamicModal>
             </div>
           </div>
           <div className="grow m-auto">
