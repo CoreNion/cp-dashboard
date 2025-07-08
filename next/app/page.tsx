@@ -6,10 +6,28 @@ import Report from '@/components/Report';
 import Status from '@/components/Status';
 import TimerSetting from '@/components/TimerSetting';
 import Settings, { DynamicModal } from '@/components/modals/Settings';
+import { useChimeFileName, useChimeSource, usePreChimeFileName, usePreChimeSource } from '@/hooks/chimeHooks';
+import { useTimerAlertSource } from '@/hooks/timerHooks';
+import { useAlertFileName } from '@/hooks/alertHooks';
+import { useBannerSource, useIsBannerVisible, useIsVerticalBanner, useVerticalBannerSource } from '@/hooks/bannerHooks';
 
 export default function Home() {
   const { width } = useWindowSize();
   const [firstClick, setFirstClick] = useState(false);
+
+  // 音源関連のフックをインポート
+  const [chimeSourceState, setChimeSourceState] = useChimeSource();
+  const [chimeFileNameState] = useChimeFileName();
+  const [preChimeSourceState, setPreChimeSourceState] = usePreChimeSource();
+  const [preChimeFileNameState] = usePreChimeFileName();
+  const [timerAlertSourceState, setTimerAlertSourceState] = useTimerAlertSource();
+  const [alertFileNameState] = useAlertFileName();
+
+  // バナー関連のフックをインポート
+  const [isBannerVisibleState] = useIsBannerVisible();
+  const [bannerSourceState, setBannerSourceState] = useBannerSource();
+  const [isVerticalBannerState] = useIsVerticalBanner();
+  const [verticalBannerSourceState, setVerticalBannerSourceState] = useVerticalBannerSource();
 
   useEffect(() => {
     const handleClick = async () => {
@@ -27,6 +45,31 @@ export default function Home() {
 
         new Audio("/beep.mp3").play().catch(e => console.warn(e));
 
+        // チャイム音源を読み込む
+        if (chimeFileNameState !== 'デフォルトの音声') {
+          // TODO: ファイル読み込みロジックを実装
+          // 現状はpublicディレクトリからのパスを直接指定
+          setChimeSourceState(new Audio('/chime.mp3'));
+        } else {
+          setChimeSourceState(new Audio('/chime.mp3'));
+        }
+
+        // 予鈴音源を読み込む
+        if (preChimeFileNameState !== 'デフォルトの音声') {
+          // TODO: ファイル読み込みロジックを実装
+          setPreChimeSourceState(new Audio('/pre-chime.mp3'));
+        } else {
+          setPreChimeSourceState(new Audio('/pre-chime.mp3'));
+        }
+
+        // アラート音源を読み込む
+        if (alertFileNameState !== 'デフォルトの音声') {
+          // TODO: ファイル読み込みロジックを実装
+          setTimerAlertSourceState(new Audio('/alert.mp3'));
+        } else {
+          setTimerAlertSourceState(new Audio('/alert.mp3'));
+        }
+
         setFirstClick(true);
       }
     };
@@ -36,7 +79,21 @@ export default function Home() {
     return () => {
       document.body.removeEventListener('click', handleClick);
     };
-  }, [firstClick]);
+  }, [firstClick, chimeFileNameState, preChimeFileNameState, alertFileNameState, setChimeSourceState, setPreChimeSourceState, setTimerAlertSourceState]);
+
+  useEffect(() => {
+    // バナー画像を読み込む
+    if (isBannerVisibleState) {
+      // TODO: ファイル読み込みロジックを実装
+      setBannerSourceState('/ogp.png'); // 仮の画像パス
+    }
+
+    // 縦バナー画像を読み込む
+    if (isVerticalBannerState) {
+      // TODO: ファイル読み込みロジックを実装
+      setVerticalBannerSourceState('/pwa/sc_mobile.png'); // 仮の画像パス
+    }
+  }, [isBannerVisibleState, isVerticalBannerState, setBannerSourceState, setVerticalBannerSourceState]);
 
   return (
     <>
