@@ -3,15 +3,9 @@
 import { useState, useEffect } from 'react';
 import { UilCelsius, UilPercentage } from '@iconscout/react-unicons'; // react-iconsではなく@iconscout/react-uniconsを使用
 
-// TODO: これらのカスタムフックは後で実装する
-const useSensorInfoVisible = () => useState(true); // 仮実装
-const useFontSize = () => useState(1); // 仮実装
-const useSensorSource = () => useState('serial'); // 仮実装
-const useIsSerialReady = () => useState(false); // 仮実装
-const useRoomTmp = () => useState<number | null>(null); // 仮実装
-const useHumidity = () => useState<number | null>(null); // 仮実装
-const usePressure = () => useState<number | null>(null); // 仮実装
-const useOutTmp = () => useState<number | null>(null); // 仮実装
+import { useFontSize } from '@/hooks/fontHooks'
+import { useIsSensorInfoVisible, useSensorSource, useRoomTmp, useHumidity, usePressure, useOutTmp } from '@/hooks/sensorHooks';
+import { useIsSerialReady } from '@/hooks/serialHooks';
 
 const connectSerialDevice = () => {
   console.log('Connecting to serial device...');
@@ -27,7 +21,7 @@ const Settings = () => <div className="w-full h-full bg-gray-200">Settings</div>
 
 
 export default function Status() {
-  const [sensorVisible, setSensorVisible] = useSensorInfoVisible();
+  const [sensorVisible, setSensorVisible] = useIsSensorInfoVisible();
   const [fontSizeOffset] = useFontSize();
   const [valueNameSize, setValueNameSize] = useState(`${6 * fontSizeOffset}vh`);
   const [valueSize, setValueSize] = useState(`${8.5 * fontSizeOffset}vh`);

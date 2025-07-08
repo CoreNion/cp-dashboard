@@ -8,11 +8,8 @@ import 'dayjs/locale/ja';
 dayjs.extend(duration);
 dayjs.locale("ja");
 
-// TODO: これらのカスタムフックとユーティリティ関数は後で実装する
-const useIsTimerActive = () => useState(false);
-const useIsChimeEnabled = () => useState(true);
-const useIsPreChimeEnabled = () => useState(true);
-const useTimerSetting = () => useState<[number, number, number]>([0, 0, 0]);
+import { useIsTimerActive, useTimerSetting } from '@/hooks/timerHooks';
+import { useIsChimeEnabled, useIsPreChimeEnabled } from '@/hooks/chimeHooks';
 
 const addTimerLimit = (time: [number, number, number]) => {
   console.log('addTimerLimit', time);

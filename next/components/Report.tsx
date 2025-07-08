@@ -8,20 +8,17 @@ import 'dayjs/locale/ja';
 dayjs.extend(duration);
 dayjs.locale("ja");
 
-// TODO: これらのカスタムフックとユーティリティ関数は後で実装する
+import { useTime } from '@/hooks/timerHooks';
+import { useWidthScreenSize } from '../hooks/useWidthScreenSize';
+import { useCountdownDates, useYearlyCountdownDates } from '@/hooks/countdownHooks';
+import { useIsVerticalBanner, useVerticalBannerSource } from '@/hooks/bannerHooks';
+
 interface CountdownData {
   date: string;
   label: string;
   color: string;
   type?: "yearly";
 }
-
-const useTime = () => useState(dayjs().toISOString()); // 仮実装
-const useWidthScreenSize = () => useState(typeof window !== 'undefined' ? window.innerWidth : 0); // 仮実装
-const useCountdownDates = () => useState<CountdownData[]>([]); // 仮実装
-const useYearlyCountdownDates = () => useState<CountdownData[]>([]); // 仮実装
-const useIsVerticalBanner = () => useState(false); // 仮実装
-const useVerticalBannerSource = () => useState<string | null>(null); // 仮実装
 
 const calcLimit = (eventDate: dayjs.Dayjs, currentDay: dayjs.Dayjs) => eventDate.diff(currentDay);
 const calcLimitDays = (eventDate: dayjs.Dayjs, currentDay: dayjs.Dayjs) => eventDate.diff(currentDay, 'day', true);
@@ -33,8 +30,8 @@ const calcRatio = (eventDate: dayjs.Dayjs, currentDay: dayjs.Dayjs, lastEventDat
 };
 
 export default function Report() {
-  const [timeState] = useTime();
-  const [wSize] = useWidthScreenSize();
+  const timeState = useTime();
+  const wSize = useWidthScreenSize();
 
   const [countdownName, setCountdownName] = useState('レポート日数');
   const [countdownLimit, setCountdownLimit] = useState(0);

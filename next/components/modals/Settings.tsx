@@ -2,15 +2,9 @@
 
 import { useState, useCallback } from 'react';
 
-// TODO: これらのカスタムフックとユーティリティ関数は後で実装する
-const useChimeSource = () => useState<HTMLAudioElement | null>(null);
-const useChimeFileName = () => useState('デフォルトの音声');
-const usePreChimeSource = () => useState<HTMLAudioElement | null>(null);
-const usePreChimeFileName = () => useState('デフォルトの音声');
-const useTimerAlertSource = () => useState<HTMLAudioElement | null>(null);
-const useAlertFileName = () => useState('デフォルトの音声');
-const useIsChimeEnabled = () => useState(true);
-const useIsPreChimeEnabled = () => useState(true);
+import { useChimeSource, useChimeFileName, useIsChimeEnabled, usePreChimeSource, usePreChimeFileName, useIsPreChimeEnabled } from '@/hooks/chimeHooks';
+import { useTimerAlertSource } from '@/hooks/timerHooks'
+import { useAlertFileName } from '@/hooks/alertHooks';
 
 // 仮のファイル操作関数
 const saveFile = (file: File, fileName: string) => {
