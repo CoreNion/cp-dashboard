@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useWindowSize } from '../hooks/useWindowSize';
+import Clock from '@/components/Clock';
+import Status from '@/components/Status';
 
 export default function Home() {
   const { width } = useWindowSize();
@@ -51,8 +53,7 @@ export default function Home() {
       {width >= 1280 ? (
         <div className="min-h-[100dvh] flex flex-row text-center gap-2">
           <div className="basis-[20.0%] flex flex-row justify-between">
-            {/* Status Component */}
-            <div className="w-full h-full bg-gray-200">Status</div>
+            <Status></Status>
           </div>
 
           <div className="grow m-auto">
