@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
 
+import { ScreenEffect } from '@/components/ScreenEffect';
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -42,7 +44,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${mPlusRounded1c.variable} antialiased`}
       >
-        {children}
+        <ScreenEffect>
+          {children}
+        </ScreenEffect>
       </body>
     </html>
   );
