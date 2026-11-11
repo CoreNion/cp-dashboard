@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: light, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, nord, sunset;
+  logs: false;
+}
+
+/* Campus Dashboardのデフォルトテーマ */
+@plugin "daisyui/theme" {
+  name: "dash";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f2f2f2;
+  --color-base-300: #e5e6e6;
+  --color-base-content: #1f2937;
+  --color-primary: #1e40af;
+  --color-primary-content: #d2dbf7;
+  --color-secondary: #166534;
+  --color-secondary-content: #d3e4d8;
+  --color-accent: #fecaca;
+  --color-accent-content: #160f0f;
+  --color-neutral: #374151;
+  --color-neutral-content: #d7dde4;
+  --color-info: #bfdbfe;
+  --color-info-content: #0d1116;
+  --color-success: #00ffff;
+  --color-success-content: #001616;
+  --color-warning: #fef08a;
+  --color-warning-content: #161407;
+  --color-error: #7f1d1d;
+  --color-error-content: #f0d1d1;
+
+  --radius-selector: 1rem;
+  --radius-field: 1.9rem;
+  --radius-box: 1rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+
+  --depth: 0;
+  --noise: 0;
+}
+
+/* 設定項目の行 (ラベル + 入力) */
+@utility setting-row {
+  @apply flex items-center justify-between gap-2 px-1 py-2 text-sm select-none;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* モーダル: iPhoneのSafariなどでアドレスバーなどを考慮する */
+.modal-h-fix {
+  max-height: calc(100dvh - 5em);
+}
+
+/* 時計 */
+.main-clock {
+  font-size: var(--main-clock-size);
+}
+
+.sub-clock {
+  font-size: var(--sub-clock-size);
+}
+
+/* 情報表示 */
+.value-name {
+  font-size: var(--value-name-size);
+}
+
+.value {
+  font-size: var(--value-size);
+}
+
+/* 情報スクロール */
+.scrolling-text {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 35vw;
+}
+
+.scrolling-text span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll 8s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* 雪 */
+.snowflake {
+  position: fixed;
+  top: 0px;
+  width: 15px;
+  height: 15px;
+  background: #c7d4e0;
+  border-radius: 50%;
+  z-index: 999;
+  pointer-events: none;
+  animation:
+    fall 10s linear infinite,
+    yurayura 3s ease-in-out infinite;
+}
+
+/* 桜 */
+.sakura {
+  position: fixed;
+  top: 0px;
+  width: 25px;
+  height: 6px;
+  background: #f59fad;
+  border-radius: 50%;
+  z-index: 999;
+  pointer-events: none;
+  animation:
+    fall 10s linear infinite,
+    yurayura 3s ease-in-out infinite;
+}
+
+/* 落下アニメーション */
+@keyframes fall {
+  0% {
+    top: -10vh;
+  }
+
+  100% {
+    top: 100vh;
+  }
+}
+
+/* ゆらゆらアニメーション */
+@keyframes yurayura {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: translate(40px, 20px) rotate(120deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* カウントダウン設定のカレンダー: イベントのある日 */
+.countdown-event > button {
+  color: #ffffff;
+  background: var(--event-color);
+}
+
+.countdown-event-gray {
+  --event-color: #6b7280;
+}
+
+.countdown-event-red {
+  --event-color: #dc2626;
+}
+
+.countdown-event-yellow {
+  --event-color: #ca8a04;
+}
+
+.countdown-event-green {
+  --event-color: #16a34a;
+}
+
+.countdown-event-teal {
+  --event-color: #0d9488;
+}
+
+.countdown-event-blue {
+  --event-color: #2563eb;
+}
+
+.countdown-event-indigo {
+  --event-color: #4f46e5;
+}
+
+.countdown-event-purple {
+  --event-color: #9333ea;
+}
+
+.countdown-event-pink {
+  --event-color: #db2777;
+}
