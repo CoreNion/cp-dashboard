@@ -1,10 +1,14 @@
 import type { FeatureCollection } from 'geojson';
-import { Map as MapLibreMap, NavigationControl, Popup, type GeoJSONSource } from 'maplibre-gl';
+import { Map as MapLibreMap, NavigationControl, Popup, setWorkerUrl, type GeoJSONSource } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { useEffect, useRef, useState } from 'react';
 import { refreshWeather } from '../../services/weather.ts';
 import { getSettings, updateSettings, useSettings } from '../../store/settings.ts';
 import { convertAmedasInfos, getAmedasInfo, getWeatherAreaCodes, type AmedasInfo, type AmedasTable, type AreaTable } from '../../utils/weather-code.ts';
+
+// MapLibreのworkerを、Viteが配信するURLから読み込むようにする (開発サーバーの事前バンドルでは自動解決できないため)
+setWorkerUrl(maplibreWorkerUrl);
 
 /** 気象庁から取得する地域/アメダスの一覧 */
 type WeatherTables = {
