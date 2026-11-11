@@ -63,7 +63,7 @@ export const ChimeSetting = () => {
                   <input
                     type="time"
                     defaultValue={chimeTime.time}
-                    className="input"
+                    className="input min-w-28"
                     aria-label="時刻"
                     onBlur={(e) => {
                       if (e.target.value !== '' && e.target.value !== chimeTime.time) changeChimeTime(index, { time: e.target.value });
