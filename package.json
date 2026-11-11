@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "packageManager": "yarn@4.4.1+sha512.f825273d0689cc9ead3259c14998037662f1dcd06912637b21a450e8da7cfeb4b1965bbee73d16927baa1201054126bc385c6f43ff4aa705c8631d26e12460f1",
   "dependencies": {
@@ -18,6 +19,10 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@iconify-json/system-uicons": "^1.2.4",
+    "@iconify-json/uil": "^1.2.3",
+    "@iconify-json/wi": "^1.2.1",
+    "@iconify/utils": "^3.1.7",
     "@tailwindcss/vite": "^4.3.5",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^26.6.6",

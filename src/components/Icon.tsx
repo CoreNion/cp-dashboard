@@ -1,4 +1,9 @@
-import { Icon as IconifyIcon } from '@iconify/react';
+import { addCollection, Icon as IconifyIcon, type IconifyJSON } from '@iconify/react';
+import icons from '../icons.json';
+
+// 使用するアイコンをバンドルから登録する (オフラインでも表示できるようにするため)。
+// アイコンを追加したら `yarn icons` で icons.json を再生成すること。
+(icons as unknown as IconifyJSON[]).forEach((collection) => addCollection(collection));
 
 type IconProps = {
   /** Iconifyのアイコン名 (例: "uil:setting") */
