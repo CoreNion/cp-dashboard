@@ -1,12 +1,7 @@
 {
-  // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "types": [
-      "@types/w3c-web-serial",
-      "@types/wicg-file-system-access",
-      "@types/leaflet"
-    ],
-    "noImplicitThis": false,
-  },
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }

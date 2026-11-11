@@ -1,42 +1,32 @@
 {
   "name": "cp-dashboard",
+  "version": "2.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "packageManager": "yarn@4.4.1+sha512.f825273d0689cc9ead3259c14998037662f1dcd06912637b21a450e8da7cfeb4b1965bbee73d16927baa1201054126bc385c6f43ff4aa705c8631d26e12460f1",
+  "dependencies": {
+    "@iconify/react": "^6.0.4",
+    "dayjs": "^1.11.23",
+    "maplibre-gl": "^6.17.0",
+    "react": "^19.3.1",
+    "react-day-picker": "^10.0.2",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^1.4.1",
-    "@nuxt/icon": "^1.5.0",
-    "@nuxtjs/color-mode": "^3.4.4",
-    "@nuxtjs/device": "^3.2.2",
-    "@nuxtjs/google-fonts": "^3.2.0",
-    "@nuxtjs/leaflet": "^1.2.2",
-    "@nuxtjs/tailwindcss": "^6.12.1",
-    "@popperjs/core": "^2.11.8",
-    "@types/node": "^20.16.2",
-    "@types/w3c-web-serial": "^1.0.6",
-    "@types/wicg-file-system-access": "^2023.10.5",
-    "@vite-pwa/assets-generator": "^0.2.4",
-    "@vite-pwa/nuxt": "^0.10.1",
-    "@vueuse/core": "^11.0.3",
-    "autoprefixer": "^10.4.20",
-    "chart.js": "^4.4.4",
-    "chartjs-adapter-moment": "^1.0.1",
-    "daisyui": "^4.12.10",
-    "dayjs": "^1.11.13",
-    "moment": "^2.30.1",
-    "nuxt": "^3.13.0",
-    "postcss": "^8.4.41",
-    "typescript": "^5.5.4",
-    "v-calendar": "^3.1.2",
-    "vue": "^3.4.38",
-    "vue-chartjs": "^5.3.1",
-    "vue-router": "^4.4.3",
-    "vue-tsc": "^2.0.29"
-  },
-  "packageManager": "yarn@4.4.1+sha512.f825273d0689cc9ead3259c14998037662f1dcd06912637b21a450e8da7cfeb4b1965bbee73d16927baa1201054126bc385c6f43ff4aa705c8631d26e12460f1"
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "daisyui": "^5",
+    "tailwindcss": "^4",
+    "typescript": "^7",
+    "vite": "^8",
+    "vite-plugin-pwa": "^2.0.0"
+  }
 }

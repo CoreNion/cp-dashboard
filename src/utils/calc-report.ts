@@ -1,0 +1,48 @@
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import 'dayjs/locale/ja';
+
+dayjs.extend(duration);
+dayjs.locale('ja');
+
+/**
+ * イベントまでの残り時間(ms)を計算する
+ * @param eventDay イベントの日付
+ * @param date 日付
+ * @returns 残り時間 (ms)
+ */
+export const calcLimit = (eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs()) => {
+  return eventDay.diff(dayjs(date), 'millisecond');
+};
+
+/**
+ * イベント日までの残り日数を計算する
+ * @param eventDay イベントの日付
+ * @param date 日付
+ * @returns イベント日までの残り日数
+ */
+export const calcLimitDays = (eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs()) => {
+  return dayjs.duration({ milliseconds: calcLimit(eventDay, date) }).asDays();
+};
+
+/**
+ * イベント日接近のアラートを表示するかどうか
+ * @param eventDay 次のイベント日
+ * @param date 日付
+ */
+export const needAlert = (eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs()) => {
+  return calcLimitDays(eventDay, date) <= 4;
+};
+
+/**
+ * イベント日の残り時間の経過割合を計算する
+ * @param eventDay 次のイベント日
+ * @param date 日付
+ * @param startDay 期間のスタート日 (イベント日の1ヶ月前)
+ */
+export const calcRatio = (eventDay: dayjs.Dayjs, date: dayjs.Dayjs = dayjs(), startDay: dayjs.Dayjs = dayjs(eventDay).subtract(1, 'month')) => {
+  // 全期間を計算
+  const allTime = eventDay.diff(startDay, 'millisecond');
+
+  return ((allTime - calcLimit(eventDay, date)) / allTime) * 100;
+};
