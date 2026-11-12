@@ -5,6 +5,7 @@ import { AdSetting } from './AdSetting.tsx';
 import { AudioSetting } from './AudioSetting.tsx';
 import { ChimeSetting } from './ChimeSetting.tsx';
 import { GeneralSetting } from './GeneralSetting.tsx';
+import { TimeSetting } from './TimeSetting.tsx';
 
 // 地図やカレンダーのライブラリはサイズが大きいため、開いたときに読み込む
 const WeatherSetting = lazy(() => import('./WeatherSetting.tsx').then((m) => ({ default: m.WeatherSetting })));
@@ -21,6 +22,9 @@ export const Settings = () => {
         <GeneralSetting />
         <DynamicModal btnTitle="天気設定" btnWfull>
           <WeatherSetting />
+        </DynamicModal>
+        <DynamicModal btnTitle="時刻設定" btnWfull>
+          <TimeSetting />
         </DynamicModal>
       </div>
 
