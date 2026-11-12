@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
 import { updateRuntime } from '../store/runtime.ts';
 import { getSettings, settingsStore } from '../store/settings.ts';
 import type { ClockMessage, ClockRequest } from '../workers/clock.ts';
+import { zoned } from '../utils/time.ts';
 import { playAudio } from './audio.ts';
 
 /** 今日鳴らしたチャイム/予鈴の記録 (日付が変わるとリセット) */
@@ -16,7 +16,7 @@ const checkChime = (date: Date) => {
   const { enabled, preEnabled, times } = getSettings().chime;
   if (!enabled) return;
 
-  const now = dayjs(date);
+  const now = zoned(date, getSettings().clock.timezone);
 
   // 日付が変わったら鳴動状況をリセット
   const today = now.format('YYYY-MM-DD');

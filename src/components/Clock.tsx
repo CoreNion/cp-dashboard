@@ -4,6 +4,7 @@ import { kWideScreenWidth } from '../constants.ts';
 import { useRuntime } from '../store/runtime.ts';
 import { useSettings } from '../store/settings.ts';
 import { cssVars, isSafariOrFirefox } from '../utils/css.ts';
+import { zoned } from '../utils/time.ts';
 import { Icon } from './Icon.tsx';
 
 dayjs.locale('ja');
@@ -28,8 +29,9 @@ export const Clock = ({ className }: { className?: string }) => {
   const { clockEffect, fontSize } = useSettings((s) => s.appearance);
   const infoScroll = useSettings((s) => s.infoScroll);
   const bannerVisible = useSettings((s) => s.banner.horizontal);
+  const timezone = useSettings((s) => s.clock.timezone);
 
-  const now = dayjs(time);
+  const now = zoned(time, timezone);
   const isWide = width >= kWideScreenWidth;
 
   // 時計/日付の文字サイズ

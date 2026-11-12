@@ -5,14 +5,15 @@ import { useSettings } from '../store/settings.ts';
 import type { CountdownData, Settings } from '../types.ts';
 import { calcLimit, calcLimitDays, calcRatio, needAlert } from '../utils/calc-report.ts';
 import { cssVars } from '../utils/css.ts';
+import { zoned } from '../utils/time.ts';
 
 dayjs.extend(duration);
 
-/** イベントの日時 (その日の終わり) */
-const eventDate = (date: string) => dayjs(date).hour(23).minute(59).second(59);
-
 /** イベントカウントダウンのステータスを計算する */
-const calcCountdownStatus = (countdown: Settings['countdown'], djs: dayjs.Dayjs) => {
+const calcCountdownStatus = (countdown: Settings['countdown'], djs: dayjs.Dayjs, timezone: string) => {
+  /** イベントの日時 (設定されたタイムゾーンでの、その日の終わり) */
+  const eventDate = (date: string) => zoned(`${date}T23:59:59`, timezone);
+
   // 年間定期のイベントを今年の日付にし、一回限りのイベントと結合
   const yearlyDates = countdown.yearly.map<CountdownData>((d) => ({ ...d, date: `${djs.year()}-${d.date}` }));
   const allDates = [...countdown.once, ...yearlyDates];
@@ -50,12 +51,13 @@ export const Report = () => {
   const verticalBanner = useRuntime((s) => s.verticalBannerUrl);
   const countdown = useSettings((s) => s.countdown);
   const verticalBannerVisible = useSettings((s) => s.banner.vertical);
+  const timezone = useSettings((s) => s.clock.timezone);
 
   if (verticalBannerVisible) {
     return <div className="m-2">{verticalBanner != null && <img className="max-h-[45vh] border" src={verticalBanner} alt="宣伝画像" />}</div>;
   }
 
-  const status = calcCountdownStatus(countdown, dayjs(time)) ?? { name: 'イベントなし', limit: 0, limitDays: 0, alert: false, ratio: 0 };
+  const status = calcCountdownStatus(countdown, zoned(time, timezone), timezone) ?? { name: 'イベントなし', limit: 0, limitDays: 0, alert: false, ratio: 0 };
   const limit = dayjs.duration(status.limit);
   const ratio = Math.min(100, Math.max(0, status.ratio));
   const isLarge = width >= 1536;
