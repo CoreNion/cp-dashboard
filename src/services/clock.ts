@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { updateRuntime } from '../store/runtime.ts';
-import { getSettings } from '../store/settings.ts';
+import { getSettings, settingsStore } from '../store/settings.ts';
+import type { ClockMessage, ClockRequest } from '../workers/clock.ts';
 import { playAudio } from './audio.ts';
 
 /** 今日鳴らしたチャイム/予鈴の記録 (日付が変わるとリセット) */
@@ -37,23 +38,49 @@ const checkChime = (date: Date) => {
   });
 };
 
+let worker: Worker | null = null;
+
+const postRequest = (request: ClockRequest) => worker?.postMessage(request);
+
 /**
  * 時計用のworkerを起動する
  * @returns 最初の時刻を受信したら解決されるPromise
  */
 export const startClock = () =>
   new Promise<void>((resolve) => {
-    const worker = new Worker(new URL('../workers/clock.ts', import.meta.url), { type: 'module' });
+    const clockWorker = new Worker(new URL('../workers/clock.ts', import.meta.url), { type: 'module' });
+    worker = clockWorker;
 
     // workerからの時刻を用いて各種処理を行う
-    worker.addEventListener('message', (event: MessageEvent<Date>) => {
-      const date = event.data;
-      if (!(date instanceof Date)) return;
+    clockWorker.addEventListener('message', (event: MessageEvent<ClockMessage>) => {
+      const data = event.data;
 
-      // 現在時刻を更新
-      updateRuntime({ time: date });
-      checkChime(date);
+      if (data.type === 'tick') {
+        // 現在時刻を更新
+        const date = new Date(data.time);
+        updateRuntime({ time: date });
+        checkChime(date);
 
-      resolve();
+        resolve();
+      } else if (data.type === 'sync') {
+        // 時刻補正の状態を更新
+        updateRuntime({ clockSync: data.status });
+      }
+    });
+
+    // 時刻補正の設定を渡して時計を開始し、以降は設定が変更されるたびに渡し直す
+    let ntpSync = getSettings().clock.ntpSync;
+    postRequest({ type: 'config', ntpSync });
+    settingsStore.subscribe(() => {
+      const next = getSettings().clock.ntpSync;
+      if (next === ntpSync) return;
+
+      ntpSync = next;
+      postRequest({ type: 'config', ntpSync });
     });
   });
+
+/** 時刻を今すぐ同期する */
+export const syncClockNow = () => {
+  postRequest({ type: 'sync' });
+};

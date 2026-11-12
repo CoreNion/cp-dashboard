@@ -64,6 +64,23 @@ export type Settings = {
     horizontal: boolean;
     vertical: boolean;
   };
+  clock: {
+    /** オンライン時にWebNTPで時刻を補正するか */
+    ntpSync: boolean;
+    /** 表示に使うタイムゾーン (IANA名。kAutoTimezoneの場合は端末の設定) */
+    timezone: string;
+  };
+};
+
+/** WebNTPによる時刻補正の状態 */
+export type ClockSync = {
+  state: 'off' | 'syncing' | 'synced' | 'failed';
+  /** 端末の時計に対する補正量 (ms) */
+  offset: number | null;
+  /** 補正量を求めた通信の往復時間 (ms) */
+  delay: number | null;
+  /** 最後に同期した時刻 (ms) */
+  syncedAt: number | null;
 };
 
 /** 保存されないアプリの状態 */
@@ -76,6 +93,7 @@ export type Runtime = {
   width: number;
   /** 現在時刻 */
   time: Date;
+  clockSync: ClockSync;
   timer: {
     active: boolean;
     /** 残り時間 (h:m:s) */

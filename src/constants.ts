@@ -137,3 +137,8 @@ export const kVerticalBannerFile = 'vertical-banner.png';
  * 大画面レイアウトに切り替える横幅
  */
 export const kWideScreenWidth = 1280;
+
+/**
+ * 端末の設定のタイムゾーンを使用することを表す設定値
+ */
+export const kAutoTimezone = 'auto';

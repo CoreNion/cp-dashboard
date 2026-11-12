@@ -8,6 +8,7 @@ export const runtimeStore = createStore<Runtime>({
   firstClicked: false,
   width: typeof window === 'undefined' ? kWideScreenWidth : window.innerWidth,
   time: new Date(),
+  clockSync: { state: 'off', offset: null, delay: null, syncedAt: null },
   timer: {
     active: false,
     remaining: null,

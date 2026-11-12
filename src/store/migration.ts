@@ -1,4 +1,4 @@
-import { kChimeTimes, kDefaultAudioName, kDefaultFont, kYearlyCountdownDates } from '../constants.ts';
+import { kAutoTimezone, kChimeTimes, kDefaultAudioName, kDefaultFont, kYearlyCountdownDates } from '../constants.ts';
 import type { Settings } from '../types.ts';
 
 /** 設定を保存するLocalStorageのキー */
@@ -44,6 +44,10 @@ export const createDefaultSettings = (): Settings => ({
   banner: {
     horizontal: false,
     vertical: false,
+  },
+  clock: {
+    ntpSync: true,
+    timezone: kAutoTimezone,
   },
 });
 
@@ -157,6 +161,7 @@ const readLegacySettings = (storage: Storage): Settings => {
       horizontal: legacyBoolean(storage, 'isBannerVisible', d.banner.horizontal),
       vertical: legacyBoolean(storage, 'isVerticalBanner', d.banner.vertical),
     },
+    clock: d.clock,
   };
 };
 
@@ -193,6 +198,7 @@ const mergeWithDefaults = (saved: Partial<Settings>): Settings => {
     infoScroll: { ...d.infoScroll, ...saved.infoScroll },
     weather: { ...d.weather, ...saved.weather },
     banner: { ...d.banner, ...saved.banner },
+    clock: { ...d.clock, ...saved.clock },
   };
 };
 
