@@ -45,7 +45,8 @@ export const startTimer = () => {
   const time = remaining ?? setting;
   if (time.every((v) => v === 0)) return;
 
-  worker?.postMessage('TIMER_START:' + time.join(','));
+  // 再開の場合は、workerが保持している残り時間 (1秒未満を含む) から続ける
+  worker?.postMessage(remaining != null ? 'TIMER_RESUME' : 'TIMER_START:' + time.join(','));
   updateTimer({ active: true, remaining: time });
 };
 

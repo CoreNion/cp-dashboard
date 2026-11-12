@@ -3,17 +3,12 @@
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 (async () => {
-  // 現在時刻を送信
-  self.postMessage(new Date());
-
-  // 1秒ごとに時刻を送信
-  // 時刻が1秒進んだタイミングに同期するために、時刻が切り替わった瞬間を待ってからループを開始
-  await sleep(1000 - new Date().getMilliseconds());
   while (true) {
     // 現在時刻を送信
     self.postMessage(new Date());
 
-    // 1秒待つ
-    await sleep(1000);
+    // 次に秒が切り替わる瞬間まで待つ
+    // 毎回秒の境界に合わせ直すことで、待ち時間の遅延が蓄積しないようにする (+1msは境界の手前で起きるのを防ぐため)
+    await sleep(1000 - (Date.now() % 1000) + 1);
   }
 })();
