@@ -1,10 +1,11 @@
 import type { FeatureCollection } from 'geojson';
-import { Map as MapLibreMap, NavigationControl, Popup, setWorkerUrl, type GeoJSONSource } from 'maplibre-gl';
+import { setWorkerUrl } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Layer, Map as MapView, NavigationControl, Popup, Source, type LayerProps, type MapLayerMouseEvent } from 'react-map-gl/maplibre';
 import { refreshWeather } from '../../services/weather.ts';
-import { getSettings, updateSettings, useSettings } from '../../store/settings.ts';
+import { updateSettings, useSettings } from '../../store/settings.ts';
 import { convertAmedasInfos, getAmedasInfo, getWeatherAreaCodes, type AmedasInfo, type AmedasTable, type AreaTable } from '../../utils/weather-code.ts';
 
 // MapLibreのworkerを、Viteが配信するURLから読み込むようにする (開発サーバーの事前バンドルでは自動解決できないため)
@@ -23,6 +24,23 @@ const kMarkerMinZoom = 7;
 
 const kAmedasSource = 'amedas';
 
+/** 地図上の地点の情報 */
+type AmedasPoint = Pick<AmedasInfo, 'code' | 'name' | 'onlyTemp' | 'lon' | 'lat'>;
+
+/** アメダスの地点のレイヤー */
+const kAmedasLayer: LayerProps = {
+  id: kAmedasSource,
+  type: 'circle',
+  minzoom: kMarkerMinZoom,
+  paint: {
+    'circle-radius': 8,
+    'circle-stroke-width': 2,
+    'circle-stroke-color': '#ffffff',
+    // 選択中: 赤 / 外気温のみ: 橙 / 気温と気圧: 青
+    'circle-color': ['case', ['get', 'selected'], '#dc2626', ['get', 'onlyTemp'], '#d97706', '#1e40af'],
+  },
+};
+
 /** アメダスの一覧をGeoJSONに変換する */
 const toGeoJSON = (infos: AmedasInfo[], selectedCode: string): FeatureCollection => ({
   type: 'FeatureCollection',
@@ -39,119 +57,84 @@ const setAmedasLocation = (code: string, name: string) => {
   refreshWeather();
 };
 
-/** 地点をクリックしたときのポップアップの中身を作成する */
-const createPopupContent = (info: Pick<AmedasInfo, 'code' | 'name' | 'onlyTemp'>, onSet: () => void) => {
-  const root = document.createElement('div');
-  root.className = 'text-black text-center';
-
-  const text = document.createElement('p');
-  text.className = 'mb-1';
-  text.append(info.name, document.createElement('br'), info.onlyTemp ? '(外気温のみ)' : '(気温/気圧)');
-
-  const button = document.createElement('button');
-  button.className = 'btn btn-xs';
-  button.textContent = '設定';
-  button.addEventListener('click', () => {
-    setAmedasLocation(info.code, `${info.name} ${info.onlyTemp ? '(外気温のみ)' : ''}`.trim());
-    onSet();
-  });
-
-  root.append(text, button);
-  return root;
-};
-
 /** アメダスの地点を選択する地図 */
 const AmedasMap = ({ amedas }: { amedas: AmedasTable }) => {
   const { onlyTemp, amedasCode } = useSettings((s) => s.weather);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<MapLibreMap | null>(null);
-  // さらなるズームが必要か
-  const [needMoreZoom, setNeedMoreZoom] = useState(true);
+  const [state, setState] = useState<{ needMoreZoom: boolean; hovering: boolean; popup: AmedasPoint | null }>({
+    needMoreZoom: true,
+    hovering: false,
+    popup: null,
+  });
 
-  // 地図を作成
-  useEffect(() => {
-    if (containerRef.current == null) return;
+  const data = useMemo(() => toGeoJSON(convertAmedasInfos(amedas, onlyTemp), amedasCode), [amedas, onlyTemp, amedasCode]);
 
-    const map = new MapLibreMap({
-      container: containerRef.current,
-      center: [137.2736, 32.59285],
-      zoom: 3,
-      maxZoom: 16,
-      style: {
-        version: 8,
-        sources: {
-          gsi: {
-            type: 'raster',
-            tiles: ['https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            maxzoom: 18,
-            attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>",
-          },
-        },
-        layers: [{ id: 'gsi', type: 'raster', source: 'gsi' }],
-      },
-    });
-    mapRef.current = map;
+  /** 地点をクリックしたらポップアップを表示 (地点以外なら閉じる) */
+  const onClick = (e: MapLayerMouseEvent) => {
+    const feature = e.features?.[0];
+    if (feature == null || feature.geometry.type !== 'Point') {
+      setState((prev) => ({ ...prev, popup: null }));
+      return;
+    }
 
-    map.addControl(new NavigationControl({ showCompass: false }));
-    // 回転は不要なので無効化
-    map.dragRotate.disable();
-    map.touchZoomRotate.disableRotation();
+    const props = feature.properties as Pick<AmedasInfo, 'code' | 'name' | 'onlyTemp'>;
+    const [lon, lat] = feature.geometry.coordinates;
+    setState((prev) => ({ ...prev, popup: { code: props.code, name: props.name, onlyTemp: props.onlyTemp, lon, lat } }));
+  };
 
-    map.on('load', () => {
-      const weather = getSettings().weather;
-      map.addSource(kAmedasSource, {
-        type: 'geojson',
-        data: toGeoJSON(convertAmedasInfos(amedas, weather.onlyTemp), weather.amedasCode),
-      });
-      map.addLayer({
-        id: kAmedasSource,
-        type: 'circle',
-        source: kAmedasSource,
-        minzoom: kMarkerMinZoom,
-        paint: {
-          'circle-radius': 8,
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff',
-          // 選択中: 赤 / 外気温のみ: 橙 / 気温と気圧: 青
-          'circle-color': ['case', ['get', 'selected'], '#dc2626', ['get', 'onlyTemp'], '#d97706', '#1e40af'],
-        },
-      });
-    });
-
-    map.on('zoom', () => setNeedMoreZoom(map.getZoom() < kMarkerMinZoom));
-
-    // 地点をクリックしたらポップアップを表示
-    map.on('click', kAmedasSource, (e) => {
-      const feature = e.features?.[0];
-      if (feature == null || feature.geometry.type !== 'Point') return;
-
-      const props = feature.properties as { code: string; name: string; onlyTemp: boolean };
-      const popup = new Popup({ closeButton: false });
-      popup
-        .setLngLat(feature.geometry.coordinates as [number, number])
-        .setDOMContent(createPopupContent(props, () => popup.remove()))
-        .addTo(map);
-    });
-    map.on('mouseenter', kAmedasSource, () => (map.getCanvas().style.cursor = 'pointer'));
-    map.on('mouseleave', kAmedasSource, () => (map.getCanvas().style.cursor = ''));
-
-    return () => {
-      mapRef.current = null;
-      map.remove();
-    };
-  }, [amedas]);
-
-  // 設定が変わったら、表示する地点を更新
-  useEffect(() => {
-    const source = mapRef.current?.getSource<GeoJSONSource>(kAmedasSource);
-    source?.setData(toGeoJSON(convertAmedasInfos(amedas, onlyTemp), amedasCode));
-  }, [amedas, onlyTemp, amedasCode]);
+  const { popup } = state;
 
   return (
     <div className="min-w-full">
-      <p className="text-error font-bold min-h-6">{needMoreZoom ? '地点を表示するには、もう少しズームしてください。' : ''}</p>
-      <div ref={containerRef} className="w-full h-[400px] rounded-box overflow-hidden"></div>
+      <p className="text-error font-bold min-h-6">{state.needMoreZoom ? '地点を表示するには、もう少しズームしてください。' : ''}</p>
+      <div className="rounded-box overflow-hidden">
+        <MapView
+          initialViewState={{ longitude: 138.9434, latitude: 38.2120, zoom: 4 }}
+          minZoom={4}
+          mapStyle="https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/pale.json"
+          style={{ width: '100%', height: 400 }}
+          onLoad={(e) => e.target.touchZoomRotate.disableRotation()}
+          interactiveLayerIds={[kAmedasSource]}
+          cursor={state.hovering ? 'pointer' : ''}
+          onMouseEnter={() => setState((prev) => ({ ...prev, hovering: true }))}
+          onMouseLeave={() => setState((prev) => ({ ...prev, hovering: false }))}
+          onZoom={(e) => {
+            const needMoreZoom = e.viewState.zoom < kMarkerMinZoom;
+            setState((prev) => (prev.needMoreZoom === needMoreZoom ? prev : { ...prev, needMoreZoom }));
+          }}
+          onClick={onClick}
+        >
+          <NavigationControl showCompass={false} />
+          <Source id={kAmedasSource} type="geojson" data={data}>
+            <Layer {...kAmedasLayer} />
+          </Source>
+          {popup != null && (
+            <Popup
+              longitude={popup.lon}
+              latitude={popup.lat}
+              closeButton={false}
+              closeOnClick={false}
+              onClose={() => setState((prev) => ({ ...prev, popup: null }))}
+            >
+              <div className="text-black text-center">
+                <p className="mb-1">
+                  {popup.name}
+                  <br />
+                  {popup.onlyTemp ? '(外気温のみ)' : '(気温/気圧)'}
+                </p>
+                <button
+                  className="btn btn-xs"
+                  onClick={() => {
+                    setAmedasLocation(popup.code, `${popup.name} ${popup.onlyTemp ? '(外気温のみ)' : ''}`.trim());
+                    setState((prev) => ({ ...prev, popup: null }));
+                  }}
+                >
+                  設定
+                </button>
+              </div>
+            </Popup>
+          )}
+        </MapView>
+      </div>
     </div>
   );
 };
